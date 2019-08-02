@@ -6,6 +6,7 @@ public class LevelGenerator : MonoBehaviour
     public Texture2D mapTexture;
 
     public ColorToPrefab[] colorMappings;
+    public float scaleFactor;
 
     void Start()
     {
@@ -38,7 +39,8 @@ public class LevelGenerator : MonoBehaviour
         {
             if (colorMapping.color.Equals(pixelColor))
             {
-                Vector2 position = new Vector2(x, y);
+                //scale the positions down to game proportions
+                Vector2 position = new Vector2(x/scaleFactor, y/scaleFactor);
                 Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
             }
         }
