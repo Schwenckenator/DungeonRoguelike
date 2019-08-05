@@ -27,6 +27,9 @@ public class EntityTurnScheduler : MonoBehaviour
 
         BattleController.Instance.ScheduleTurn(myNextTurn);
     }
+    public void ScheduleTurn() {
+        ScheduleTurn(myTickDelay);
+    }
 
     public void EndTurn() {
         // Schedule next turn in battle

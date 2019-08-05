@@ -17,6 +17,17 @@ public class BattleController : MonoBehaviour {
         turnQueue = new List<Turn>();
     }
 
+    public void StartBattle() {
+        //Search for combatants
+        //Just grab all entities for now
+        EntityTurnScheduler[] combatants = FindObjectsOfType<EntityTurnScheduler>();
+        //All combatants schedule a turn
+        foreach(var combatant in combatants) {
+            combatant.ScheduleTurn();
+        }
+        //Hand control to first entity
+        NextTurn();
+    }
 
     public void ScheduleTurn(Turn newTurn) {
         //Set turn to current tick + delay
@@ -73,6 +84,9 @@ public class TBattleControllerEditor : Editor {
 
         BattleController myScript = (BattleController)target;
         if (Application.isPlaying) {
+            if (GUILayout.Button("Start Battle")) {
+                myScript.StartBattle();
+            }
             if (GUILayout.Button("Next Turn")) {
                 myScript.NextTurn();
             }
