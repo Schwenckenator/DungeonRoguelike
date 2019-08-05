@@ -6,7 +6,7 @@ using UnityEditor;
 public class TestTurnScheduler : MonoBehaviour
 {
     public int tickDelay;
-    public int entityID;
+    public EntityTurnScheduler entityID;
 
     public void ScheduleTurn() {
         Turn turn = new Turn(entityID, tickDelay);
