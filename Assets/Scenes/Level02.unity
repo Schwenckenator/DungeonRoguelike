@@ -223,7 +223,7 @@ MonoBehaviour:
     seed: 0
     pivotPointRoot: {fileID: 0}
     spreadOutCount: 1
-  showGraphs: 1
+  showGraphs: 0
 --- !u!4 &204496237
 Transform:
   m_ObjectHideFlags: 0
@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -270,6 +271,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa62eec463f067f4bbe1609a445577a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panSpeed: 5
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -7484,17 +7498,17 @@ PrefabInstance:
     - target: {fileID: 8784567091710726882, guid: 10d5518479cc07944b0407c5f84c3c01,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.4557066
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8784567091710726882, guid: 10d5518479cc07944b0407c5f84c3c01,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9375236
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8784567091710726882, guid: 10d5518479cc07944b0407c5f84c3c01,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.535156
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8784567091710726882, guid: 10d5518479cc07944b0407c5f84c3c01,
         type: 3}
