@@ -7,6 +7,7 @@ public class EntityTurnScheduler : MonoBehaviour
 {
     public bool myTurn = false;
     public int myTickDelay = 10;
+    public SpriteRenderer selectionRing;
 
     // Start is called before the first frame update
     void Start()
@@ -37,12 +38,14 @@ public class EntityTurnScheduler : MonoBehaviour
 
         //Disable self
         myTurn = false;
+        selectionRing.enabled = false;
 
     }
 
     public void StartTurn() {
         //Say its my turn
         myTurn = true;
+        selectionRing.enabled = true;
     }
 }
 
