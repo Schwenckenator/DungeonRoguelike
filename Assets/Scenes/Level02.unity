@@ -335,6 +335,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &933715910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8552054766517171441, guid: d391983548d3a43df99eb5df473451cb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4649266092634639730}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1048993451
 GameObject:
   m_ObjectHideFlags: 0
@@ -5336,6 +5342,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.21960784
       objectReference: {fileID: 0}
+    - target: {fileID: 423358360, guid: d391983548d3a43df99eb5df473451cb, type: 3}
+      propertyPath: parentObject
+      value: 
+      objectReference: {fileID: 933715910}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d391983548d3a43df99eb5df473451cb, type: 3}
 --- !u!1001 &5281958268817258137
