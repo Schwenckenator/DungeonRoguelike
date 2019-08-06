@@ -78,7 +78,7 @@ public class BattleController : MonoBehaviour {
 }
 
 [CustomEditor(typeof(BattleController))]
-public class BattleControllerEditor : Editor {
+public class TBattleControllerEditor : Editor {
     public override void OnInspectorGUI() {
         DrawDefaultInspector();
 
