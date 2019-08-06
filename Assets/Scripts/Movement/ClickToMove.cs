@@ -10,7 +10,10 @@ public class ClickToMove : MonoBehaviour
     public GameObject distanceChecker1;
     public GameObject distanceChecker2;
 
-    public float maxDistance=3;
+    public float maxDistanceCurrent = 3;
+    public float maxDistance1 = 1.5f;
+    public float maxDistance2 = 3;
+
     //Change this according to 
 
     private Transform target;
@@ -19,8 +22,15 @@ public class ClickToMove : MonoBehaviour
     {
 
         aiDestination = parentObject.GetComponent<AIDestinationSetter>();
- 
 
+        UpdateMaxDistance();
+    }
+
+    void UpdateMaxDistance()
+    {
+        maxDistanceCurrent = maxDistance1;
+
+        Debug.Log("MaxDist " + maxDistanceCurrent);
     }
 
 
@@ -52,11 +62,11 @@ public class ClickToMove : MonoBehaviour
         Vector2 position = worldPoint2d;
         float actualDistance = Vector2.Distance(center, position);
 
-        if (actualDistance > maxDistance)
+        if (actualDistance > maxDistanceCurrent)
         {
             Vector2 centerToPosition = position - center;
             centerToPosition.Normalize();
-            position = center + centerToPosition * maxDistance;
+            position = center + centerToPosition * maxDistanceCurrent;
         }
 
 

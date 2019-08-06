@@ -223,7 +223,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4327281720561021772}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79b5e26d091d47b4a2de9fda77da356, type: 3}
   m_Name: 
@@ -233,7 +233,9 @@ MonoBehaviour:
     type: 3}
   distanceChecker1: {fileID: 5378027703029193767}
   distanceChecker2: {fileID: 5378027704109307127}
-  maxDistance: 3
+  maxDistanceCurrent: 3
+  maxDistance1: 1.5
+  maxDistance2: 3
 --- !u!114 &5378027702334679076
 MonoBehaviour:
   m_ObjectHideFlags: 0
