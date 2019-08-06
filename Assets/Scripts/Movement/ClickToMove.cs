@@ -3,22 +3,24 @@ using Pathfinding;
 
 public class ClickToMove : MonoBehaviour
 {
-    private Transform target;
+    public GameObject parentObject;
     public GameObject moveTarget;
     AIDestinationSetter aiDestination;
 
     public GameObject distanceChecker1;
     public GameObject distanceChecker2;
     public float maxDistance=3;
-
-
     //Change this according to 
-    public bool selected = true;
+
+    private Transform target;
 
     void Start()
     {
 
-        aiDestination = GetComponent<AIDestinationSetter>();
+        aiDestination = parentObject.GetComponent<AIDestinationSetter>();
+        distanceChecker1.SetActive(true);
+        distanceChecker2.SetActive(true);
+
     }
 
 
