@@ -7,11 +7,26 @@ public class BattleController : MonoBehaviour {
     public static BattleController Instance { get; private set; }
 
     public int CurrentTick { get; private set; }
+    public EntityTurnScheduler currentEntity;
+
     private List<Turn> turnQueue;
+    
 
     private void Awake() {
         Instance = this;
         turnQueue = new List<Turn>();
+    }
+
+    public void StartBattle() {
+        //Search for combatants
+        //Just grab all entities for now
+        EntityTurnScheduler[] combatants = FindObjectsOfType<EntityTurnScheduler>();
+        //All combatants schedule a turn
+        foreach(var combatant in combatants) {
+            combatant.ScheduleTurn();
+        }
+        //Hand control to first entity
+        NextTurn();
     }
 
     public void ScheduleTurn(Turn newTurn) {
@@ -37,6 +52,9 @@ public class BattleController : MonoBehaviour {
         Debug.Log("Turn Ended, starting next turn.");
         //Disable Control of Current Entity
         /* ***************************************/
+        if(currentEntity != null) {
+            currentEntity.EndTurn();
+        }
 
         //Find the next turn
         Turn currentTurn = turnQueue[0];
@@ -47,6 +65,8 @@ public class BattleController : MonoBehaviour {
         Debug.Log($"Current tick changed to {CurrentTick}.");
         //Give control to new Entity
         /* ***************************************/
+        currentEntity = currentTurn.Entity;
+        currentTurn.Entity.StartTurn();
     }
 
     public void DebugPrintTurnQueue() {
@@ -64,6 +84,9 @@ public class TBattleControllerEditor : Editor {
 
         BattleController myScript = (BattleController)target;
         if (Application.isPlaying) {
+            if (GUILayout.Button("Start Battle")) {
+                myScript.StartBattle();
+            }
             if (GUILayout.Button("Next Turn")) {
                 myScript.NextTurn();
             }
