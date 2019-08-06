@@ -7,9 +7,11 @@ public class EntityTurnScheduler : MonoBehaviour
 {
     public bool myTurn = false;
     public int myTickDelay = 10;
-    public SpriteRenderer selectionRing;
+   // public SpriteRenderer selectionRing;
+    //Using object so children are hidden
+    public GameObject selectionRingObj;
     //public GameObject clickToMoveObj;
-   
+
     public int actionsPerGo = 2;
     public int actionsRemaining;
 
@@ -49,9 +51,13 @@ public class EntityTurnScheduler : MonoBehaviour
 
         //Disable self
         myTurn = false;
-        selectionRing.enabled = false;
-        //  GetComponent<ClickToMove>().SetActive(false);
+        //selectionRing.enabled = false;
+        selectionRingObj.SetActive(false);
+
         GetComponent<ClickToMove>().enabled = false;
+
+        //  GetComponent<ClickToMove>().SetActive(false);
+        //GetComponent<ClickToMove>().enabled = false;
 
 
 
@@ -61,7 +67,9 @@ public class EntityTurnScheduler : MonoBehaviour
         //Say its my turn
         myTurn = true;
         actionsRemaining = actionsPerGo;
-        selectionRing.enabled = true;
+        selectionRingObj.SetActive(true);
+
+        //selectionRing.enabled = true;
         //  clickToMoveObj.SetActive(true);
         GetComponent<ClickToMove>().enabled = true;
 

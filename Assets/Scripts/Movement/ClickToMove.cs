@@ -9,6 +9,7 @@ public class ClickToMove : MonoBehaviour
 
     public GameObject distanceChecker1;
     public GameObject distanceChecker2;
+
     public float maxDistance=3;
     //Change this according to 
 
@@ -18,8 +19,7 @@ public class ClickToMove : MonoBehaviour
     {
 
         aiDestination = parentObject.GetComponent<AIDestinationSetter>();
-        distanceChecker1.SetActive(true);
-        distanceChecker2.SetActive(true);
+ 
 
     }
 
