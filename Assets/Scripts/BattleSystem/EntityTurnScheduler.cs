@@ -31,9 +31,7 @@ public class EntityTurnScheduler : MonoBehaviour
         //Limit turn to number of actions
         if (actionsRemaining <= 0)
         {
-            EndTurn();
             actionsRemaining = actionsPerGo;
-
             BattleController.Instance.NextTurn();
 
         }
@@ -55,15 +53,8 @@ public class EntityTurnScheduler : MonoBehaviour
 
         //Disable self
         myTurn = false;
-        //selectionRing.enabled = false;
         selectionRingObj.SetActive(false);
-
         GetComponent<ClickToMove>().enabled = false;
-
-        //  GetComponent<ClickToMove>().SetActive(false);
-        //GetComponent<ClickToMove>().enabled = false;
-
-
 
     }
 
@@ -72,10 +63,9 @@ public class EntityTurnScheduler : MonoBehaviour
         myTurn = true;
         actionsRemaining = actionsPerGo;
         selectionRingObj.SetActive(true);
-
-        //selectionRing.enabled = true;
-        //  clickToMoveObj.SetActive(true);
         GetComponent<ClickToMove>().enabled = true;
+        GetComponent<ClickToMove>().UpdateMaxDistance();
+
 
     }
 
