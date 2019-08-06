@@ -32,6 +32,10 @@ public class EntityTurnScheduler : MonoBehaviour
         if (actionsRemaining <= 0)
         {
             EndTurn();
+            actionsRemaining = actionsPerGo;
+
+            BattleController.Instance.NextTurn();
+
         }
     }
 
@@ -77,7 +81,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public void SpendActions(int numberOfActions)
     {
-        actionsPerGo -= numberOfActions;
+        actionsRemaining -= numberOfActions;
     }
 
 }

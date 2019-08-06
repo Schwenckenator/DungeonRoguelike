@@ -3,7 +3,6 @@ using Pathfinding;
 
 public class ClickToMove : MonoBehaviour
 {
-    public GameObject parentObject;
     public GameObject moveTarget;
     AIDestinationSetter aiDestination;
     AIPath aiPath;
@@ -25,18 +24,20 @@ public class ClickToMove : MonoBehaviour
     void Start()
     {
   
-        aiDestination = parentObject.GetComponent<AIDestinationSetter>();
-        aiPath = parentObject.GetComponent<AIPath>();
-
+        aiDestination = GetComponent<AIDestinationSetter>();
+        aiPath = GetComponent<AIPath>();
         turnScheduler = GetComponent<EntityTurnScheduler>();
+
         UpdateMaxDistance();
     }
 
     void UpdateMaxDistance()
     {
+        //Update according to remaining actions
         if (turnScheduler.actionsRemaining > 1)
         {
             maxDistanceCurrent = maxDistance2;
+
 
         }
         else
@@ -44,7 +45,7 @@ public class ClickToMove : MonoBehaviour
             maxDistanceCurrent = maxDistance1;
 
         }
-        Debug.Log("MaxDist " + maxDistanceCurrent);
+        //Debug.Log("MaxDist " + maxDistanceCurrent);
     }
 
 
@@ -64,12 +65,21 @@ public class ClickToMove : MonoBehaviour
         {
             if(hit.collider.gameObject.name == distanceChecker1.name)
             {
-                print("Distance1");
+                Debug.Log("Distance1");
+                turnScheduler.SpendActions(1);
+
 
             }
             else if (hit.collider.gameObject.name == distanceChecker2.name)
             {
-                print("Distance2");
+                Debug.Log("Distance2");
+                turnScheduler.SpendActions(2);
+
+            }
+            else
+            {
+                turnScheduler.SpendActions(2);
+
             }
 
 
