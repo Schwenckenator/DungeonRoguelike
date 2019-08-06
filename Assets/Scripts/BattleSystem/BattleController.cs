@@ -32,24 +32,24 @@ public class BattleController : MonoBehaviour {
     public void ScheduleTurn(Turn newTurn) {
         //Set turn to current tick + delay
         newTurn.SetTick(CurrentTick);
-        Debug.Log($"Turn's tick is {newTurn.Tick}. The Current Tick was {CurrentTick}, and the delay was {newTurn.TickDelay}.");
+    //    Debug.Log($"Turn's tick is {newTurn.Tick}. The Current Tick was {CurrentTick}, and the delay was {newTurn.TickDelay}.");
         //Iterate over queue
         //Insert before number bigger than tick
 
         for (int i = 0; i < turnQueue.Count; i++) {
             if (turnQueue[i].Tick > newTurn.Tick) {
                 turnQueue.Insert(i, newTurn);
-                Debug.Log($"New Turn inserted at index {i}.");
+       //         Debug.Log($"New Turn inserted at index {i}.");
                 return;
             }
         }
 
         turnQueue.Add(newTurn);
-        Debug.Log("New Turn Added to end.");
+    //   Debug.Log("New Turn Added to end.");
     }
 
     public void NextTurn() {
-        Debug.Log("Turn Ended, starting next turn.");
+   //     Debug.Log("Turn Ended, starting next turn.");
         //Disable Control of Current Entity
         /* ***************************************/
         if(currentEntity != null) {
@@ -59,10 +59,10 @@ public class BattleController : MonoBehaviour {
         //Find the next turn
         Turn currentTurn = turnQueue[0];
         turnQueue.RemoveAt(0);
-        Debug.Log($"Next Turn is {currentTurn.ToString()}.");
+  //      Debug.Log($"Next Turn is {currentTurn.ToString()}.");
         //Change current Tick
         CurrentTick = currentTurn.Tick;
-        Debug.Log($"Current tick changed to {CurrentTick}.");
+  //      Debug.Log($"Current tick changed to {CurrentTick}.");
         //Give control to new Entity
         /* ***************************************/
         currentEntity = currentTurn.Entity;
@@ -72,7 +72,7 @@ public class BattleController : MonoBehaviour {
     public void DebugPrintTurnQueue() {
         int turnCount = 0;
         foreach(Turn turn in turnQueue) {
-            Debug.Log($"Turn {turnCount++}, Entity {turn.Entity.ToString()} with Tick {turn.Tick}.");
+//            Debug.Log($"Turn {turnCount++}, Entity {turn.Entity.ToString()} with Tick {turn.Tick}.");
         }
     }
 }
