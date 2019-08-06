@@ -32,7 +32,7 @@ public class BattleController : MonoBehaviour {
     public void ScheduleTurn(Turn newTurn) {
         //Set turn to current tick + delay
         newTurn.SetTick(CurrentTick);
-        Debug.Log($"Turn's tick is {newTurn.Tick}. The Current Tick was {CurrentTick}, and the delay was {newTurn.TickDelay}.");
+        Debug.Log($"{newTurn.Entity}'s tick is {newTurn.Tick}. The Current Tick was {CurrentTick}, and the delay was {newTurn.TickDelay}.");
         //Iterate over queue
         //Insert before number bigger than tick
 
