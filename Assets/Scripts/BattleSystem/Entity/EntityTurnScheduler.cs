@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor;
 
 public class EntityTurnScheduler : MonoBehaviour
@@ -15,11 +16,13 @@ public class EntityTurnScheduler : MonoBehaviour
     public int actionsPerGo = 2;
     public int actionsRemaining;
 
+    public Image[] actionArrows;
+
     // Start is called before the first frame update
     void Start()
     {
         actionsRemaining = actionsPerGo;
-
+        SetActionArrowsVisibility(actionsRemaining);
     }
 
     // Update is called once per frame
@@ -66,14 +69,22 @@ public class EntityTurnScheduler : MonoBehaviour
         GetComponent<ClickToMove>().enabled = true;
         GetComponent<ClickToMove>().UpdateMaxDistance();
 
+        // Show actions in UI
+        SetActionArrowsVisibility(actionsRemaining);
 
     }
 
     public void SpendActions(int numberOfActions)
     {
         actionsRemaining -= numberOfActions;
+        SetActionArrowsVisibility(actionsRemaining);
     }
 
+    public void SetActionArrowsVisibility(int actions) {
+        for(int i = 0; i < actionArrows.Length; i++) {
+            actionArrows[i].enabled = i < actions;
+        }
+    }
 }
 
 [CustomEditor(typeof(EntityTurnScheduler))]
