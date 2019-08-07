@@ -6,6 +6,8 @@ using UnityEditor;
 
 public class EntityTurnScheduler : MonoBehaviour
 {
+    public bool debug = true;
+
     public bool myTurn = false;
     public int myTickDelay = 10;
    // public SpriteRenderer selectionRing;
@@ -76,8 +78,15 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public void SpendActions(int numberOfActions)
     {
+        if (debug) {
+            Debug.Log($"Spend actions called, spending {numberOfActions} actions.");
+        }
         actionsRemaining -= numberOfActions;
         SetActionArrowsVisibility(actionsRemaining);
+
+        if (debug) {
+            Debug.Log($"{this.ToString()} has {actionsRemaining} remaining.");
+        }
     }
 
     public void SetActionArrowsVisibility(int actions) {
@@ -97,6 +106,10 @@ public class EntityTurnSchedulerEditor : Editor {
 
             if (GUILayout.Button("Schedule Turn")) {
                 myScript.ScheduleTurn(myScript.myTickDelay);
+            }
+
+            if (GUILayout.Button("Spend Action")) {
+                myScript.SpendActions(1);
             }
 
         }
