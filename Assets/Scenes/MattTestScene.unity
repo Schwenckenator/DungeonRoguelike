@@ -5652,46 +5652,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1965841455643963295, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7970552929768221305, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_PreferredWidth
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7970552929768221305, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_PreferredHeight
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4716095352927604719, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_ChildControlWidth
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4716095352927604719, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_ChildControlHeight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4716095352927604719, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_ChildScaleWidth
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4716095352927604719, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_ChildForceExpandWidth
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4716095352927604719, guid: ee782d9a9748e1d48aed6045b0c80335,
-        type: 3}
-      propertyPath: m_ChildForceExpandHeight
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee782d9a9748e1d48aed6045b0c80335, type: 3}
 --- !u!1001 &2525179910947163367
