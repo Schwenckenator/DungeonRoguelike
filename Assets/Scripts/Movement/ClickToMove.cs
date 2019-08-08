@@ -52,8 +52,10 @@ public class ClickToMove : MonoBehaviour
 
     void ClickToMoveOrder()
     {
+        //Debug.Log("Move order issued");
         //set to moving and seeking
-        seeking = true;
+        //seeking = true;  <---- This is set later
+        bool validMove = false;
 
 
         var mousePos = Input.mousePosition;
@@ -64,10 +66,12 @@ public class ClickToMove : MonoBehaviour
         //Distinguish which distance was used
         if (hit.collider != null)
         {
+            Debug.Log($"Hit a collider! Its name is {hit.collider.gameObject.name}");
             if(hit.collider.gameObject.name == distanceChecker1.name)
             {
                 Debug.Log("Distance1");
                 turnScheduler.SpendActions(1);
+                validMove = true;
 
 
             }
@@ -75,15 +79,18 @@ public class ClickToMove : MonoBehaviour
             {
                 Debug.Log("Distance2");
                 turnScheduler.SpendActions(2);
-
+                validMove = true;
             }
-            else
-            {
-                turnScheduler.SpendActions(2);
+        } else {
+            Debug.Log("Move order hit no collider.");
+        }
 
-            }
-
-
+        if (!validMove) {
+            Debug.Log("Move order invalid, aborting.");
+            return;
+        } else {
+            Debug.Log("Move order valid!");
+            seeking = true;
         }
 
         //Restrict the distance in one turn/click
