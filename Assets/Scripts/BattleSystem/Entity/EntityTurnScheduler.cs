@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor;
 
 public class EntityTurnScheduler : MonoBehaviour
 {
+    public bool debug = true;
+
     public bool myTurn = false;
     public int myTickDelay = 10;
    // public SpriteRenderer selectionRing;
@@ -15,11 +18,13 @@ public class EntityTurnScheduler : MonoBehaviour
     public int actionsPerGo = 2;
     public int actionsRemaining;
 
+    public Image[] actionArrows;
+
     // Start is called before the first frame update
     void Start()
     {
         actionsRemaining = actionsPerGo;
-
+        SetActionArrowsVisibility(actionsRemaining);
     }
 
     // Update is called once per frame
@@ -66,14 +71,29 @@ public class EntityTurnScheduler : MonoBehaviour
         GetComponent<ClickToMove>().enabled = true;
         GetComponent<ClickToMove>().UpdateMaxDistance();
 
+        // Show actions in UI
+        SetActionArrowsVisibility(actionsRemaining);
 
     }
 
     public void SpendActions(int numberOfActions)
     {
+        if (debug) {
+            Debug.Log($"Spend actions called, spending {numberOfActions} actions.");
+        }
         actionsRemaining -= numberOfActions;
+        SetActionArrowsVisibility(actionsRemaining);
+
+        if (debug) {
+            Debug.Log($"{this.ToString()} has {actionsRemaining} remaining.");
+        }
     }
 
+    public void SetActionArrowsVisibility(int actions) {
+        for(int i = 0; i < actionArrows.Length; i++) {
+            actionArrows[i].enabled = i < actions;
+        }
+    }
 }
 
 [CustomEditor(typeof(EntityTurnScheduler))]
@@ -86,6 +106,10 @@ public class EntityTurnSchedulerEditor : Editor {
 
             if (GUILayout.Button("Schedule Turn")) {
                 myScript.ScheduleTurn(myScript.myTickDelay);
+            }
+
+            if (GUILayout.Button("Spend Action")) {
+                myScript.SpendActions(1);
             }
 
         }
