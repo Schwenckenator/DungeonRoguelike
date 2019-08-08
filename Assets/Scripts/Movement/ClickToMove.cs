@@ -48,7 +48,22 @@ public class ClickToMove : MonoBehaviour
        // Debug.Log("MaxDist " + maxDistanceCurrent);
     }
 
+    Vector2 AlignToGrid(Vector2 input) {
+        return new Vector2(RoundToPoint5(input.x), RoundToPoint5(input.y)); ;
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="input">Number to be rounded</param>
+    /// <returns>Float rounded to nearest x.5 value </returns>
+    float RoundToPoint5(float input) {
+        float output = input;
+        output -= 0.5f;
+        output = Mathf.Round(output);
+        output += 0.5f;
 
+        return output;
+    }
 
     void ClickToMoveOrder()
     {
@@ -93,18 +108,20 @@ public class ClickToMove : MonoBehaviour
             seeking = true;
         }
 
-        //Restrict the distance in one turn/click
-        Vector2 center = transform.localPosition; 
-        Vector2 position = worldPoint2d;
-        float actualDistance = Vector2.Distance(center, position);
+        ////Restrict the distance in one turn/click
+        //Vector2 center = transform.localPosition; 
+        //Vector2 position = worldPoint2d;
+        //float actualDistance = Vector2.Distance(center, position);
 
-        if (actualDistance > maxDistanceCurrent)
-        {
-            Vector2 centerToPosition = position - center;
-            centerToPosition.Normalize();
-            position = center + centerToPosition * maxDistanceCurrent;
-        }
+        //if (actualDistance > maxDistanceCurrent)
+        //{
+        //    Vector2 centerToPosition = position - center;
+        //    centerToPosition.Normalize();
+        //    position = center + centerToPosition * maxDistanceCurrent;
+        //}
 
+        //Align move position to grid
+        Vector2 position = AlignToGrid(worldPoint2d);
 
         //Ensure the target object is instantiated
         if (!target)
