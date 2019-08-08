@@ -20,6 +20,8 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public Image[] actionArrows;
 
+    private Entity entity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +61,7 @@ public class EntityTurnScheduler : MonoBehaviour
         //Disable self
         myTurn = false;
         selectionRingObj.SetActive(false);
-        GetComponent<ClickToMove>().enabled = false;
+        entity.State = EntityState.inactive;
 
     }
 
@@ -68,8 +70,8 @@ public class EntityTurnScheduler : MonoBehaviour
         myTurn = true;
         actionsRemaining = actionsPerGo;
         selectionRingObj.SetActive(true);
-        GetComponent<ClickToMove>().enabled = true;
-        GetComponent<ClickToMove>().UpdateMaxDistance();
+        entity.State = EntityState.idle;
+        entity.ClickToMove.UpdateMaxDistance();
 
         // Show actions in UI
         SetActionArrowsVisibility(actionsRemaining);
