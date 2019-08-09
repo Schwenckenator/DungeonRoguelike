@@ -84,20 +84,7 @@ public class ClickToMove : MonoBehaviour
     }
 
     Vector2 AlignToGrid(Vector2 input) {
-        return new Vector2(RoundToPoint5(input.x), RoundToPoint5(input.y)); ;
-    }
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="input">Number to be rounded</param>
-    /// <returns>Float rounded to nearest x.5 value </returns>
-    float RoundToPoint5(float input) {
-        float output = input;
-        output -= 0.5f;
-        output = Mathf.Round(output);
-        output += 0.5f;
-
-        return output;
+        return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f)); ;
     }
 
     void ClickToMoveOrder()

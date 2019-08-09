@@ -8,17 +8,18 @@ using UnityEngine;
 public class MainUI : MonoBehaviour
 {
 
-    public void Attack() {
+    public void Interact(string type) {
+        //For Current entity, Change state to targeting.
+        BattleController.Instance.currentEntity.State = EntityState.targeting;
+
+        if (type == "attack") { //TODO: Maybe a dictionary / way better way to do it would be good here
+            BattleController.Instance.currentEntity.Interaction.interaction = InteractionType.attack;
+        }else if(type == "heal") {
+            BattleController.Instance.currentEntity.Interaction.interaction = InteractionType.heal;
+        }
         
     }
 
-    private void DoDamage() {
-
-    }
-
-    public void Heal() {
-
-    }
 
     public void EndTurn() {
         BattleController.Instance.NextTurn();

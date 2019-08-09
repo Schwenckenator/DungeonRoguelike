@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEditor;
 
 public enum InteractionType {
@@ -9,19 +10,58 @@ public enum InteractionType {
 
 public class EntityInteraction : MonoBehaviour
 {
+    public Entity myEntity;
     public Entity target;
+    public InteractionType interaction;
     public float myDamage;
     public float myHealing;
 
     public int raycount = 16;
     public float rayDistance = 2f;
 
+    private void Start() {
+        myEntity = GetComponent<Entity>();
+    }
+
     private void Update() {
-        
+        if(myEntity.State != EntityState.targeting) {
+            Debug.LogError("This should not run while not targeting. Aborting.");
+            this.enabled = false;
+            return;
+        }
+        // If the pointer is over a UI element, the player doesn't want to set a target.
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
+        //
+        AcquireTarget();
+    }
+
+    private void AcquireTarget() {
+        //Find mouse position;
+        var mousePos = Input.mousePosition;
+        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 worldPoint2d = new Vector2(worldPoint.x, worldPoint.y);
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint2d, Vector2.zero);
+
+        foreach (RaycastHit2D hit in hits) {
+
+            if (hit.collider.CompareTag("Entity")) {
+                //It has found an entity
+                //Now display targeting ring, chance to hit etc.
+                Debug.Log($"Mouse is over {hit.collider.gameObject.name}.");
+
+                //If the player wants to select the target, they click
+                if (Input.GetMouseButtonDown(0)) {
+                    SetTarget(hit.collider.GetComponent<Entity>());
+                }
+            }
+        }
     }
 
     public void SetTarget(Entity target) {
         this.target = target;
+        Debug.Log($"New target's name is {target.gameObject.name}.");
     }
 
     public void Interact(InteractionType interaction) {
