@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Pathfinding;
+using UnityEngine.EventSystems;
 
 public class ClickToMove : MonoBehaviour
 {
@@ -28,8 +29,42 @@ public class ClickToMove : MonoBehaviour
         turnScheduler = GetComponent<EntityTurnScheduler>();
 
         UpdateMaxDistance();
+
+        //Subscribe from game events
+        GameEvents.current.onStartPlayerTurn += OnStartPlayerTurn;
+        GameEvents.current.onFinishPlayerTurn += OnFinishPlayerTurn;
+
     }
 
+    private void OnDestroy()
+    {
+        //Unsubscribe from game events
+        GameEvents.current.onStartPlayerTurn -= OnStartPlayerTurn;
+        GameEvents.current.onFinishPlayerTurn -= OnFinishPlayerTurn;
+    }
+
+
+    private void OnStartPlayerTurn(int entityID)
+    {
+        //Check event to see if this id matches
+        // if(entity.GetInstanceID() == GetInstanceID())
+        if (entityID == gameObject.GetInstanceID())
+
+        {
+            Debug.Log(gameObject.name + " Start turn");
+            UpdateMaxDistance();
+        }
+
+    }
+    private void OnFinishPlayerTurn(int entityID)
+    {
+        //Check event to see if this id matches
+        if (entityID == GetInstanceID())
+        {            
+            UpdateMaxDistance();
+        }
+
+    }
     public void UpdateMaxDistance()
     {
         //Update according to remaining actions
@@ -150,14 +185,14 @@ public class ClickToMove : MonoBehaviour
         //Check for click to move
         if (Input.GetMouseButtonDown(0))
         {
+            // If the pointer is over a UI element, the player doesn't want to move their unit.
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
             //Prevent multiple clicks
             if (!seeking)
             {
-
                 ClickToMoveOrder();
             }
-
         }
-
     }
 }
