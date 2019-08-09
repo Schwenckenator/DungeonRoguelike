@@ -20,6 +20,11 @@ public class EntityInteraction : MonoBehaviour
         
     }
 
+    private void Update() {
+        //Target
+
+    }
+
     public void SetTarget(EntityStats target) {
         this.target = target;
     }

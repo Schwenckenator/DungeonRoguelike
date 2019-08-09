@@ -20,26 +20,17 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public Image[] actionArrows;
 
+    private Entity entity;
+
     // Start is called before the first frame update
     void Start()
     {
-        actionsRemaining = actionsPerGo;
+        entity = GetComponent<Entity>();
+
+        // Entities should have 0 actions when it's not their turn
+        //actionsRemaining = actionsPerGo;
+        actionsRemaining = 0;
         SetActionArrowsVisibility(actionsRemaining);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Do stuff when myTurn is true
-
-
-        //Limit turn to number of actions
-        if (actionsRemaining <= 0)
-        {
-            actionsRemaining = actionsPerGo;
-            BattleController.Instance.NextTurn();
-
-        }
     }
 
     public void ScheduleTurn(int tickDelay) {
@@ -52,6 +43,19 @@ public class EntityTurnScheduler : MonoBehaviour
         ScheduleTurn(myTickDelay);
     }
 
+    public void StartTurn() {
+        //Say its my turn
+        myTurn = true;
+        actionsRemaining = actionsPerGo;
+        selectionRingObj.SetActive(true);
+        entity.State = EntityState.idle;
+        entity.ClickToMove.UpdateMaxDistance();
+
+        // Show actions in UI
+        SetActionArrowsVisibility(actionsRemaining);
+
+    }
+
     public void EndTurn() {
         // Schedule next turn in battle
         ScheduleTurn(myTickDelay);
@@ -59,30 +63,19 @@ public class EntityTurnScheduler : MonoBehaviour
         //Disable self
         myTurn = false;
         selectionRingObj.SetActive(false);
-        GetComponent<ClickToMove>().enabled = false;
+        entity.State = EntityState.inactive;
 
     }
-
-    public void StartTurn() {
-        //Say its my turn
-        myTurn = true;
-        actionsRemaining = actionsPerGo;
-        selectionRingObj.SetActive(true);
-        GetComponent<ClickToMove>().enabled = true;
-        GetComponent<ClickToMove>().UpdateMaxDistance();
-
-        // Show actions in UI
-        SetActionArrowsVisibility(actionsRemaining);
-
-    }
-
+       
     public void SpendActions(int numberOfActions)
     {
         if (debug) {
             Debug.Log($"Spend actions called, spending {numberOfActions} actions.");
         }
+
         actionsRemaining -= numberOfActions;
         SetActionArrowsVisibility(actionsRemaining);
+        CheckForEndOfTurn();
 
         if (debug) {
             Debug.Log($"{this.ToString()} has {actionsRemaining} remaining.");
@@ -92,6 +85,14 @@ public class EntityTurnScheduler : MonoBehaviour
     public void SetActionArrowsVisibility(int actions) {
         for(int i = 0; i < actionArrows.Length; i++) {
             actionArrows[i].enabled = i < actions;
+        }
+    }
+
+    private void CheckForEndOfTurn() {
+        if (actionsRemaining <= 0) {
+            //actionsRemaining = actionsPerGo; //Read above comment
+            actionsRemaining = 0;
+            BattleController.Instance.NextTurn();
         }
     }
 }
