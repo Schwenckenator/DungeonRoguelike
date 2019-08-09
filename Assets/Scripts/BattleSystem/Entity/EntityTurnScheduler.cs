@@ -54,6 +54,8 @@ public class EntityTurnScheduler : MonoBehaviour
         // Show actions in UI
         SetActionArrowsVisibility(actionsRemaining);
 
+        GameEvents.current.StartPlayerTurn(gameObject.GetInstanceID());
+
     }
 
     public void EndTurn() {
@@ -65,8 +67,10 @@ public class EntityTurnScheduler : MonoBehaviour
         selectionRingObj.SetActive(false);
         entity.State = EntityState.inactive;
 
+        GameEvents.current.FinishPlayerTurn(gameObject.GetInstanceID());
+
     }
-       
+
     public void SpendActions(int numberOfActions)
     {
         if (debug) {
