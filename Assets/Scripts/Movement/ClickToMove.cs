@@ -29,8 +29,42 @@ public class ClickToMove : MonoBehaviour
         turnScheduler = GetComponent<EntityTurnScheduler>();
 
         UpdateMaxDistance();
+
+        //Subscribe from game events
+        GameEvents.current.onStartPlayerTurn += OnStartPlayerTurn;
+        GameEvents.current.onFinishPlayerTurn += OnFinishPlayerTurn;
+
     }
 
+    private void OnDestroy()
+    {
+        //Unsubscribe from game events
+        GameEvents.current.onStartPlayerTurn -= OnStartPlayerTurn;
+        GameEvents.current.onFinishPlayerTurn -= OnFinishPlayerTurn;
+    }
+
+
+    private void OnStartPlayerTurn(int entityID)
+    {
+        //Check event to see if this id matches
+        // if(entity.GetInstanceID() == GetInstanceID())
+        if (entityID == gameObject.GetInstanceID())
+
+        {
+            Debug.Log(gameObject.name + " Start turn");
+            UpdateMaxDistance();
+        }
+
+    }
+    private void OnFinishPlayerTurn(int entityID)
+    {
+        //Check event to see if this id matches
+        if (entityID == GetInstanceID())
+        {            
+            UpdateMaxDistance();
+        }
+
+    }
     public void UpdateMaxDistance()
     {
         //Update according to remaining actions
