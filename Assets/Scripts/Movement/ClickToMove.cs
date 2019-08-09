@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 public class ClickToMove : MonoBehaviour
 {
+    //public bool canMove = false;
     public GameObject moveTarget;
     AIDestinationSetter aiDestination;
     AIPath aiPath;
@@ -51,6 +52,7 @@ public class ClickToMove : MonoBehaviour
         if (entityID == gameObject.GetInstanceID())
 
         {
+            //canMove = true;
             Debug.Log(gameObject.name + " Start turn");
             UpdateMaxDistance();
         }
@@ -60,7 +62,8 @@ public class ClickToMove : MonoBehaviour
     {
         //Check event to see if this id matches
         if (entityID == GetInstanceID())
-        {            
+        {
+            //canMove = false;
             UpdateMaxDistance();
         }
 
@@ -119,7 +122,7 @@ public class ClickToMove : MonoBehaviour
             Debug.Log($"Hit a collider! Its name is {hit.collider.gameObject.name}");
             if(hit.collider.gameObject.name == distanceChecker1.name)
             {
-                Debug.Log("Distance1");
+            //  Debug.Log("Distance1");
                 turnScheduler.SpendActions(1);
                 validMove = true;
 
@@ -127,19 +130,19 @@ public class ClickToMove : MonoBehaviour
             }
             else if (hit.collider.gameObject.name == distanceChecker2.name)
             {
-                Debug.Log("Distance2");
+            //    Debug.Log("Distance2");
                 turnScheduler.SpendActions(2);
                 validMove = true;
             }
         } else {
-            Debug.Log("Move order hit no collider.");
+        //    Debug.Log("Move order hit no collider.");
         }
 
         if (!validMove) {
-            Debug.Log("Move order invalid, aborting.");
+        //    Debug.Log("Move order invalid, aborting.");
             return;
         } else {
-            Debug.Log("Move order valid!");
+        //    Debug.Log("Move order valid!");
             seeking = true;
         }
 
@@ -176,23 +179,26 @@ public class ClickToMove : MonoBehaviour
 
     void Update()
     {
-        //Update when goal reached
-        if (seeking && aiPath.reachedEndOfPath)
-        {
-            seeking = false;
-           // Debug.Log("Reached Destination");
-        }
-        //Check for click to move
-        if (Input.GetMouseButtonDown(0))
-        {
-            // If the pointer is over a UI element, the player doesn't want to move their unit.
-            if (EventSystem.current.IsPointerOverGameObject()) return;
-
-            //Prevent multiple clicks
-            if (!seeking)
+        //if (canMove)
+        //{
+            //Update when goal reached
+            if (seeking && aiPath.reachedEndOfPath)
             {
-                ClickToMoveOrder();
+                seeking = false;
+                // Debug.Log("Reached Destination");
             }
-        }
+            //Check for click to move
+            if (Input.GetMouseButtonDown(0))
+            {
+                // If the pointer is over a UI element, the player doesn't want to move their unit.
+                if (EventSystem.current.IsPointerOverGameObject()) return;
+
+                //Prevent multiple clicks
+                if (!seeking)
+                {
+                    ClickToMoveOrder();
+                }
+            }
+        //}
     }
 }

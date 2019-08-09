@@ -26,6 +26,8 @@ public class Entity : MonoBehaviour
                 Interaction.enabled = false;
 
             } else if(state == EntityState.idle) {
+
+                Debug.Log("SET IDLE");
                 ClickToMove.enabled = true;
                 Interaction.enabled = false;
 
