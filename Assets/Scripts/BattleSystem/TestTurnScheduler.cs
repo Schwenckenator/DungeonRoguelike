@@ -6,10 +6,10 @@ using UnityEditor;
 public class TestTurnScheduler : MonoBehaviour
 {
     public int tickDelay;
-    public EntityTurnScheduler entityID;
+    public Entity entity;
 
     public void ScheduleTurn() {
-        Turn turn = new Turn(entityID, tickDelay);
+        Turn turn = new Turn(entity, tickDelay);
         BattleController.Instance.ScheduleTurn(turn);
     }
 }

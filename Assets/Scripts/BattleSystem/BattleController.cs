@@ -7,7 +7,7 @@ public class BattleController : MonoBehaviour {
     public static BattleController Instance { get; private set; }
 
     public int CurrentTick { get; private set; }
-    public EntityTurnScheduler currentEntity;
+    public Entity currentEntity;
 
     private List<Turn> turnQueue;
     
@@ -54,7 +54,7 @@ public class BattleController : MonoBehaviour {
         //Disable Control of Current Entity
         /* ***************************************/
         if(currentEntity != null) {
-            currentEntity.EndTurn();
+            currentEntity.TurnScheduler.EndTurn();
         }
 
         //Find the next turn
@@ -67,7 +67,7 @@ public class BattleController : MonoBehaviour {
         //Give control to new Entity
         /* ***************************************/
         currentEntity = currentTurn.Entity;
-        currentTurn.Entity.StartTurn();
+        currentEntity.TurnScheduler.StartTurn();
     }
 
     public void DebugPrintTurnQueue() {

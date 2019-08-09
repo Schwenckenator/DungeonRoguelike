@@ -9,7 +9,7 @@ public class MainUI : MonoBehaviour
 {
 
     public void Attack() {
-        BattleController.Instance.currentEntity;
+        
     }
 
     private void DoDamage() {

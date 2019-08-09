@@ -9,7 +9,7 @@ public enum InteractionType {
 
 public class EntityInteraction : MonoBehaviour
 {
-    public EntityStats target;
+    public Entity target;
     public float myDamage;
     public float myHealing;
 
@@ -20,20 +20,15 @@ public class EntityInteraction : MonoBehaviour
         
     }
 
-    private void Update() {
-        //Target
-
-    }
-
-    public void SetTarget(EntityStats target) {
+    public void SetTarget(Entity target) {
         this.target = target;
     }
 
     public void Interact(InteractionType interaction) {
         if(interaction == InteractionType.attack) {
-            target.Damage(myDamage);
+            target.Stats.Damage(myDamage);
         } else if (interaction == InteractionType.heal) {
-            target.Heal(myHealing);
+            target.Stats.Heal(myHealing);
         }
     }
 
@@ -53,7 +48,7 @@ public class EntityInteraction : MonoBehaviour
             hits = Physics2D.RaycastAll(transform.position, dir, rayDistance);
             foreach (RaycastHit2D hit in hits) {
                 if (hit.collider != null && hit.collider.tag == "Entity") {
-                    target = hit.transform.GetComponent<EntityStats>();
+                    target = hit.transform.GetComponent<Entity>();
                     break;
                 }
             }
