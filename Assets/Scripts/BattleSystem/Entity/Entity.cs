@@ -23,12 +23,19 @@ public class Entity : MonoBehaviour
             state = value;
             if(state == EntityState.moving) {
                 ClickToMove.enabled = true;
-            }else if(state == EntityState.idle) {
+                Interaction.enabled = false;
+
+            } else if(state == EntityState.idle) {
                 ClickToMove.enabled = true;
-            }else if(state == EntityState.targeting) {
+                Interaction.enabled = false;
+
+            } else if(state == EntityState.targeting) {
                 ClickToMove.enabled = false;
+                Interaction.enabled = true;
+
             } else if(state == EntityState.inactive) {
                 ClickToMove.enabled = false;
+                Interaction.enabled = false;
             }
         }
     }

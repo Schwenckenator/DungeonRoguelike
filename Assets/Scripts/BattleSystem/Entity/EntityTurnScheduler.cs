@@ -26,21 +26,11 @@ public class EntityTurnScheduler : MonoBehaviour
     void Start()
     {
         entity = GetComponent<Entity>();
-        // Entities should have 0 actions when it's not their turn
 
+        // Entities should have 0 actions when it's not their turn
         //actionsRemaining = actionsPerGo;
         actionsRemaining = 0;
         SetActionArrowsVisibility(actionsRemaining);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Do stuff when myTurn is true
-
-
-        //Limit turn to number of actions
-
     }
 
     public void ScheduleTurn(int tickDelay) {
@@ -51,17 +41,6 @@ public class EntityTurnScheduler : MonoBehaviour
     }
     public void ScheduleTurn() {
         ScheduleTurn(myTickDelay);
-    }
-
-    public void EndTurn() {
-        // Schedule next turn in battle
-        ScheduleTurn(myTickDelay);
-
-        //Disable self
-        myTurn = false;
-        selectionRingObj.SetActive(false);
-        entity.State = EntityState.inactive;
-
     }
 
     public void StartTurn() {
@@ -77,6 +56,17 @@ public class EntityTurnScheduler : MonoBehaviour
 
     }
 
+    public void EndTurn() {
+        // Schedule next turn in battle
+        ScheduleTurn(myTickDelay);
+
+        //Disable self
+        myTurn = false;
+        selectionRingObj.SetActive(false);
+        entity.State = EntityState.inactive;
+
+    }
+       
     public void SpendActions(int numberOfActions)
     {
         if (debug) {

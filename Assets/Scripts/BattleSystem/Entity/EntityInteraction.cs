@@ -17,6 +17,11 @@ public class EntityInteraction : MonoBehaviour
     public float rayDistance = 2f;
 
 
+    private void Update() {
+        //Target
+
+    }
+
     public void SetTarget(EntityStats target) {
         this.target = target;
     }
