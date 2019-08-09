@@ -73,7 +73,7 @@ public class BattleController : MonoBehaviour {
     public void DebugPrintTurnQueue() {
         int turnCount = 0;
         foreach(Turn turn in turnQueue) {
-//            Debug.Log($"Turn {turnCount++}, Entity {turn.Entity.ToString()} with Tick {turn.Tick}.");
+            Debug.Log($"Turn {turnCount++}, Entity {turn.Entity.ToString()} with Tick {turn.Tick}.");
         }
     }
 }
