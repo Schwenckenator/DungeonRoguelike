@@ -11,18 +11,24 @@ public enum InteractionType {
 public class EntityInteraction : MonoBehaviour
 {
     public Entity myEntity;
-    public Entity target;
+    //public Entity target;
     //public InteractionType interaction;
     //public float myDamage;
     //public float myHealing;
-    public Ability myAbility;
+    public Ability currentAbility;
+    public List<Ability> abilities;
 
     public int raycount = 16;
     public float rayDistance = 2f;
 
     private void Start() {
         myEntity = GetComponent<Entity>();
-        myAbility = new BasicAttack(TargetType.enemy, 15, 30);
+        abilities = new List<Ability> {
+            //Add two abilities
+            new BasicAttack(TargetType.enemy, 2, 1f, 15, 30),
+            new BasicAttack(TargetType.ally, 2, 1f, -15, -30)
+        };
+
     }
 
     private void Update() {
@@ -55,44 +61,46 @@ public class EntityInteraction : MonoBehaviour
 
                 //If the player wants to select the target, they click
                 if (Input.GetMouseButtonDown(0)) {
-                    SetTarget(hit.collider.GetComponent<Entity>());
-                    myAbility.Activate(target);
+                    Interact(hit.collider.GetComponent<Entity>());
                 }
             }
         }
     }
 
-    public void SetTarget(Entity target) {
-        this.target = target;
-        Debug.Log($"New target's name is {target.gameObject.name}.");
+    public void Interact(Entity target) {
+        currentAbility.Activate(target);
     }
 
-    public void AllAroundTargeting() {
-        Debug.Log("Attempting to acquire Targets!");
-        target = null;
-        for(int i=0; i< raycount; i++) {
-            //Declare all variables
-            RaycastHit2D[] hits;
-            float degrees = i * (360f / raycount);
-            Vector2 dir = RotateVector(Vector2.right, degrees);
-
-            //Draw debug ray
-
-            Debug.DrawRay(transform.position, dir * rayDistance, Color.green, 3f);
-
-            hits = Physics2D.RaycastAll(transform.position, dir, rayDistance);
-            foreach (RaycastHit2D hit in hits) {
-                if (hit.collider != null && hit.collider.tag == "Entity") {
-                    target = hit.transform.GetComponent<Entity>();
-                    break;
-                }
-            }
-            if(target != null) {
-                break;
-            }
-        }
-
+    public void SetCurrentAbility(int index) {
+        currentAbility = abilities[index];
     }
+
+    //public void AllAroundTargeting() {
+    //    Debug.Log("Attempting to acquire Targets!");
+    //    target = null;
+    //    for(int i=0; i< raycount; i++) {
+    //        //Declare all variables
+    //        RaycastHit2D[] hits;
+    //        float degrees = i * (360f / raycount);
+    //        Vector2 dir = RotateVector(Vector2.right, degrees);
+
+    //        //Draw debug ray
+
+    //        Debug.DrawRay(transform.position, dir * rayDistance, Color.green, 3f);
+
+    //        hits = Physics2D.RaycastAll(transform.position, dir, rayDistance);
+    //        foreach (RaycastHit2D hit in hits) {
+    //            if (hit.collider != null && hit.collider.tag == "Entity") {
+    //                target = hit.transform.GetComponent<Entity>();
+    //                break;
+    //            }
+    //        }
+    //        if(target != null) {
+    //            break;
+    //        }
+    //    }
+
+    //}
 
     private static Vector2 RotateVector(Vector2 input, float degrees) {
         Vector2 output = Vector2.zero;
@@ -118,17 +126,17 @@ public class EntityInteractionEditor : Editor {
     public override void OnInspectorGUI() {
         DrawDefaultInspector();
 
-        EntityInteraction myScript = (EntityInteraction)target;
-        if (Application.isPlaying) {
-            if (GUILayout.Button("Aquire targets all around")) {
-                myScript.AllAroundTargeting();
-            }
+        //EntityInteraction myScript = (EntityInteraction)target;
+        //if (Application.isPlaying) {
+        //    if (GUILayout.Button("Aquire targets all around")) {
+        //        myScript.AllAroundTargeting();
+        //    }
             //if (GUILayout.Button("Attack!")) {
             //    myScript.Interact(InteractionType.attack);
             //}
             //if (GUILayout.Button("Heal")) {
             //    myScript.Interact(InteractionType.heal);
             //}
-        }
+        //}
     }
 }

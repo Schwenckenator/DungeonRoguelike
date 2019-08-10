@@ -8,15 +8,13 @@ using UnityEngine;
 public class MainUI : MonoBehaviour
 {
 
-    public void Interact(string type) {
-        //For Current entity, Change state to targeting.
-        BattleController.Instance.currentEntity.State = EntityState.targeting;
+    public void Interact(int index) {
+        //Obtain reference for ease of use
+        Entity currentEntity = BattleController.Instance.currentEntity;
 
-        if (type == "attack") { //TODO: Maybe a dictionary / way better way to do it would be good here
-            BattleController.Instance.currentEntity.Interaction.myAbility = new BasicAttack(TargetType.enemy, 15, 30);
-        }else if(type == "heal") {
-            BattleController.Instance.currentEntity.Interaction.myAbility = new BasicAttack(TargetType.enemy, -15, -30);
-        }
+        //For Current entity, Change state to targeting.
+        currentEntity.State = EntityState.targeting;
+        currentEntity.Interaction.SetCurrentAbility(index);
         
     }
 

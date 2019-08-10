@@ -11,9 +11,13 @@ public abstract class Ability
     //Handle type through subclassing
     //I'll think of what all abilities share later.
     public TargetType ValidTargets { get; protected set; }
+    public int ActionCost { get; protected set; }
+    public float Range { get; protected set; }
 
-    public Ability(TargetType target) {
+    public Ability(TargetType target, int actionCost, float range) {
         ValidTargets = target;
+        ActionCost = actionCost;
+        Range = range;
     }
 
     public abstract void Activate(Entity target);
