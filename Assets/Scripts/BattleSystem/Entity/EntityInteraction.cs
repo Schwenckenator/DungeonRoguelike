@@ -12,15 +12,17 @@ public class EntityInteraction : MonoBehaviour
 {
     public Entity myEntity;
     public Entity target;
-    public InteractionType interaction;
-    public float myDamage;
-    public float myHealing;
+    //public InteractionType interaction;
+    //public float myDamage;
+    //public float myHealing;
+    public Ability myAbility;
 
     public int raycount = 16;
     public float rayDistance = 2f;
 
     private void Start() {
         myEntity = GetComponent<Entity>();
+        myAbility = new BasicAttack(TargetType.enemy, 15, 30);
     }
 
     private void Update() {
@@ -54,6 +56,7 @@ public class EntityInteraction : MonoBehaviour
                 //If the player wants to select the target, they click
                 if (Input.GetMouseButtonDown(0)) {
                     SetTarget(hit.collider.GetComponent<Entity>());
+                    myAbility.Activate(target);
                 }
             }
         }
@@ -62,14 +65,6 @@ public class EntityInteraction : MonoBehaviour
     public void SetTarget(Entity target) {
         this.target = target;
         Debug.Log($"New target's name is {target.gameObject.name}.");
-    }
-
-    public void Interact(InteractionType interaction) {
-        if(interaction == InteractionType.attack) {
-            target.Stats.Damage(myDamage);
-        } else if (interaction == InteractionType.heal) {
-            target.Stats.Heal(myHealing);
-        }
     }
 
     public void AllAroundTargeting() {
@@ -128,12 +123,12 @@ public class EntityInteractionEditor : Editor {
             if (GUILayout.Button("Aquire targets all around")) {
                 myScript.AllAroundTargeting();
             }
-            if (GUILayout.Button("Attack!")) {
-                myScript.Interact(InteractionType.attack);
-            }
-            if (GUILayout.Button("Heal")) {
-                myScript.Interact(InteractionType.heal);
-            }
+            //if (GUILayout.Button("Attack!")) {
+            //    myScript.Interact(InteractionType.attack);
+            //}
+            //if (GUILayout.Button("Heal")) {
+            //    myScript.Interact(InteractionType.heal);
+            //}
         }
     }
 }

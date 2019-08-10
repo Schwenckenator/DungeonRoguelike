@@ -13,9 +13,9 @@ public class MainUI : MonoBehaviour
         BattleController.Instance.currentEntity.State = EntityState.targeting;
 
         if (type == "attack") { //TODO: Maybe a dictionary / way better way to do it would be good here
-            BattleController.Instance.currentEntity.Interaction.interaction = InteractionType.attack;
+            BattleController.Instance.currentEntity.Interaction.myAbility = new BasicAttack(TargetType.enemy, 15, 30);
         }else if(type == "heal") {
-            BattleController.Instance.currentEntity.Interaction.interaction = InteractionType.heal;
+            BattleController.Instance.currentEntity.Interaction.myAbility = new BasicAttack(TargetType.enemy, -15, -30);
         }
         
     }
