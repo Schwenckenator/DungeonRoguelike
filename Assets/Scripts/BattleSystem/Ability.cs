@@ -10,10 +10,10 @@ public abstract class Ability
 {
     //Handle type through subclassing
     //I'll think of what all abilities share later.
-    public TargetType validTargets { get; protected set; }
+    public TargetType ValidTargets { get; protected set; }
 
     public Ability(TargetType target) {
-        validTargets = target;
+        ValidTargets = target;
     }
 
     public abstract void Activate(Entity target);
