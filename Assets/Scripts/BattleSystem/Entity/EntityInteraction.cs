@@ -53,7 +53,7 @@ public class EntityInteraction : MonoBehaviour
             if (hit.collider.CompareTag("Entity")) {
                 //It has found an entity
                 //Now display targeting ring, chance to hit etc.
-                Debug.Log($"Mouse is over {hit.collider.gameObject.name}.");
+                //Debug.Log($"Mouse is over {hit.collider.gameObject.name}.");
 
                 //If the player wants to select the target, they click
                 if (Input.GetMouseButtonDown(0)) {
@@ -64,8 +64,18 @@ public class EntityInteraction : MonoBehaviour
     }
 
     public void Interact(Entity target) {
+        //Check range to target
 
+        if ((transform.position - target.transform.position).magnitude > currentAbility.Range + 0.9f) { //Add a lot of grace
+            Debug.Log("Out of range!");
+            return;
+        }
+
+        //Do the ability
         currentAbility.Activate(target);
+
+        //Spend the actions
+        myEntity.TurnScheduler.SpendActions(currentAbility.ActionCost);
     }
 
     public void SetCurrentAbility(int index) {
