@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetType { self = 1, ally = 2, enemy = 4}
+public enum TargetType { all, selfOnly, alliesOnly, enemyOnly, selfAndAllies, others}
+public enum AbilityType { empty, damage, heal }
 /// <summary>
 /// Ability holds valid targets, damage, and all things to do with an interaction
 /// </summary>
-public abstract class Ability
+
+//[CreateAssetMenu(fileName = "New Ability", menuName = "Ability/Ability", order = 51)]
+public abstract class Ability : ScriptableObject
 {
     //Handle type through subclassing
     //I'll think of what all abilities share later.
-    public TargetType ValidTargets { get; protected set; }
-    public int ActionCost { get; protected set; }
-    public float Range { get; protected set; }
+    public TargetType targetType;
+    public AbilityType abilityType;
+    public int actionCost = 2;
+    public bool endsTurn = false;
+    public float range = 1f;
+    public int minValue;
+    public int maxValue;
 
-    public Ability(TargetType target, int actionCost, float range) {
-        ValidTargets = target;
-        ActionCost = actionCost;
-        Range = range;
-    }
+    //public abstract void Initialise();
 
-    public abstract void Activate(Entity target);
+    public abstract void TriggerAbility(Entity target);
 }

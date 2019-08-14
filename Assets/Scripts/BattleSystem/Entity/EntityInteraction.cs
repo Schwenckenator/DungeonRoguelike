@@ -4,27 +4,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEditor;
 
-public enum InteractionType {
-    attack, heal
-}
-
 public class EntityInteraction : MonoBehaviour
 {
-    public Entity myEntity;
-    public Ability currentAbility;
-    public List<Ability> abilities;
+    
+    public List<Ability> abilities; //Set this in inspector
 
-    public int raycount = 16;
-    public float rayDistance = 2f;
+    //public int raycount = 16;
+    //public float rayDistance = 2f;
+
+    private Entity myEntity;
+    private Ability currentAbility;
+
+    private Camera mainCamera;
+
 
     private void Start() {
         myEntity = GetComponent<Entity>();
-        abilities = new List<Ability> {
-            //Add two abilities
-            new BasicAttack(TargetType.enemy, 2, 1f, 15, 30),
-            new BasicAttack(TargetType.ally, 2, 1f, -15, -30)
-        };
-
+        mainCamera = Camera.main;
     }
 
     private void Update() {
@@ -35,15 +31,16 @@ public class EntityInteraction : MonoBehaviour
         }
         // If the pointer is over a UI element, the player doesn't want to set a target.
         if (EventSystem.current.IsPointerOverGameObject()) return;
-
+        if (Input.GetMouseButtonDown(1)) { //Right click cancels
+            myEntity.State = EntityState.idle;
+        }
         //
         AcquireTarget();
     }
 
     private void AcquireTarget() {
         //Find mouse position;
-        var mousePos = Input.mousePosition;
-        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 worldPoint = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 worldPoint2d = new Vector2(worldPoint.x, worldPoint.y);
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint2d, Vector2.zero);
@@ -64,18 +61,28 @@ public class EntityInteraction : MonoBehaviour
     }
 
     public void Interact(Entity target) {
-        //Check range to target
+        //Check if actions are available
+        if(myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
+            Debug.Log("Not enough Actions remaining!");
+            return;
+        }
 
-        if ((transform.position - target.transform.position).magnitude > currentAbility.Range + 0.9f) { //Add a lot of grace
+        //Check range to target
+        if ((transform.position - target.transform.position).magnitude > currentAbility.range + 0.9f) { //Add a lot of grace
             Debug.Log("Out of range!");
             return;
         }
 
         //Do the ability
-        currentAbility.Activate(target);
+        currentAbility.TriggerAbility(target);
 
+        int actionCost = currentAbility.actionCost;
+
+        if (currentAbility.endsTurn) { // Spend all remaining actions
+            actionCost = myEntity.TurnScheduler.actionsRemaining;
+        }
         //Spend the actions
-        myEntity.TurnScheduler.SpendActions(currentAbility.ActionCost);
+        myEntity.TurnScheduler.SpendActions(actionCost);
     }
 
     public void SetCurrentAbility(int index) {

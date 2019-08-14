@@ -689,8 +689,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
-  TestDamage: 0
-  TestHealing: 0
   healthBar: {fileID: 7693042547851496817}
 --- !u!114 &8012301206481507425
 MonoBehaviour:
@@ -704,13 +702,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04bec3056f4f76347b06dfed8f2821db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myEntity: {fileID: 0}
-  target: {fileID: 0}
-  interaction: 0
-  myDamage: 25
-  myHealing: 25
-  raycount: 16
-  rayDistance: 2
+  abilities:
+  - {fileID: 11400000, guid: 4e0b513774d18ba49ac2d8c8910893c7, type: 2}
+  - {fileID: 11400000, guid: d8047acf1e1f12240b52ccd373116bf5, type: 2}
 --- !u!1 &4862793165748987985
 GameObject:
   m_ObjectHideFlags: 0
