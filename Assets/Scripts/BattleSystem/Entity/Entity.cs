@@ -50,9 +50,10 @@ public class Entity : MonoBehaviour
             }
         }
     }
-    
 
-    
+    private SpriteRenderer spriteRenderer;
+
+
     public void Initialise()
     {
         if(character == null) {
@@ -67,10 +68,16 @@ public class Entity : MonoBehaviour
         State = EntityState.inactive;
 
         Interaction.Initialise();
+        Stats.Initialise();
         TurnScheduler.Initialise();
         ClickToMove.Initialise();
 
-        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = character.sprite;
+    }
+
+    //TODO: Graphics should be moved out of this script
+    public void Die() {
+        spriteRenderer.sprite = character.deadSprite;
     }
 }

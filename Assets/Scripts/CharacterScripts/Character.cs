@@ -7,6 +7,7 @@ public class Character : ScriptableObject
 {
     public string charName;
     public Sprite sprite;
+    public Sprite deadSprite;
     public List<Ability> baseAbilities;
 
 }
