@@ -84,6 +84,11 @@ PrefabInstance:
       propertyPath: allegience
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4128388199214397066, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: allegiance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1042253517969308516, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_Sprite
@@ -129,6 +134,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061216150727006508, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: myTickDelay
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a71753eb18b6b04db2df0e5430107c4, type: 3}

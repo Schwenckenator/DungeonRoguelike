@@ -28,8 +28,10 @@ public class EntityInteraction : MonoBehaviour
         targetingRing.SetActive(false);
     }
 
-    private void Start() {
+    public void Initialise() {
         myEntity = GetComponent<Entity>();
+        //Select first ability for safety
+        currentAbility = abilities[0];
     }
 
     private void Update() {

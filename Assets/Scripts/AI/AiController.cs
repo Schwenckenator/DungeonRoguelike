@@ -16,7 +16,6 @@ public class AiController : MonoBehaviour
 
     //If no enemies found, ends turn
 
-    private Entity currentTarget;
 
     // Start is called before the first frame update
     void Start()
@@ -30,20 +29,52 @@ public class AiController : MonoBehaviour
         
     }
     public void StartTurn() {
+        Debug.Log("AI TURN! Adding delay...");
+        Invoke("DoTurn", 2f);
+    }
+
+    private void DoTurn() {
+        Debug.Log("Do my turn!");
 
         Entity nearestEntity = GetNearestEntity(FindTargets());
-
         float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
         //If out of punching range
-        if (distanceToEntity > 1f) {
-            //Move towards target
-
+        if (distanceToEntity > 1.9f) {
+            MoveToNearestPlayer(nearestEntity);
         } else {
+            Debug.Log("Enemy close! Attacking!");
             //You're in range! Punch the sucker!
-
+            MyEntity.Interaction.Interact(nearestEntity);
         }
 
+        //If there are remaining actions, spend them
+        if(MyEntity.TurnScheduler.actionsRemaining > 0) {
+            Debug.Log("I still have actions, doing turn again.");
+            Invoke("DoTurn", 1f);
+        }
+    }
+
+    private void MoveToNearestPlayer(Entity nearestEntity) {
+        Debug.Log("Enemy far away!");
+        //Move towards target
+        //Find position one square away from target
+        Vector3 adjacentVector = nearestEntity.transform.position - transform.position - Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f);
+        Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
+        Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
+        Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
+        Debug.Log($"The adjacent square vector is {adjacentVector}.");
+
+        Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
+        //Clamp to max range
+        Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining);
+
+        Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
+
+        Debug.Log($"Adding Move order to {targetPosition.ToString()}!");
+
+        MyEntity.ClickToMove.MoveOrder(targetPosition);
+        
     }
 
     private static List<Entity> FindTargets() {

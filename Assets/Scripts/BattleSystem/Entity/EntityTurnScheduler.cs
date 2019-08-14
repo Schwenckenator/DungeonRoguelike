@@ -23,7 +23,7 @@ public class EntityTurnScheduler : MonoBehaviour
     private Entity myEntity;
 
     // Start is called before the first frame update
-    void Start()
+    public void Initialise()
     {
         myEntity = GetComponent<Entity>();
 
@@ -55,6 +55,10 @@ public class EntityTurnScheduler : MonoBehaviour
         SetActionArrowsVisibility(actionsRemaining);
 
         GameEvents.current.StartPlayerTurn(gameObject.GetInstanceID());
+
+        if(myEntity.allegiance == EntityAllegiance.monster) {
+            GetComponent<AiController>().StartTurn();
+        }
 
     }
 

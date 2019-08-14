@@ -15,6 +15,7 @@ public class BattleController : MonoBehaviour {
     private void Awake() {
         Instance = this;
         turnQueue = new List<Turn>();
+        Random.InitState(System.DateTime.Now.Millisecond);
     }
 
     public void StartBattle() {

@@ -484,6 +484,7 @@ MonoBehaviour:
   distanceChecker2: {fileID: 5688986333672390504}
   maxDistance1: 1.5
   maxDistance2: 3
+  maxDistanceForOneAction: 3
 --- !u!114 &5688986332972663739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -574,7 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47dee558324d3a41be693233b1da06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allegience: 0
+  allegiance: 0
 --- !u!114 &4061216150727006508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,7 +619,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4061216150727006419}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04bec3056f4f76347b06dfed8f2821db, type: 3}
   m_Name: 
@@ -1247,6 +1248,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Targeting Ring
+      objectReference: {fileID: 0}
+    - target: {fileID: 4789979047459697207, guid: 14b71025ca042fa4fb6534390a07d6ab,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4789979047459697210, guid: 14b71025ca042fa4fb6534390a07d6ab,
         type: 3}

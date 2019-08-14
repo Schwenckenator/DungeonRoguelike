@@ -24,7 +24,7 @@ public class ClickToMove : MonoBehaviour
     private Entity myEntity;
     private Transform target;
 
-    void Start()
+    public void Initialise()
     {
   
         aiDestination = GetComponent<AIDestinationSetter>();
@@ -48,10 +48,10 @@ public class ClickToMove : MonoBehaviour
     }
 
     private void OnEnable() {
-        PlayerInput.Instance.onLeftMouseButtonPressed += ClickToMoveOrder;
+        PlayerInput.Instance.onLeftMouseButtonPressed += MoveOrder;
     }
     private void OnDisable() {
-        PlayerInput.Instance.onLeftMouseButtonPressed -= ClickToMoveOrder;
+        PlayerInput.Instance.onLeftMouseButtonPressed -= MoveOrder;
     }
 
 
@@ -63,7 +63,7 @@ public class ClickToMove : MonoBehaviour
 
         {
             //canMove = true;
-            Debug.Log(gameObject.name + " Start turn");
+            //Debug.Log(gameObject.name + " Start turn");
             UpdateMaxDistance();
         }
 
@@ -113,10 +113,11 @@ public class ClickToMove : MonoBehaviour
     //    return output;
     //}
 
-    void ClickToMoveOrder(Vector2 worldPoint2d)
+    public void MoveOrder(Vector2 worldPoint2d)
     {
         //If already moving, don't bother.
-        if (seeking) return;
+        //For AI testing
+        //if (seeking) return;
 
         //Debug.Log("Move order issued");
 

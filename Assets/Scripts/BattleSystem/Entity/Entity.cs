@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ public class Entity : MonoBehaviour
 
             } else if(state == EntityState.idle) {
 
-                Debug.Log("SET IDLE");
+                //Debug.Log("SET IDLE");
                 ClickToMove.enabled = true;
                 Interaction.enabled = false;
                 
@@ -50,7 +51,7 @@ public class Entity : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Interaction = GetComponent<EntityInteraction>();
         Stats = GetComponent<EntityStats>();
@@ -58,6 +59,13 @@ public class Entity : MonoBehaviour
         ClickToMove = GetComponent<ClickToMove>();
 
         State = EntityState.inactive;
+
+        Initialise();
     }
 
+    private void Initialise() {
+        Interaction.Initialise();
+        TurnScheduler.Initialise();
+        ClickToMove.Initialise();
+    }
 }
