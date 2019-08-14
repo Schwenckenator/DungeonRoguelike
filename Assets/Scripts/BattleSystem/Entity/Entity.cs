@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum EntityState { inactive, targeting, moving, idle}
-public enum EntityAllegience { player, monster}
+public enum EntityAllegiance { player, monster}
 
 public class Entity : MonoBehaviour
 {
@@ -46,7 +46,7 @@ public class Entity : MonoBehaviour
             }
         }
     }
-    public EntityAllegience allegience;
+    public EntityAllegiance allegience;
 
     // Start is called before the first frame update
     void Start()
