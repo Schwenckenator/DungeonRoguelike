@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HealingTouch
   m_EditorClassIdentifier: 
   targetType: 0
-  abilityType: 1
+  abilityType: 2
   actionCost: 1
   endsTurn: 1
   range: 1

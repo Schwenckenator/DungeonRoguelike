@@ -9,7 +9,7 @@ public class TargetingRing : MonoBehaviour
     public static TargetingRing Instance { get; private set; }
 
     private Camera mainCamera;
-    private SpriteRenderer renderer;
+    private new SpriteRenderer renderer;
 
     // Start is called before the first frame update
     void Awake()
