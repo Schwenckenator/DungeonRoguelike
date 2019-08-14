@@ -8,6 +8,8 @@ public enum EntityAllegiance { player, monster}
 
 public class Entity : MonoBehaviour
 {
+    public Character character;
+
     public EntityInteraction Interaction { get; private set; }
     public EntityStats Stats { get; private set; }
     public EntityTurnScheduler TurnScheduler { get; private set; }
@@ -50,9 +52,13 @@ public class Entity : MonoBehaviour
     }
     
 
-    // Start is called before the first frame update
-    void Awake()
+    
+    public void Initialise()
     {
+        if(character == null) {
+            Debug.LogError("Character cannot be null!");
+            return;
+        }
         Interaction = GetComponent<EntityInteraction>();
         Stats = GetComponent<EntityStats>();
         TurnScheduler = GetComponent<EntityTurnScheduler>();
@@ -60,12 +66,11 @@ public class Entity : MonoBehaviour
 
         State = EntityState.inactive;
 
-        Initialise();
-    }
-
-    private void Initialise() {
         Interaction.Initialise();
         TurnScheduler.Initialise();
         ClickToMove.Initialise();
+
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = character.sprite;
     }
 }

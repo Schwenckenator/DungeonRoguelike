@@ -15,7 +15,7 @@ public abstract class Ability : ScriptableObject
     //I'll think of what all abilities share later.
     public TargetType targetType;
     public AbilityType abilityType;
-    public int actionCost = 2;
+    public int actionCost = 1;
     public bool endsTurn = false;
     public float range = 1f;
     public int minValue;
