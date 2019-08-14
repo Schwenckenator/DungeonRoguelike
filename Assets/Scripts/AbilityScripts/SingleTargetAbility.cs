@@ -22,13 +22,13 @@ public class SingleTargetAbility : Ability {
             return me == target;
         }
         if (targetType == TargetType.alliesOnly) {
-            return me.allegience == target.allegience && me != target;
+            return me.allegiance == target.allegiance && me != target;
         }
         if (targetType == TargetType.enemiesOnly) {
-            return me.allegience != target.allegience;
+            return me.allegiance != target.allegiance;
         }
         if (targetType == TargetType.selfAndAllies) {
-            return me.allegience == target.allegience;
+            return me.allegiance == target.allegiance;
         }
         if (targetType == TargetType.others) {
             return me != target;

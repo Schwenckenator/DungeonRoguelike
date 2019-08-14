@@ -67,6 +67,9 @@ public class BattleController : MonoBehaviour {
         //Give control to new Entity
         /* ***************************************/
         currentEntity = currentTurn.Entity;
+
+        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
+
         currentEntity.TurnScheduler.StartTurn();
     }
 

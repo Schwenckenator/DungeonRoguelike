@@ -44,6 +44,13 @@ public class ClickToMove : MonoBehaviour
         GameEvents.current.onFinishPlayerTurn -= OnFinishPlayerTurn;
     }
 
+    private void OnEnable() {
+        PlayerInput.Instance.onLeftMouseButtonPressed += ClickToMoveOrder;
+    }
+    private void OnDisable() {
+        PlayerInput.Instance.onLeftMouseButtonPressed -= ClickToMoveOrder;
+    }
+
 
     private void OnStartPlayerTurn(int entityID)
     {
@@ -87,33 +94,31 @@ public class ClickToMove : MonoBehaviour
     }
 
     Vector2 AlignToGrid(Vector2 input) {
-        return new Vector2(RoundToPoint5(input.x), RoundToPoint5(input.y)); ;
+        return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f));
     }
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="input">Number to be rounded</param>
-    /// <returns>Float rounded to nearest x.5 value </returns>
-    float RoundToPoint5(float input) {
-        float output = input;
-        output -= 0.5f;
-        output = Mathf.Round(output);
-        output += 0.5f;
+    ///// <summary>
+    /////
+    ///// </summary>
+    ///// <param name="input">Number to be rounded</param>
+    ///// <returns>Float rounded to nearest x.5 value </returns>
+    //float RoundToPoint5(float input) {
+    //    float output = input;
+    //    output -= 0.5f;
+    //    output = Mathf.Round(output);
+    //    output += 0.5f;
 
-        return output;
-    }
+    //    return output;
+    //}
 
-    void ClickToMoveOrder()
+    void ClickToMoveOrder(Vector2 worldPoint2d)
     {
+        //If already moving, don't bother.
+        if (seeking) return;
+
         //Debug.Log("Move order issued");
-        //set to moving and seeking
-        //seeking = true;  <---- This is set later
+
         bool validMove = false;
 
-
-        var mousePos = Input.mousePosition;
-        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 worldPoint2d = new Vector2(worldPoint.x, worldPoint.y);
         RaycastHit2D hit = Physics2D.Raycast(worldPoint2d, Vector2.zero);
 
         //Distinguish which distance was used
@@ -146,18 +151,6 @@ public class ClickToMove : MonoBehaviour
             seeking = true;
         }
 
-        ////Restrict the distance in one turn/click
-        //Vector2 center = transform.localPosition; 
-        //Vector2 position = worldPoint2d;
-        //float actualDistance = Vector2.Distance(center, position);
-
-        //if (actualDistance > maxDistanceCurrent)
-        //{
-        //    Vector2 centerToPosition = position - center;
-        //    centerToPosition.Normalize();
-        //    position = center + centerToPosition * maxDistanceCurrent;
-        //}
-
         //Align move position to grid
         Vector2 position = AlignToGrid(worldPoint2d);
 
@@ -177,28 +170,10 @@ public class ClickToMove : MonoBehaviour
 
     }
 
-    void Update()
-    {
-        //if (canMove)
-        //{
-            //Update when goal reached
-            if (seeking && aiPath.reachedEndOfPath)
-            {
-                seeking = false;
-                // Debug.Log("Reached Destination");
-            }
-            //Check for click to move
-            if (Input.GetMouseButtonDown(0))
-            {
-                // If the pointer is over a UI element, the player doesn't want to move their unit.
-                if (EventSystem.current.IsPointerOverGameObject()) return;
-
-                //Prevent multiple clicks
-                if (!seeking)
-                {
-                    ClickToMoveOrder();
-                }
-            }
-        //}
+    void Update(){
+        if (seeking && aiPath.reachedEndOfPath){
+            seeking = false;
+            // Debug.Log("Reached Destination");
+        }
     }
 }
