@@ -15,6 +15,7 @@ public class BattleController : MonoBehaviour {
     private void Awake() {
         Instance = this;
         turnQueue = new List<Turn>();
+        Random.InitState(System.DateTime.Now.Millisecond);
     }
 
     public void StartBattle() {
@@ -67,6 +68,9 @@ public class BattleController : MonoBehaviour {
         //Give control to new Entity
         /* ***************************************/
         currentEntity = currentTurn.Entity;
+
+        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
+
         currentEntity.TurnScheduler.StartTurn();
     }
 

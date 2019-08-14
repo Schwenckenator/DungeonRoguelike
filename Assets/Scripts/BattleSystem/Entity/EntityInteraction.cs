@@ -8,19 +8,30 @@ public class EntityInteraction : MonoBehaviour
 {
     
     public List<Ability> abilities; //Set this in inspector
-
+    public GameObject targetingRing;
     //public int raycount = 16;
     //public float rayDistance = 2f;
 
     private Entity myEntity;
     private Ability currentAbility;
+    
+    private void OnEnable() {
+        PlayerInput.Instance.onMouseHover += HoverOverTarget;
+        PlayerInput.Instance.onLeftMouseButtonPressed += SelectTarget;
+        PlayerInput.Instance.onRightMouseButtonPressed += CancelTargeting;
+        targetingRing.SetActive(true);
+    }
+    private void OnDisable() {
+        PlayerInput.Instance.onMouseHover -= HoverOverTarget;
+        PlayerInput.Instance.onLeftMouseButtonPressed -= SelectTarget;
+        PlayerInput.Instance.onRightMouseButtonPressed -= CancelTargeting;
+        targetingRing.SetActive(false);
+    }
 
-    private Camera mainCamera;
-
-
-    private void Start() {
+    public void Initialise() {
         myEntity = GetComponent<Entity>();
-        mainCamera = Camera.main;
+        //Select first ability for safety
+        currentAbility = abilities[0];
     }
 
     private void Update() {
@@ -29,35 +40,35 @@ public class EntityInteraction : MonoBehaviour
             this.enabled = false;
             return;
         }
-        // If the pointer is over a UI element, the player doesn't want to set a target.
-        if (EventSystem.current.IsPointerOverGameObject()) return;
-        if (Input.GetMouseButtonDown(1)) { //Right click cancels
-            myEntity.State = EntityState.idle;
-        }
-        //
-        AcquireTarget();
     }
 
-    private void AcquireTarget() {
-        //Find mouse position;
-        Vector3 worldPoint = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 worldPoint2d = new Vector2(worldPoint.x, worldPoint.y);
+    private void HoverOverTarget(Vector2 worldPoint) {
+        Vector2 movePoint = worldPoint;
+        
+        //Raycast at position
+        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint2d, Vector2.zero);
-
-        foreach (RaycastHit2D hit in hits) {
+        foreach (var hit in hits) {
 
             if (hit.collider.CompareTag("Entity")) {
-                //It has found an entity
-                //Now display targeting ring, chance to hit etc.
-                //Debug.Log($"Mouse is over {hit.collider.gameObject.name}.");
-
-                //If the player wants to select the target, they click
-                if (Input.GetMouseButtonDown(0)) {
-                    Interact(hit.collider.GetComponent<Entity>());
-                }
+                movePoint = hit.collider.transform.position;
             }
         }
+
+        targetingRing.transform.position = movePoint;
+    }
+    private void SelectTarget(Vector2 worldPoint) {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
+
+        foreach (RaycastHit2D hit in hits) {
+            if (hit.collider.CompareTag("Entity")) {
+                Interact(hit.collider.GetComponent<Entity>());
+            }
+        }
+    }
+
+    private void CancelTargeting(Vector2 waste) {
+        myEntity.State = EntityState.idle;
     }
 
     public void Interact(Entity target) {
@@ -78,8 +89,6 @@ public class EntityInteraction : MonoBehaviour
             Debug.Log("Out of range!");
             return;
         }
-
-        
 
         //Do the ability
         currentAbility.TriggerAbility(target);
