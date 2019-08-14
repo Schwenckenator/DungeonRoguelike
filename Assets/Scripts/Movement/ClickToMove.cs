@@ -15,11 +15,13 @@ public class ClickToMove : MonoBehaviour
     private float maxDistanceCurrent;
 
     //Would like to retrieve this programatically but for short term this works
-    public float maxDistance1 = 1.5f;
-    public float maxDistance2 = 3;
+    public float maxDistance1 = 3f;
+    public float maxDistance2 = 6f;
+    public float maxDistanceForOneAction = 3f;
 
     private bool seeking;
     private EntityTurnScheduler turnScheduler;
+    private Entity myEntity;
     private Transform target;
 
     void Start()
@@ -28,6 +30,7 @@ public class ClickToMove : MonoBehaviour
         aiDestination = GetComponent<AIDestinationSetter>();
         aiPath = GetComponent<AIPath>();
         turnScheduler = GetComponent<EntityTurnScheduler>();
+        myEntity = GetComponent<Entity>();
 
         UpdateMaxDistance();
 
@@ -119,28 +122,39 @@ public class ClickToMove : MonoBehaviour
 
         bool validMove = false;
 
-        RaycastHit2D hit = Physics2D.Raycast(worldPoint2d, Vector2.zero);
+        //RaycastHit2D hit = Physics2D.Raycast(worldPoint2d, Vector2.zero);
 
-        //Distinguish which distance was used
-        if (hit.collider != null)
-        {
-            Debug.Log($"Hit a collider! Its name is {hit.collider.gameObject.name}");
-            if(hit.collider.gameObject.name == distanceChecker1.name)
-            {
-            //  Debug.Log("Distance1");
-                turnScheduler.SpendActions(1);
-                validMove = true;
+        ////Distinguish which distance was used
+        //if (hit.collider != null)
+        //{
+        //    Debug.Log($"Hit a collider! Its name is {hit.collider.gameObject.name}");
+        //    if(hit.collider.gameObject.name == distanceChecker1.name)
+        //    {
+        //    //  Debug.Log("Distance1");
+        //        turnScheduler.SpendActions(1);
+        //        validMove = true;
 
 
-            }
-            else if (hit.collider.gameObject.name == distanceChecker2.name)
-            {
-            //    Debug.Log("Distance2");
-                turnScheduler.SpendActions(2);
-                validMove = true;
-            }
-        } else {
-        //    Debug.Log("Move order hit no collider.");
+        //    }
+        //    else if (hit.collider.gameObject.name == distanceChecker2.name)
+        //    {
+        //    //    Debug.Log("Distance2");
+        //        turnScheduler.SpendActions(2);
+        //        validMove = true;
+        //    }
+        //} else {
+        ////    Debug.Log("Move order hit no collider.");
+        //}
+
+        Vector2 pos2d = new Vector2(transform.position.x, transform.position.y);
+        float distance = (pos2d - worldPoint2d).magnitude;
+
+        if (distance < maxDistanceForOneAction * myEntity.TurnScheduler.actionsRemaining) {
+            //Use division to find number of actions spent
+            int actionsToSpend = Mathf.CeilToInt(distance / maxDistanceForOneAction);
+
+            myEntity.TurnScheduler.SpendActions(actionsToSpend);
+            validMove = true;
         }
 
         if (!validMove) {
