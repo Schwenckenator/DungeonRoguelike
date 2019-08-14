@@ -42,7 +42,7 @@ public class TargetingRing : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
         foreach(var hit in hits) {
 
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
             if (hit.collider.CompareTag("Entity")) {
                 movePoint = hit.collider.transform.position;
             }

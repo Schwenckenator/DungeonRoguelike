@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetType { all, selfOnly, alliesOnly, enemyOnly, selfAndAllies, others}
+public enum TargetType { all, selfOnly, alliesOnly, enemiesOnly, selfAndAllies, others}
 public enum AbilityType { empty, damage, heal }
 /// <summary>
 /// Ability holds valid targets, damage, and all things to do with an interaction
@@ -24,4 +24,6 @@ public abstract class Ability : ScriptableObject
     //public abstract void Initialise();
 
     public abstract void TriggerAbility(Entity target);
+
+    public abstract bool IsLegalTarget(Entity me, Entity target);
 }

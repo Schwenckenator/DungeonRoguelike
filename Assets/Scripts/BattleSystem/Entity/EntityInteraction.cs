@@ -67,11 +67,19 @@ public class EntityInteraction : MonoBehaviour
             return;
         }
 
+        //Check for correct target
+        if(!currentAbility.IsLegalTarget(myEntity, target)) {
+            Debug.Log("Not Legal Target!");
+            return;
+        }
+
         //Check range to target
         if ((transform.position - target.transform.position).magnitude > currentAbility.range + 0.9f) { //Add a lot of grace
             Debug.Log("Out of range!");
             return;
         }
+
+        
 
         //Do the ability
         currentAbility.TriggerAbility(target);

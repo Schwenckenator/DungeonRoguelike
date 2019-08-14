@@ -499,6 +499,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4403177311452241173, guid: fccc8133da28651469946aa518534fab,
+        type: 3}
+      propertyPath: allegience
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8012301206481507425, guid: fccc8133da28651469946aa518534fab,
         type: 3}
       propertyPath: scriptableAbility
