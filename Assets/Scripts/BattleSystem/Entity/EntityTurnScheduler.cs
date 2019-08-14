@@ -20,12 +20,12 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public Image[] actionArrows;
 
-    private Entity entity;
+    private Entity myEntity;
 
     // Start is called before the first frame update
     void Start()
     {
-        entity = GetComponent<Entity>();
+        myEntity = GetComponent<Entity>();
 
         // Entities should have 0 actions when it's not their turn
         //actionsRemaining = actionsPerGo;
@@ -35,7 +35,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public void ScheduleTurn(int tickDelay) {
         
-        Turn myNextTurn = new Turn(this, tickDelay);
+        Turn myNextTurn = new Turn(myEntity, tickDelay);
 
         BattleController.Instance.ScheduleTurn(myNextTurn);
     }
@@ -48,8 +48,8 @@ public class EntityTurnScheduler : MonoBehaviour
         myTurn = true;
         actionsRemaining = actionsPerGo;
         selectionRingObj.SetActive(true);
-        entity.State = EntityState.idle;
-        entity.ClickToMove.UpdateMaxDistance();
+        myEntity.State = EntityState.idle;
+        myEntity.ClickToMove.UpdateMaxDistance();
 
         // Show actions in UI
         SetActionArrowsVisibility(actionsRemaining);
@@ -65,7 +65,7 @@ public class EntityTurnScheduler : MonoBehaviour
         //Disable self
         myTurn = false;
         selectionRingObj.SetActive(false);
-        entity.State = EntityState.inactive;
+        myEntity.State = EntityState.inactive;
 
         GameEvents.current.FinishPlayerTurn(gameObject.GetInstanceID());
 

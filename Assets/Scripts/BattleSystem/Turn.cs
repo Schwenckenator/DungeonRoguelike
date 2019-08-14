@@ -6,9 +6,9 @@ public class Turn
 {
     public int TickDelay { get; private set; }
     public int Tick { get; private set; }
-    public EntityTurnScheduler Entity { get; private set; } //TODO: Make this the entity class when it's made
+    public Entity Entity { get; private set; } //TODO: Make this the entity class when it's made
 
-    public Turn(EntityTurnScheduler entity, int tickDelay) {
+    public Turn(Entity entity, int tickDelay) {
         Entity = entity;
         TickDelay = tickDelay;
     }
