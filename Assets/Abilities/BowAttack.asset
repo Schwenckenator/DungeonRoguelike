@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a94f24897887534caefdb493bb2ef45, type: 3}
   m_Name: BowAttack
   m_EditorClassIdentifier: 
+  name: Bow
   targetType: 3
   abilityType: 1
   actionCost: 1

@@ -30,6 +30,10 @@ public class BattleController : MonoBehaviour {
         NextTurn();
     }
 
+    public void EndBattle() {
+        throw new System.NotImplementedException();
+    }
+
     public void ScheduleTurn(Turn newTurn) {
         //Set turn to current tick + delay
         newTurn.SetTick(CurrentTick);
@@ -70,7 +74,7 @@ public class BattleController : MonoBehaviour {
         currentEntity = currentTurn.Entity;
 
         PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
-
+        MainUI.Instance.CreateAbilityBar(currentEntity);
         currentEntity.TurnScheduler.StartTurn();
     }
 

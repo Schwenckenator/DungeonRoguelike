@@ -13,6 +13,7 @@ public abstract class Ability : ScriptableObject
 {
     //Handle type through subclassing
     //I'll think of what all abilities share later.
+    public new string name;
     public TargetType targetType;
     public AbilityType abilityType;
     public int actionCost = 1;

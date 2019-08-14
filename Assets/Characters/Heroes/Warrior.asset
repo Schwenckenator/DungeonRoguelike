@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charName: Warrior
   sprite: {fileID: 21300210, guid: c51d6277d6e5e86499e6eca007e73e8d, type: 3}
-  baseAbilities: []
+  baseAbilities:
+  - {fileID: 11400000, guid: bcfc6b61f433b044aae49192689ce550, type: 2}
