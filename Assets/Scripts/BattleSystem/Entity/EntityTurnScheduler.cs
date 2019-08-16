@@ -44,6 +44,13 @@ public class EntityTurnScheduler : MonoBehaviour
     }
 
     public void StartTurn() {
+
+        if (myEntity.Stats.isDead) {
+            //If I'm dead, skip my turn
+            BattleController.Instance.NextTurn();
+            return;
+        }
+
         //Say its my turn
         myTurn = true;
         actionsRemaining = actionsPerGo;
@@ -63,8 +70,10 @@ public class EntityTurnScheduler : MonoBehaviour
     }
 
     public void EndTurn() {
-        // Schedule next turn in battle
-        ScheduleTurn(myTickDelay);
+        if (!myEntity.Stats.isDead) {
+            // Schedule next turn in battle if not dead
+            ScheduleTurn(myTickDelay);
+        }
 
         //Disable self
         myTurn = false;

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a94f24897887534caefdb493bb2ef45, type: 3}
-  m_Name: HealingTouch
+  m_Name: BowAttack
   m_EditorClassIdentifier: 
-  name: Healing Touch
-  targetType: 4
-  abilityType: 2
+  name: Bow
+  targetType: 3
+  abilityType: 1
   actionCost: 1
   endsTurn: 1
-  range: 1
+  range: 10
   minValue: 20
-  maxValue: 25
+  maxValue: 30
