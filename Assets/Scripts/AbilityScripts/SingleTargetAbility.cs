@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Ability", menuName = "Ability/Single Target Ability", order = 51)]
 public class SingleTargetAbility : Ability {
 
+    public bool canTargetDead = false;
+    public bool canTargetAlive = true;
 
     public override void TriggerAbility(Entity target) {
         if(abilityType == AbilityType.damage) {
@@ -15,6 +17,9 @@ public class SingleTargetAbility : Ability {
     }
 
     public override bool IsLegalTarget(Entity me, Entity target) {
+        if (!canTargetDead && target.Stats.isDead) return false;
+        if (!canTargetAlive && !target.Stats.isDead) return false;
+
         if(targetType == TargetType.all) {
             return true;
         }

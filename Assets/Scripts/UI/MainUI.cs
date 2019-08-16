@@ -9,28 +9,43 @@ using UnityEngine.UI;
 public class MainUI : MonoBehaviour
 {
     public static MainUI Instance { get; private set; }
-    public GameObject abilityButton;
-    public Transform abilityPanel;
+    public GameObject EndTurnButton;
     public GameObject[] abilityButtons;
 
     private void Start() {
         Instance = this;
     }
 
-    public void CreateAbilityBar(Entity entity) {
+    public void SetAbilityBar(Entity entity) {
+        //Monster
+        if (entity.allegiance == EntityAllegiance.monster) {
+            HideAbilityBar();
+        } else {
+            CreatePlayerAbilityBar(entity);
+        }
+    }
+
+    private void CreatePlayerAbilityBar(Entity entity) {
+        //Player
         Ability[] abilities = entity.Interaction.abilities.ToArray();
 
-        for (int i=0; i< abilityButtons.Length; i++) {
-            if(i < abilities.Length) {
+        for (int i = 0; i < abilityButtons.Length; i++) {
+            if (i < abilities.Length) {
                 abilityButtons[i].SetActive(true);
                 Text newButtonText = abilityButtons[i].GetComponentInChildren<Text>();
                 newButtonText.text = abilities[i].name;
             } else {
                 abilityButtons[i].SetActive(false);
             }
-
-            
+            EndTurnButton.SetActive(true);
         }
+    }
+
+    private void HideAbilityBar() {
+        for (int i = 0; i < abilityButtons.Length; i++) {
+            abilityButtons[i].SetActive(false);
+        }
+        EndTurnButton.SetActive(false);
     }
 
     public void Interact(int index) {

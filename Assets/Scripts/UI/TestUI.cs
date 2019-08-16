@@ -15,6 +15,10 @@ public class TestUI : MonoBehaviour
         BattleController.Instance.StartBattle();
     }
 
+    public void EndBattle() {
+        BattleController.Instance.EndBattle();
+    }
+
     public void SpawnHero(string heroType) {
         if(heroType == "warrior") Spawn(hero, warrior);
         else if(heroType == "thief") Spawn(hero, thief);

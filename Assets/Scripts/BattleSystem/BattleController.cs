@@ -10,7 +10,7 @@ public class BattleController : MonoBehaviour {
     public Entity currentEntity;
 
     private List<Turn> turnQueue;
-    
+    private bool acceptingNewTurns = true;
 
     private void Awake() {
         Instance = this;
@@ -20,6 +20,7 @@ public class BattleController : MonoBehaviour {
 
     public void StartBattle() {
         //Search for combatants
+        acceptingNewTurns = true;
         //Just grab all entities for now
         EntityTurnScheduler[] combatants = FindObjectsOfType<EntityTurnScheduler>();
         //All combatants schedule a turn
@@ -31,10 +32,22 @@ public class BattleController : MonoBehaviour {
     }
 
     public void EndBattle() {
-        throw new System.NotImplementedException();
+        acceptingNewTurns = false;
+        if (currentEntity != null) {
+            currentEntity.TurnScheduler.EndTurn();
+        }
+        turnQueue.Clear();
+
+        Debug.Log("Battle Finished.");
+        CurrentTick = 0;
+        currentEntity = null;
     }
 
     public void ScheduleTurn(Turn newTurn) {
+        if (!acceptingNewTurns) {
+            Debug.Log("Not accepting new turns.");
+            return;
+        }
         //Set turn to current tick + delay
         newTurn.SetTick(CurrentTick);
 		//Debug.Log($"{newTurn.Entity}'s tick is {newTurn.Tick}. The Current Tick was {CurrentTick}, and the delay was {newTurn.TickDelay}.");
@@ -74,7 +87,7 @@ public class BattleController : MonoBehaviour {
         currentEntity = currentTurn.Entity;
 
         PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
-        MainUI.Instance.CreateAbilityBar(currentEntity);
+        MainUI.Instance.SetAbilityBar(currentEntity);
         currentEntity.TurnScheduler.StartTurn();
     }
 

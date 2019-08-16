@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charName: Thief
   sprite: {fileID: 21300534, guid: c51d6277d6e5e86499e6eca007e73e8d, type: 3}
+  deadSprite: {fileID: 21300000, guid: 38894b122e501c842b735d4a3dd16e36, type: 3}
   baseAbilities:
   - {fileID: 11400000, guid: e303eda1d2e22c347a92ae724f095ef6, type: 2}
   - {fileID: 11400000, guid: 7a31fc8e41947ed49ba0435aa77cd9ea, type: 2}
