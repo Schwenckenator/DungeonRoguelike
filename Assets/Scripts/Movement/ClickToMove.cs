@@ -123,30 +123,6 @@ public class ClickToMove : MonoBehaviour
 
         bool validMove = false;
 
-        //RaycastHit2D hit = Physics2D.Raycast(worldPoint2d, Vector2.zero);
-
-        ////Distinguish which distance was used
-        //if (hit.collider != null)
-        //{
-        //    Debug.Log($"Hit a collider! Its name is {hit.collider.gameObject.name}");
-        //    if(hit.collider.gameObject.name == distanceChecker1.name)
-        //    {
-        //    //  Debug.Log("Distance1");
-        //        turnScheduler.SpendActions(1);
-        //        validMove = true;
-
-
-        //    }
-        //    else if (hit.collider.gameObject.name == distanceChecker2.name)
-        //    {
-        //    //    Debug.Log("Distance2");
-        //        turnScheduler.SpendActions(2);
-        //        validMove = true;
-        //    }
-        //} else {
-        ////    Debug.Log("Move order hit no collider.");
-        //}
-
         Vector2 pos2d = new Vector2(transform.position.x, transform.position.y);
         float distance = (pos2d - worldPoint2d).magnitude;
 
@@ -159,7 +135,7 @@ public class ClickToMove : MonoBehaviour
         }
 
         if (!validMove) {
-        //    Debug.Log("Move order invalid, aborting.");
+            Debug.Log("Move order invalid, aborting.");
             return;
         } else {
         //    Debug.Log("Move order valid!");

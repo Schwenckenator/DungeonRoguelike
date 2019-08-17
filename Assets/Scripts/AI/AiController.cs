@@ -6,7 +6,7 @@ public class AiController : MonoBehaviour
 {
     public Entity MyEntity { get; private set; }
 
-
+    private int turnAttemptCount = 0;
     //Basic AI
 
     //Checks all enemies
@@ -52,10 +52,13 @@ public class AiController : MonoBehaviour
             MyEntity.Interaction.Interact(nearestEntity);
         }
 
-        //If there are remaining actions, spend them
+        //If there are remaining actions
         if(MyEntity.TurnScheduler.actionsRemaining > 0) {
             Debug.Log("I still have actions, doing turn again.");
+            turnAttemptCount++;
             Invoke("DoTurn", 1f);
+        } else {
+            turnAttemptCount = 0;
         }
     }
 
@@ -71,7 +74,7 @@ public class AiController : MonoBehaviour
 
         Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
         //Clamp to max range
-        Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining);
+        Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining - turnAttemptCount);
 
         Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
 

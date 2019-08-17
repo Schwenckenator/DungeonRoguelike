@@ -88,6 +88,7 @@ public class BattleController : MonoBehaviour {
 
         PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
         MainUI.Instance.SetAbilityBar(currentEntity);
+        FocusOnUnit.Instance.MoveCameraToUnit(currentEntity.transform);
         currentEntity.TurnScheduler.StartTurn();
     }
 
