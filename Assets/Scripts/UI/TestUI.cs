@@ -29,7 +29,7 @@ public class TestUI : MonoBehaviour
     }
     public void Spawn(GameObject obj, Character character) {
         //Get Random position
-        Vector2 randomPosition = new Vector2(Random.Range(-3, 3), Random.Range(-3, 3));
+        Vector2 randomPosition = new Vector2(Random.Range(2, 48), Random.Range(2, 48));
         GameObject newEntity = Instantiate(obj, randomPosition, Quaternion.identity);
         newEntity.GetComponent<Entity>().character = character;
         newEntity.GetComponent<Entity>().Initialise();
