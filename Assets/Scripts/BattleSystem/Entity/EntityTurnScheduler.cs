@@ -107,7 +107,6 @@ public class EntityTurnScheduler : MonoBehaviour
 
     private void CheckForEndOfTurn() {
         if (actionsRemaining <= 0) {
-            //actionsRemaining = actionsPerGo; //Read above comment
             actionsRemaining = 0;
             BattleController.Instance.NextTurn();
         }

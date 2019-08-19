@@ -65,6 +65,7 @@ public class ClickToMove : MonoBehaviour
             //canMove = true;
             //Debug.Log(gameObject.name + " Start turn");
             UpdateMaxDistance();
+        
         }
 
     }
@@ -99,25 +100,14 @@ public class ClickToMove : MonoBehaviour
     Vector2 AlignToGrid(Vector2 input) {
         return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f));
     }
-    ///// <summary>
-    /////
-    ///// </summary>
-    ///// <param name="input">Number to be rounded</param>
-    ///// <returns>Float rounded to nearest x.5 value </returns>
-    //float RoundToPoint5(float input) {
-    //    float output = input;
-    //    output -= 0.5f;
-    //    output = Mathf.Round(output);
-    //    output += 0.5f;
-
-    //    return output;
-    //}
 
     public void MoveOrder(Vector2 worldPoint2d)
     {
         //If already moving, don't bother.
-        //For AI testing
-        //if (seeking) return;
+        if (seeking) {
+            Debug.Log("Already Moving! Ignoring input.");
+            return;
+        }
 
         //Debug.Log("Move order issued");
 
@@ -157,14 +147,11 @@ public class ClickToMove : MonoBehaviour
             target.position = position;
         }
         //  Debug.Log(target.position);
-         UpdateMaxDistance();
-
+        UpdateMaxDistance();
+        aiPath.onTargetReached += MoveComplete;
     }
 
-    void Update(){
-        if (seeking && aiPath.reachedEndOfPath){
-            seeking = false;
-            // Debug.Log("Reached Destination");
-        }
+    private void MoveComplete() {
+        seeking = false;
     }
 }
