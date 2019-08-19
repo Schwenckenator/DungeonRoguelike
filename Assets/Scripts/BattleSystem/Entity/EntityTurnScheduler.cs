@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using System;
 
 public class EntityTurnScheduler : MonoBehaviour
 {
@@ -10,10 +11,8 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public bool myTurn = false;
     public int myTickDelay = 10;
-   // public SpriteRenderer selectionRing;
-    //Using object so children are hidden
+
     public GameObject selectionRingObj;
-    //public GameObject clickToMoveObj;
 
     public int actionsPerGo = 2;
     public int actionsRemaining;
@@ -22,13 +21,14 @@ public class EntityTurnScheduler : MonoBehaviour
 
     private Entity myEntity;
 
+    public bool currentlyPerformingAction { get; private set; }
+
     // Start is called before the first frame update
     public void Initialise()
     {
         myEntity = GetComponent<Entity>();
 
         // Entities should have 0 actions when it's not their turn
-        //actionsRemaining = actionsPerGo;
         actionsRemaining = 0;
         SetActionArrowsVisibility(actionsRemaining);
     }
@@ -92,7 +92,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
         actionsRemaining -= numberOfActions;
         SetActionArrowsVisibility(actionsRemaining);
-        CheckForEndOfTurn();
+        
 
         if (debug) {
             Debug.Log($"{this.ToString()} has {actionsRemaining} remaining.");
@@ -105,9 +105,16 @@ public class EntityTurnScheduler : MonoBehaviour
         }
     }
 
+    public void ActionStarted() {
+        currentlyPerformingAction = true;
+    }
+    public void ActonFinished() {
+        currentlyPerformingAction = false;
+        CheckForEndOfTurn();
+    }
+
     private void CheckForEndOfTurn() {
         if (actionsRemaining <= 0) {
-            //actionsRemaining = actionsPerGo; //Read above comment
             actionsRemaining = 0;
             BattleController.Instance.NextTurn();
         }

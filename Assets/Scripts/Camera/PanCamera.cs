@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PanCamera : MonoBehaviour
 {
-    public float panSpeed = 1;
+    public float panSpeed = 10;
+
     // Start is called before the first frame update
     void Start()
     {

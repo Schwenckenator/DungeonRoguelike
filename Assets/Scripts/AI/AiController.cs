@@ -6,7 +6,7 @@ public class AiController : MonoBehaviour
 {
     public Entity MyEntity { get; private set; }
 
-
+    private int turnAttemptCount = 0;
     //Basic AI
 
     //Checks all enemies
@@ -52,10 +52,13 @@ public class AiController : MonoBehaviour
             MyEntity.Interaction.Interact(nearestEntity);
         }
 
-        //If there are remaining actions, spend them
+        //If there are remaining actions
         if(MyEntity.TurnScheduler.actionsRemaining > 0) {
             Debug.Log("I still have actions, doing turn again.");
+            turnAttemptCount++;
             Invoke("DoTurn", 1f);
+        } else {
+            turnAttemptCount = 0;
         }
     }
 
@@ -64,6 +67,7 @@ public class AiController : MonoBehaviour
         //Move towards target
         //Find position one square away from target
         Vector3 adjacentVector = nearestEntity.transform.position - transform.position - Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f);
+        
         Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
         Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
         Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
@@ -71,9 +75,11 @@ public class AiController : MonoBehaviour
 
         Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
         //Clamp to max range
-        Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining);
+        Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining - turnAttemptCount);
 
         Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
+
+        Debug.DrawLine(transform.position, targetPosition, Color.red, 3f);
 
         Debug.Log($"Adding Move order to {targetPosition.ToString()}!");
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Pathfinding;
 
 public enum TileLayer { noCollision, collision }
 
@@ -22,21 +23,25 @@ public class DungeonGenerator : MonoBehaviour
 
     public List<TileInfo> tilePairs;
 
-    
-
     // Start is called before the first frame update
     void Start()
     {
-        //RenderMap(GenerateMapArray(design, true), floorMap, floorTile);
-        //RenderMap(GenerateMapArray(design), wallMap, wallTile);
         GenerateMap(design, TileLayer.collision, wallMap, tilePairs);
         GenerateMap(design, TileLayer.noCollision, floorMap, tilePairs);
+
+        Invoke("Scan", 0.2f);
+    }
+
+    void Scan() {
+        AstarPath.active.Scan();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R)) {
+            AstarPath.active.Scan();
+        }
     }
 
     void GenerateMap(Texture2D image, TileLayer layer, Tilemap tileMap, List<TileInfo> tiles) {

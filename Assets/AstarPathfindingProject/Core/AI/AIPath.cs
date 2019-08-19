@@ -255,8 +255,11 @@ namespace Pathfinding {
 		/// This method will be called again if a new path is calculated as the destination may have changed.
 		/// So when the agent is close to the destination this method will typically be called every <see cref="repathRate"/> seconds.
 		/// </summary>
-		public virtual void OnTargetReached () {
+		protected virtual void OnTargetReached () {
+            onTargetReached?.Invoke();
 		}
+
+        public System.Action onTargetReached;
 
 		/// <summary>
 		/// Called when a requested path has been calculated.
