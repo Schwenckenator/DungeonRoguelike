@@ -130,6 +130,7 @@ public class ClickToMove : MonoBehaviour
         } else {
         //    Debug.Log("Move order valid!");
             seeking = true;
+            myEntity.TurnScheduler.ActionStarted();
         }
 
         //Align move position to grid
@@ -153,5 +154,7 @@ public class ClickToMove : MonoBehaviour
 
     private void MoveComplete() {
         seeking = false;
+        aiPath.onTargetReached -= MoveComplete;
+        myEntity.TurnScheduler.ActonFinished();
     }
 }
