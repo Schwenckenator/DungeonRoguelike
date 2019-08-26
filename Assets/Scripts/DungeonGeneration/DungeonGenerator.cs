@@ -19,7 +19,9 @@ public class DungeonGenerator : MonoBehaviour
     public Tilemap wallMap;
     public TileBase floorTile;
     public TileBase wallTile;
-    public Texture2D design;
+    //public Texture2D design;
+
+    public RoomList rooms;
 
     public List<TileInfo> tilePairs;
 

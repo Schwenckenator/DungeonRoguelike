@@ -301,6 +301,7 @@ MonoBehaviour:
   floorTile: {fileID: 0}
   wallTile: {fileID: 0}
   design: {fileID: 0}
+  rooms: {fileID: 0}
   tilePairs: []
 --- !u!1 &804912868
 GameObject:
@@ -5820,6 +5821,7 @@ MonoBehaviour:
   floorTile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
   wallTile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
   design: {fileID: 2800000, guid: c4eccce86c9e05945b26529fa1518d66, type: 3}
+  rooms: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
   tilePairs:
   - colour: {r: 1, g: 1, b: 1, a: 1}
     tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
