@@ -13,20 +13,74 @@ public class TileInfo {
     public TileLayer layer;
 }
 
+public class Area {
+    private readonly int size;
+    private readonly int increaseInterval;
+    private bool[,] filled;
+
+    public Area(int size, int increaseInterval) {
+        this.size = size;
+        this.increaseInterval = increaseInterval;
+        filled = new bool[size, size];
+    }
+
+    public bool Filled(int x, int y) {
+        if(x > filled.GetUpperBound(0) || y > filled.GetUpperBound(1)) {
+            return false;
+        }
+        return filled[x, y];
+    }
+
+    public void SetFilled(bool fill, int minX, int minY, int maxX, int maxY) {
+        if(maxX < minX || maxY < minY) {
+            Debug.LogError("MIN is bigger than MAX, swap them around!");
+            return;
+        }
+        
+        //If the fill setting is larger than the bounds
+        if(filled.GetUpperBound(0) < maxX || filled.GetUpperBound(1) < maxY) {
+            ExpandArray();
+        }
+
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                filled[x, y] = fill;
+            }
+        }
+    }
+
+    private void ExpandArray() {
+        int newSize = size + increaseInterval;
+        bool[,] temp = new bool[newSize, newSize];
+
+        Debug.Log($"Current Bounds are {filled.GetUpperBound(0)}, {filled.GetUpperBound(1)}.");
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                temp[x, y] = filled[x, y];
+            }
+        }
+
+        filled = temp;
+
+        Debug.Log($"New Bounds are {filled.GetUpperBound(0)}, {filled.GetUpperBound(1)}.");
+    }
+}
+
 public class DungeonGenerator : MonoBehaviour
 {
     public Tilemap floorMap;
     public Tilemap wallMap;
-    //public TileBase floorTile;
-    //public TileBase wallTile;
-    //public Texture2D design;
     public int roomsPerLevel;
     public RoomList roomContainer;
     public List<TileInfo> tilePairs;
 
+    private Area dungeonArea;
+
     // Start is called before the first frame update
     void Start()
     {
+        dungeonArea = new Area(48, 24);
         GenerateLevel(roomsPerLevel);
 
         Invoke("Scan", 0.2f);
@@ -48,9 +102,24 @@ public class DungeonGenerator : MonoBehaviour
     /// </summary>
     void GenerateLevel(int numberOfRooms) {
         Vector2Int offset = Vector2Int.zero;
-        for(int i=0; i<numberOfRooms; i++) {
-            offset = new Vector2Int(i*24,0);
+        
+        for (int i=0; i<numberOfRooms; i++) {
+            
             int roomID = Random.Range(0, roomContainer.rooms.Length);
+            bool placeFound = false;
+            int checkIndex = 0;
+
+            while (!placeFound) {
+                Debug.Log($"Checking square {checkIndex}");
+                if (!dungeonArea.Filled(checkIndex, checkIndex) && 
+                    !dungeonArea.Filled(checkIndex + roomContainer.rooms[roomID].width, checkIndex + roomContainer.rooms[roomID].height)) {
+                    offset = new Vector2Int(checkIndex, checkIndex);
+                    placeFound = true;
+                } else {
+                    checkIndex += 2;
+                }
+            }
+            
 
             GenerateRoom(roomContainer.rooms[roomID], TileLayer.collision, offset, wallMap, tilePairs);
             GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
@@ -83,6 +152,8 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
+
+        dungeonArea.SetFilled(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
     }
 
     //int[,] GeneratePixelArray(Texture2D image, Color colour, bool avoidColour) {
