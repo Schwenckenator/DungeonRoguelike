@@ -49,6 +49,7 @@ public class ClickToMove : MonoBehaviour
 
     private void OnEnable() {
         PlayerInput.Instance.onLeftMouseButtonPressed += MoveOrder;
+
     }
     private void OnDisable() {
         PlayerInput.Instance.onLeftMouseButtonPressed -= MoveOrder;
@@ -63,10 +64,13 @@ public class ClickToMove : MonoBehaviour
 
         {
             //canMove = true;
-            //Debug.Log(gameObject.name + " Start turn");
+            Debug.Log(gameObject.name + " Start turn");
             UpdateMaxDistance();
-        
+            UpdateObstacles(entityID);
+            AstarPath.active.Scan();
+
         }
+
 
     }
     private void OnFinishPlayerTurn(int entityID)
@@ -76,6 +80,28 @@ public class ClickToMove : MonoBehaviour
         {
             //canMove = false;
             UpdateMaxDistance();
+        }
+
+    }
+    private void UpdateObstacles(int entityID)
+    {
+        //Any object with the Single Node Blocker will count as an obstacle
+     //  var otherNodes = FindObjectsOfType<ClickToMove>();//all possible objects with a given component
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("Entity");
+
+        foreach (GameObject go in gos)
+        {
+            //Check we dont add itself to the list
+            if (go.GetInstanceID() == entityID)
+            { //gameObject refers to the gameObject this script is attached to.
+                go.layer = 0;
+            }
+            else
+            {
+                go.layer = 8;
+
+            }
         }
 
     }
