@@ -49,6 +49,9 @@ public class Area {
         }
     }
 
+    public int GetSize() {
+        return filled.GetUpperBound(0);
+    }
     private void ExpandArray() {
         int newSize = size + increaseInterval;
         bool[,] temp = new bool[newSize, newSize];
@@ -80,10 +83,7 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dungeonArea = new Area(48, 24);
-        GenerateLevel(roomsPerLevel);
 
-        Invoke("Scan", 0.2f);
     }
 
     void Scan() {
@@ -96,33 +96,66 @@ public class DungeonGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R)) {
             AstarPath.active.Scan();
         }
+        if (Input.GetKeyDown(KeyCode.G)) {
+            NewLevel();
+        }
+    }
+
+    void NewLevel() {
+        dungeonArea = new Area(48, 24);
+        GenerateLevel(roomsPerLevel);
+
+        Invoke("Scan", 0.2f);
     }
     /// <summary>
     /// Generates an entire level of map
     /// </summary>
     void GenerateLevel(int numberOfRooms) {
         Vector2Int offset = Vector2Int.zero;
-        
+        int previousX = dungeonArea.GetSize() / 2;
+        int previousY = dungeonArea.GetSize() / 2;
+
         for (int i=0; i<numberOfRooms; i++) {
             
             int roomID = Random.Range(0, roomContainer.rooms.Length);
+            //Remember its place origin
+            int[] index = { previousX, previousY };
+
             bool placeFound = false;
-            int checkIndex = 0;
+            int infiniteLoopProtector = 1000;
+
+            int scanDirection = Random.Range(0, 4); //Right, Up, Left, Down
 
             while (!placeFound) {
-                Debug.Log($"Checking square {checkIndex}");
-                if (!dungeonArea.Filled(checkIndex, checkIndex) && 
-                    !dungeonArea.Filled(checkIndex + roomContainer.rooms[roomID].width, checkIndex + roomContainer.rooms[roomID].height)) {
-                    offset = new Vector2Int(checkIndex, checkIndex);
+                Debug.Log($"Checking square {index[0]}, {index[1]}.");
+                if (!dungeonArea.Filled(index[0], index[1]) && 
+                    
+                    !dungeonArea.Filled(index[0] + roomContainer.rooms[roomID].width, 
+                    index[1] + roomContainer.rooms[roomID].height)) 
+                {
+
+                    offset = new Vector2Int(index[0], index[1]);
                     placeFound = true;
+
                 } else {
-                    checkIndex += 2;
+                    //Scan in direction
+                    if (scanDirection == 0) { // Right
+                        index[0]++;
+                    } else if (scanDirection == 1) { // Up
+                        index[1]++;
+                    } else if (scanDirection == 2) { // Left
+                        index[0]--;
+                    } else if (scanDirection == 3) { // Down
+                        index[1]--;
+                    }
                 }
+
+                //Protect against infinite loops
+                if (infiniteLoopProtector-- <= 0) break;
             }
-            
 
             GenerateRoom(roomContainer.rooms[roomID], TileLayer.collision, offset, wallMap, tilePairs);
-            GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
+            //GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
         }
         
     }
