@@ -28,6 +28,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private Vector2Int mapCentre;
     private Vector2Int previousPosition;
+    private List<Vector2Int> roomCentres;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +37,8 @@ public class DungeonGenerator : MonoBehaviour
 
         mapCentre = new Vector2Int(dungeonArea.size / 2, dungeonArea.size / 2);
         previousPosition = mapCentre;
+
+        roomCentres = new List<Vector2Int>();
     }
 
     void Scan() {
@@ -51,7 +54,7 @@ public class DungeonGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) { // Room
             AddRoomsWanderer(1);
         }
-        if (Input.GetKeyDown(KeyCode.W)) { //Wanderer
+        if (Input.GetKeyDown(KeyCode.P)) { //Wanderer
             AddRoomsWanderer(roomsPerLevel);
         }
         if (Input.GetKeyDown(KeyCode.R)){ //Random
@@ -91,6 +94,7 @@ public class DungeonGenerator : MonoBehaviour
     void AddRoomsRandom(int rooms) {
 
         GenerateLevelRandom(rooms);
+        GenerateHallways(roomCentres);
 
         Invoke("Scan", 0.2f);
     }
@@ -164,25 +168,28 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < numberOfRooms; i++) {
 
             int roomID = Random.Range(0, roomContainer.rooms.Length);
+            Vector2Int roomSize = new Vector2Int (roomContainer.rooms[roomID].width, roomContainer.rooms[roomID].height);
 
             bool placeFound = false;
             int infiniteLoopProtector = 100;
 
             while (!placeFound) {
                 Vector2Int randomPos = new Vector2Int
-                    (Random.Range(0, dungeonArea.size - roomContainer.rooms[roomID].width),
-                    Random.Range(0, dungeonArea.size - roomContainer.rooms[roomID].height));
+                    (Random.Range(0, dungeonArea.size - roomSize.x),
+                    Random.Range(0, dungeonArea.size - roomSize.y));
 
-                //CheckCornersEmpty(index, roomContainer.rooms[roomID].width, roomContainer.rooms[roomID].height)
                 if (!dungeonArea.IsFilled(
                     randomPos.x,
                     randomPos.y,
-                    randomPos.x + roomContainer.rooms[roomID].width - 1,
-                    randomPos.y + roomContainer.rooms[roomID].height - 1)) {
+                    randomPos.x + roomSize.x - 1,
+                    randomPos.y + roomSize.y - 1)) {
 
                     offset = randomPos;
                     placeFound = true;
                     generatedRooms++;
+
+                    Vector2Int centre = offset + new Vector2Int(roomSize.x / 2, roomSize.y / 2);
+                    roomCentres.Add(centre);
                 }
 
                 //Protect against infinite loops
@@ -197,6 +204,36 @@ public class DungeonGenerator : MonoBehaviour
             //GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
         }
         Debug.Log($"Dungeon Generated Randomly! {generatedRooms} rooms successfully generated.");
+    }
+    
+    void GenerateHallways(List<Vector2Int> roomCentres) {
+        //  For each centre
+        //      find closest room that isn't already connected
+        //      Connect to that room
+        
+        //  For each centre
+        foreach (var centre in roomCentres) {
+            Vector2Int closestNeighbour = new Vector2Int (10000, 10000); // Arbitrarily large number
+            Debug.Log($"I'm a room! My position is {centre}.");
+            //find closest room that isn't already connected
+            foreach(var neighbour in roomCentres) {
+                
+                // Don't count itself
+                if (centre == neighbour) continue;
+
+                Debug.Log($"My current closest neighbour's position is {closestNeighbour}.\n Checking neighbour {neighbour}.");
+                if ((neighbour - centre).sqrMagnitude < (closestNeighbour - centre).sqrMagnitude) {
+                    Debug.Log("It's closer!");
+                    closestNeighbour = neighbour;
+                }
+            }
+
+            Vector2 drawCentre = centre;
+            Vector2 drawNeighbour = closestNeighbour;
+            //Connect to that room
+            Debug.DrawLine(drawCentre, drawNeighbour, Color.cyan, 10f);
+
+        }
     }
     /// <summary>
     /// Generates a single room
@@ -229,25 +266,25 @@ public class DungeonGenerator : MonoBehaviour
     }
 
 
-    bool CheckCornersEmpty(Vector2Int origin, int width, int height) {
-        Vector2 drawOrigin = origin;
-        //Draw checking box
-        Debug.DrawLine(drawOrigin, new Vector2(origin.x, origin.y + height), Color.red, 3f);
-        Debug.DrawLine(drawOrigin, new Vector2(origin.x + width, origin.y), Color.red, 3f);
-        Debug.DrawLine(new Vector2(origin.x + width, origin.y), new Vector2(origin.x + width, origin.y + height), Color.red, 3f);
-        Debug.DrawLine(new Vector2(origin.x, origin.y + height), new Vector2(origin.x + width, origin.y + height), Color.red, 3f);
+    //bool CheckCornersEmpty(Vector2Int origin, int width, int height) {
+    //    Vector2 drawOrigin = origin;
+    //    //Draw checking box
+    //    Debug.DrawLine(drawOrigin, new Vector2(origin.x, origin.y + height), Color.red, 3f);
+    //    Debug.DrawLine(drawOrigin, new Vector2(origin.x + width, origin.y), Color.red, 3f);
+    //    Debug.DrawLine(new Vector2(origin.x + width, origin.y), new Vector2(origin.x + width, origin.y + height), Color.red, 3f);
+    //    Debug.DrawLine(new Vector2(origin.x, origin.y + height), new Vector2(origin.x + width, origin.y + height), Color.red, 3f);
 
-        //bottom left
-        if (dungeonArea.IsFilled(origin.x, origin.y)) return false;
-        //bottom right
-        if (dungeonArea.IsFilled(origin.x+width-1, origin.y)) return false;
-        //top left
-        if (dungeonArea.IsFilled(origin.x, origin.y+height-1)) return false;
-        //top right
-        if (dungeonArea.IsFilled(origin.x+width-1, origin.y+height-1)) return false;
+    //    //bottom left
+    //    if (dungeonArea.IsFilled(origin.x, origin.y)) return false;
+    //    //bottom right
+    //    if (dungeonArea.IsFilled(origin.x+width-1, origin.y)) return false;
+    //    //top left
+    //    if (dungeonArea.IsFilled(origin.x, origin.y+height-1)) return false;
+    //    //top right
+    //    if (dungeonArea.IsFilled(origin.x+width-1, origin.y+height-1)) return false;
 
         
-        //If it gets here, it's all free!
-        return true;
-    }
+    //    //If it gets here, it's all free!
+    //    return true;
+    //}
 }
