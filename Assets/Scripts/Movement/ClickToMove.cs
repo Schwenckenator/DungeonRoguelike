@@ -30,7 +30,7 @@ public class ClickToMove : MonoBehaviour
     public Color pathValidColor;
     public Color pathInvalidColor;
     private Vector2 lastHighlightPosition;
-
+    private bool highlightGroundActive;
 
     public void Initialise()
     {
@@ -74,7 +74,6 @@ public class ClickToMove : MonoBehaviour
     private void OnStartPlayerTurn(int entityID)
     {
         //Check event to see if this id matches
-        // if(entity.GetInstanceID() == GetInstanceID())
         if (entityID == gameObject.GetInstanceID())
 
         {
@@ -83,7 +82,7 @@ public class ClickToMove : MonoBehaviour
             UpdateMaxDistance();
             UpdateObstacles(entityID);
             AstarPath.active.Scan();
-
+            highlightGroundActive = true;
         }
 
 
@@ -95,6 +94,8 @@ public class ClickToMove : MonoBehaviour
         {
             //canMove = false;
             UpdateMaxDistance();
+            highlightGroundActive = false;
+
         }
 
     }
@@ -126,13 +127,25 @@ public class ClickToMove : MonoBehaviour
         if (turnScheduler && turnScheduler.actionsRemaining > 1)
         {
             maxDistanceCurrent = maxDistance2;
+            distanceChecker1.SetActive(true);
+
             distanceChecker2.SetActive(true);
+            highlightGroundActive = true;
+        }
+        else if (turnScheduler && turnScheduler.actionsRemaining > 0)
+        {
+            maxDistanceCurrent = maxDistance1;
+            distanceChecker1.SetActive(true);
+            distanceChecker2.SetActive(false);
+            highlightGroundActive = true;
 
         }
         else
         {
             maxDistanceCurrent = maxDistance1;
+            distanceChecker1.SetActive(false);
             distanceChecker2.SetActive(false);
+            highlightGroundActive = false;
 
         }
        // Debug.Log("MaxDist " + maxDistanceCurrent);
@@ -142,24 +155,51 @@ public class ClickToMove : MonoBehaviour
         return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f));
     }
 
+    private bool CheckValidMove(Vector2 worldPoint2d)
+    {
+        bool validMove = false;
+
+        Vector2 pos2d = new Vector2(transform.position.x, transform.position.y);
+        float distance = (pos2d - worldPoint2d).magnitude;
+
+        if (distance < maxDistanceForOneAction * myEntity.TurnScheduler.actionsRemaining)
+        {
+
+            validMove = true;
+        }
+        return validMove;
+    }
+
     public void HighlightPath(Vector2 worldPoint2d)
     {
-        Vector2 position = AlignToGrid(worldPoint2d);
-        //Reduce updates on same position
-        if (position != lastHighlightPosition)
-            lastHighlightPosition = position;
-            highlightGroundGO.transform.position = position;
-
-            highlightGroundRenderer.material.color = pathInvalidColor;
-            highlightGroundRenderer.material.color = pathValidColor;
-
+        if (highlightGroundActive)
         {
+            highlightGroundRenderer.enabled = true;
+            Vector2 position = AlignToGrid(worldPoint2d);
+
+            //Reduce updates on same position
+            //  if (position != lastHighlightPosition) { 
+            bool validMove = CheckValidMove(worldPoint2d);
+
             lastHighlightPosition = position;
             highlightGroundGO.transform.position = position;
 
+            if (validMove)
+            {
+
+                highlightGroundRenderer.material.color = pathValidColor;
+            }
+            else
+            {
+                highlightGroundRenderer.material.color = pathInvalidColor;
+            }
+            // }
+        }
+        else
+        {
+            highlightGroundRenderer.enabled = false;
 
         }
-
 
     }
 
@@ -172,27 +212,23 @@ public class ClickToMove : MonoBehaviour
         }
 
         //Debug.Log("Move order issued");
-
-        bool validMove = false;
-
         Vector2 pos2d = new Vector2(transform.position.x, transform.position.y);
         float distance = (pos2d - worldPoint2d).magnitude;
 
-        if (distance < maxDistanceForOneAction * myEntity.TurnScheduler.actionsRemaining) {
+        bool validMove = CheckValidMove(worldPoint2d);
+        if (validMove)
+        {
             //Use division to find number of actions spent
+
             int actionsToSpend = Mathf.CeilToInt(distance / maxDistanceForOneAction);
 
             myEntity.TurnScheduler.SpendActions(actionsToSpend);
-            validMove = true;
-        }
-
-        if (!validMove) {
-            Debug.Log("Move order invalid, aborting.");
-            return;
-        } else {
-        //    Debug.Log("Move order valid!");
             seeking = true;
             myEntity.TurnScheduler.ActionStarted();
+        }
+        else{
+            Debug.Log("Move order invalid, aborting.");
+            return;
         }
 
         //Align move position to grid
@@ -213,6 +249,7 @@ public class ClickToMove : MonoBehaviour
         UpdateMaxDistance();
         aiPath.onTargetReached += MoveComplete;
     }
+
 
     private void MoveComplete() {
         seeking = false;
