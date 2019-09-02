@@ -24,6 +24,14 @@ public class ClickToMove : MonoBehaviour
     private Entity myEntity;
     private Transform target;
 
+    //Highlight Vars
+    public GameObject highlightGroundGO;
+    private Renderer highlightGroundRenderer;
+    public Color pathValidColor;
+    public Color pathInvalidColor;
+    private Vector2 lastHighlightPosition;
+
+
     public void Initialise()
     {
   
@@ -38,6 +46,10 @@ public class ClickToMove : MonoBehaviour
         GameEvents.current.onStartPlayerTurn += OnStartPlayerTurn;
         GameEvents.current.onFinishPlayerTurn += OnFinishPlayerTurn;
 
+        //Highlight
+        highlightGroundGO = Instantiate(highlightGroundGO);
+        highlightGroundGO.transform.position = transform.position;
+        highlightGroundRenderer = highlightGroundGO.GetComponent<Renderer>();
     }
 
     private void OnDestroy()
@@ -49,10 +61,13 @@ public class ClickToMove : MonoBehaviour
 
     private void OnEnable() {
         PlayerInput.Instance.onLeftMouseButtonPressed += MoveOrder;
+        PlayerInput.Instance.onMouseHover += HighlightPath;
 
     }
     private void OnDisable() {
         PlayerInput.Instance.onLeftMouseButtonPressed -= MoveOrder;
+        PlayerInput.Instance.onMouseHover -= HighlightPath;
+
     }
 
 
@@ -125,6 +140,27 @@ public class ClickToMove : MonoBehaviour
 
     Vector2 AlignToGrid(Vector2 input) {
         return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f));
+    }
+
+    public void HighlightPath(Vector2 worldPoint2d)
+    {
+        Vector2 position = AlignToGrid(worldPoint2d);
+        //Reduce updates on same position
+        if (position != lastHighlightPosition)
+            lastHighlightPosition = position;
+            highlightGroundGO.transform.position = position;
+
+            highlightGroundRenderer.material.color = pathInvalidColor;
+            highlightGroundRenderer.material.color = pathValidColor;
+
+        {
+            lastHighlightPosition = position;
+            highlightGroundGO.transform.position = position;
+
+
+        }
+
+
     }
 
     public void MoveOrder(Vector2 worldPoint2d)
