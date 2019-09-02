@@ -20,8 +20,9 @@ public class PanCamera : MonoBehaviour
     void Update()
     {
         Vector2 move = GetInputVector();
+        float boostSpeed = Input.GetKey(KeyCode.LeftShift) ? boost : 1;
         //Camera size makes it relative to window size
-        transform.Translate(move * panSpeed * camera.orthographicSize * Time.deltaTime);
+        transform.Translate(move * panSpeed * boostSpeed * camera.orthographicSize * Time.deltaTime);
 
         if(Input.GetAxis("Mouse ScrollWheel") < 0) {
             camera.orthographicSize += zoomSpeed;

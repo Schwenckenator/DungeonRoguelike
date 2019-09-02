@@ -13,71 +13,6 @@ public class TileInfo {
     public TileLayer layer;
 }
 
-public class Area {
-    public readonly int size;
-    private bool[,] filled;
-
-    public Area(int size) {
-        this.size = size;
-        filled = new bool[size, size];
-    }
-
-    public bool[,] GetArea() {
-        return filled;
-    }
-
-    public bool IsFilled(int x, int y) {
-        //Squares out of bounds count as filled
-        if (x > filled.GetUpperBound(0) ||
-            y > filled.GetUpperBound(1) ||
-            x < filled.GetLowerBound(0) ||
-            y < filled.GetLowerBound(1)) {
-            return true;
-        }
-        return filled[x, y];
-    }
-    public bool IsFilled(Vector2Int cell) {
-        return IsFilled(cell.x, cell.y);
-    }
-
-    /// <summary>
-    /// Very expensive if it's not filled, I should optimise this
-    /// </summary>
-    /// <returns>Returns true if any square inside is filled</returns>
-    public bool IsFilled(int minX, int minY, int maxX, int maxY) {
-        Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
-        for (int x = minX; x < maxX; x++) {
-            for(int y = minY; y < maxY; y++) {
-                
-                Debug.DrawLine(new Vector2(x-0.5f, y - 0.5f), new Vector2(x + 0.5f, y + 0.5f), Color.red, 3f);
-                if (IsFilled(x,y)) return true;
-            }
-        }
-
-        return false;
-    }
-    /// <summary>
-    /// Very expensive if it's not filled, I should optimise this
-    /// </summary>
-    /// <returns>Returns true if any square inside is filled</returns>
-    public bool IsFilled(Vector2Int min, Vector2Int max) {
-        return IsFilled(min.x, min.y, max.x, max.y);
-    }
-
-    public void SetFilled(bool fill, int minX, int minY, int maxX, int maxY) {
-        if(maxX < minX || maxY < minY) {
-            Debug.LogError("MIN is bigger than MAX, swap them around!");
-            return;
-        }
-
-        for (int x = minX; x < maxX; x++) {
-            for (int y = minY; y < maxY; y++) {
-                filled[x, y] = fill;
-            }
-        }
-    }
-}
-
 public class DungeonGenerator : MonoBehaviour
 {
     public int roomsPerLevel;
@@ -110,14 +45,17 @@ public class DungeonGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetKeyDown(KeyCode.C)) { //sCan
             AstarPath.active.Scan();
         }
-        if (Input.GetKeyDown(KeyCode.T)) {
-            AddRooms(1);
+        if (Input.GetKeyDown(KeyCode.E)) { // Room
+            AddRoomsWanderer(1);
         }
-        if (Input.GetKeyDown(KeyCode.Y)) {
-            AddRooms(roomsPerLevel);
+        if (Input.GetKeyDown(KeyCode.W)) { //Wanderer
+            AddRoomsWanderer(roomsPerLevel);
+        }
+        if (Input.GetKeyDown(KeyCode.R)){ //Random
+            AddRoomsRandom(roomsPerLevel);
         }
         if (Input.GetKeyDown(KeyCode.Q)) {
             showFilledArea = true;
@@ -133,7 +71,7 @@ public class DungeonGenerator : MonoBehaviour
         for(int x = 0; x < area.GetUpperBound(0); x++) {
             for(int y = 0; y < area.GetUpperBound(1); y++) {
                 if (area[x, y]) {
-                    Vector2 centre = new Vector2(x, y);
+                    Vector2 centre = new Vector2(x+0.5f, y + 0.5f);
                     Gizmos.DrawWireSphere(centre, 0.5f);
                 }
             }
@@ -144,19 +82,24 @@ public class DungeonGenerator : MonoBehaviour
         showFilledArea = false;
     }
 
-    void AddRooms(int rooms) {
+    void AddRoomsWanderer(int rooms) {
         
-        GenerateLevel(rooms);
+        GenerateLevelWanderer(rooms);
+
+        Invoke("Scan", 0.2f);
+    }
+    void AddRoomsRandom(int rooms) {
+
+        GenerateLevelRandom(rooms);
 
         Invoke("Scan", 0.2f);
     }
     /// <summary>
     /// Generates an entire level of map
     /// </summary>
-    void GenerateLevel(int numberOfRooms) {
+    void GenerateLevelWanderer(int numberOfRooms) {
         Vector2Int offset = Vector2Int.zero;
         
-
         for (int i=0; i<numberOfRooms; i++) {
             
             int roomID = Random.Range(0, roomContainer.rooms.Length);
@@ -212,6 +155,48 @@ public class DungeonGenerator : MonoBehaviour
             //GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
         }
         
+    }
+
+    void GenerateLevelRandom(int numberOfRooms){
+        int generatedRooms = 0;
+        Vector2Int offset = Vector2Int.zero;
+
+        for (int i = 0; i < numberOfRooms; i++) {
+
+            int roomID = Random.Range(0, roomContainer.rooms.Length);
+
+            bool placeFound = false;
+            int infiniteLoopProtector = 100;
+
+            while (!placeFound) {
+                Vector2Int randomPos = new Vector2Int
+                    (Random.Range(0, dungeonArea.size - roomContainer.rooms[roomID].width),
+                    Random.Range(0, dungeonArea.size - roomContainer.rooms[roomID].height));
+
+                //CheckCornersEmpty(index, roomContainer.rooms[roomID].width, roomContainer.rooms[roomID].height)
+                if (!dungeonArea.IsFilled(
+                    randomPos.x,
+                    randomPos.y,
+                    randomPos.x + roomContainer.rooms[roomID].width - 1,
+                    randomPos.y + roomContainer.rooms[roomID].height - 1)) {
+
+                    offset = randomPos;
+                    placeFound = true;
+                    generatedRooms++;
+                }
+
+                //Protect against infinite loops
+                if (infiniteLoopProtector-- <= 0) break;
+            }
+            if (placeFound) {
+                GenerateRoom(roomContainer.rooms[roomID], TileLayer.collision, offset, wallMap, tilePairs);
+            } else {
+                Debug.Log("Failed to generate room.");
+            }
+
+            //GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
+        }
+        Debug.Log($"Dungeon Generated Randomly! {generatedRooms} rooms successfully generated.");
     }
     /// <summary>
     /// Generates a single room

@@ -5850,7 +5850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomsPerLevel: 12
+  roomsPerLevel: 30
   maxSize: 100
   floorMap: {fileID: 811465839}
   wallMap: {fileID: 1480709486}
