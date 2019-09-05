@@ -13,7 +13,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.46931624, y: 0}
+  m_Offset: {x: 0.47364473, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -24,7 +24,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.06136751, y: 1}
+  m_Size: {x: 0.052710533, y: 1}
   m_EdgeRadius: 0
 --- !u!61 &2623794295686982619
 BoxCollider2D:
@@ -39,7 +39,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.47490335, y: 0}
+  m_Offset: {x: -0.46841025, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -50,7 +50,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.05019331, y: 1}
+  m_Size: {x: 0.06317949, y: 1}
   m_EdgeRadius: 0
 --- !u!61 &6628328424243495465
 BoxCollider2D:
@@ -65,7 +65,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.45816705}
+  m_Offset: {x: 0, y: 0.46466008}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -76,7 +76,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.083765924}
+  m_Size: {x: 1, y: 0.07077986}
   m_EdgeRadius: 0
 --- !u!61 &8964920507927622947
 BoxCollider2D:
@@ -91,7 +91,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.46931624}
+  m_Offset: {x: 0, y: -0.47148067}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -102,7 +102,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.06136751}
+  m_Size: {x: 1, y: 0.057038665}
   m_EdgeRadius: 0
 --- !u!114 &5697160878565973784
 MonoBehaviour:
@@ -261,6 +261,11 @@ PrefabInstance:
       propertyPath: startEndModifier.addPoints
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5688986332972663736, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: radius
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7655959546134325522, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -315,6 +320,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1042253517969308517, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0476
+      objectReference: {fileID: 0}
+    - target: {fileID: 1042253517969308517, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9048
       objectReference: {fileID: 0}
     - target: {fileID: 4367331689997767131, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
