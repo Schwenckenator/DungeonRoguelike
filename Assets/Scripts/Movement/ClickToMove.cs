@@ -30,6 +30,7 @@ public class ClickToMove : MonoBehaviour
     public Color pathValidColor;
     public Color pathInvalidColor;
     private bool highlightGroundActive;
+    private Vector2 lastHighlightPosition;
 
     public void Initialise()
     {
@@ -153,25 +154,45 @@ public class ClickToMove : MonoBehaviour
     Vector2 AlignToGrid(Vector2 input) {
         return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f));
     }
-  
+
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
-        bool validMove = false;
+        bool validMove = true;
+        float baseX = worldPoint2d.x;
+        float baseY = worldPoint2d.y;
+        float testX = 0;
+        float testY = 0;
 
-        //Vector2 pos2d = new Vector2(transform.position.x, transform.position.y);
-        //float distance = (pos2d - worldPoint2d).magnitude;
+        GraphNode node;
+        double foundWalkable = 0;
 
-        //if (distance < maxDistanceForOneAction * myEntity.TurnScheduler.actionsRemaining)
-        //{
+        //Using 1 and 10 to prevent the edge causing a problem
+        for(float y = 1; y < 9; y++)
+        {
+            for (float x = 1; x < 9; x++)
+            {
+                testY = baseY + (y / 10);
+                testX = baseX + (x / 10);
+                node = AstarPath.active.GetNearest(new Vector2(testX,testY)).node;
+                if (node.Walkable==true)
+                {
+                    foundWalkable += 1;
+                }
+            }
 
-        //    validMove = true;
-        //}
-
-        GraphNode node = AstarPath.active.GetNearest(worldPoint2d).node;
-        if (node.Walkable)
+        }
+        if (foundWalkable / 100 > 0.5)
         {
             validMove = true;
+
         }
+        else
+        {
+            validMove = false;
+
+        }
+        Debug.Log("Checking Walkable Square " + worldPoint2d.x + " " + worldPoint2d.y);
+        Debug.Log("foundWalkable " + (foundWalkable / 100));
 
         return validMove;
     }
@@ -180,23 +201,26 @@ public class ClickToMove : MonoBehaviour
     {
         if (highlightGroundActive)
         {
-            highlightGroundRenderer.enabled = true;
             Vector2 position = AlignToGrid(worldPoint2d);
-
-            bool validMove = CheckValidMove(worldPoint2d);
-
-            highlightGroundGO.transform.position = position;
-
-
-
-            if (validMove)
+            if (position != lastHighlightPosition)
             {
+                highlightGroundRenderer.enabled = true;
+                lastHighlightPosition = position;
+                bool validMove = CheckValidMove(position);
 
-                highlightGroundRenderer.material.color = pathValidColor;
-            }
-            else
-            {
-                highlightGroundRenderer.material.color = pathInvalidColor;
+                highlightGroundGO.transform.position = position;
+
+
+
+                if (validMove)
+                {
+
+                    highlightGroundRenderer.material.color = pathValidColor;
+                }
+                else
+                {
+                    highlightGroundRenderer.material.color = pathInvalidColor;
+                }
             }
         }
         else
@@ -204,7 +228,7 @@ public class ClickToMove : MonoBehaviour
             highlightGroundRenderer.enabled = false;
 
         }
-
+        
     }
 
     public void MoveOrder(Vector2 worldPoint2d)
