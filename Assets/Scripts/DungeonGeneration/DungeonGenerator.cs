@@ -29,6 +29,7 @@ public class DungeonGenerator : MonoBehaviour
     private Vector2Int mapCentre;
     private Vector2Int previousPosition;
     private List<Vector2Int> roomCentres;
+    private List<Vector2IntPair> connections;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,7 @@ public class DungeonGenerator : MonoBehaviour
         previousPosition = mapCentre;
 
         roomCentres = new List<Vector2Int>();
+        connections = new List<Vector2IntPair>();
     }
 
     void Scan() {
@@ -214,20 +216,42 @@ public class DungeonGenerator : MonoBehaviour
         //  For each centre
         foreach (var centre in roomCentres) {
             Vector2Int closestNeighbour = new Vector2Int (10000, 10000); // Arbitrarily large number
+            Vector2IntPair newConnection = null;
+
             Debug.Log($"I'm a room! My position is {centre}.");
+
             //find closest room that isn't already connected
-            foreach(var neighbour in roomCentres) {
+            foreach (var neighbour in roomCentres) {
                 
                 // Don't count itself
                 if (centre == neighbour) continue;
 
-                Debug.Log($"My current closest neighbour's position is {closestNeighbour}.\n Checking neighbour {neighbour}.");
+                Debug.Log($"My current closest neighbour's position is {closestNeighbour}.\n Checking neighbour {neighbour}...");
                 if ((neighbour - centre).sqrMagnitude < (closestNeighbour - centre).sqrMagnitude) {
                     Debug.Log("It's closer!");
-                    closestNeighbour = neighbour;
+                    Debug.Log("Check for similar connection...");
+
+                    bool connectionExists = false;
+                    Vector2IntPair tempConnection = new Vector2IntPair(centre, neighbour);
+                    foreach(var connection in connections) {
+                        Debug.Log($"Does {tempConnection} equal {connection}?");
+                        if (tempConnection.Equals(connection)) {
+                            Debug.Log("Similar connection exists. Skipping.");
+                            connectionExists = true;
+                        }
+                    }
+
+                    if (!connectionExists) {
+                        Debug.Log("New closest neighbour found!");
+                        closestNeighbour = neighbour;
+                        newConnection = tempConnection;
+                    }
                 }
             }
-
+            if (newConnection != null) {
+                Debug.Log($"Added Connection {newConnection.ToString()}.");
+                connections.Add(newConnection);
+            }
             Vector2 drawCentre = centre;
             Vector2 drawNeighbour = closestNeighbour;
             //Connect to that room
