@@ -23,6 +23,9 @@ public class DungeonGenerator : MonoBehaviour
     public RoomList roomContainer;
     public List<TileInfo> tilePairs;
 
+    public int minConnections;
+    public int maxConnections;
+
     private Area dungeonArea;
     private bool showFilledArea = false;
 
@@ -95,10 +98,10 @@ public class DungeonGenerator : MonoBehaviour
     }
     void AddRoomsRandom(int rooms) {
 
-        GenerateLevelRandom(rooms);
-        GenerateHallways(roomCentres);
+        StartCoroutine(GenerateLevelRandom(rooms));
+        //StartCoroutine(GenerateHallways(roomCentres));
 
-        Invoke("Scan", 0.2f);
+        //Invoke("Scan", 0.2f);
     }
     /// <summary>
     /// Generates an entire level of map
@@ -163,7 +166,7 @@ public class DungeonGenerator : MonoBehaviour
         
     }
 
-    void GenerateLevelRandom(int numberOfRooms){
+    IEnumerator GenerateLevelRandom(int numberOfRooms){
         int generatedRooms = 0;
         Vector2Int offset = Vector2Int.zero;
 
@@ -202,13 +205,15 @@ public class DungeonGenerator : MonoBehaviour
             } else {
                 Debug.Log("Failed to generate room.");
             }
-
+            yield return null;
             //GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
         }
         Debug.Log($"Dungeon Generated Randomly! {generatedRooms} rooms successfully generated.");
+
+        StartCoroutine(GenerateHallways(roomCentres));
     }
-    
-    void GenerateHallways(List<Vector2Int> roomCentres) {
+
+    IEnumerator GenerateHallways(List<Vector2Int> roomCentres) {
         //  For each centre
         //      find closest room that isn't already connected
         //      Connect to that room
@@ -257,7 +262,10 @@ public class DungeonGenerator : MonoBehaviour
             //Connect to that room
             Debug.DrawLine(drawCentre, drawNeighbour, Color.cyan, 10f);
 
+            yield return null;
         }
+
+        Scan();
     }
     /// <summary>
     /// Generates a single room
@@ -287,28 +295,8 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         dungeonArea.SetFilled(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
+
+
     }
 
-
-    //bool CheckCornersEmpty(Vector2Int origin, int width, int height) {
-    //    Vector2 drawOrigin = origin;
-    //    //Draw checking box
-    //    Debug.DrawLine(drawOrigin, new Vector2(origin.x, origin.y + height), Color.red, 3f);
-    //    Debug.DrawLine(drawOrigin, new Vector2(origin.x + width, origin.y), Color.red, 3f);
-    //    Debug.DrawLine(new Vector2(origin.x + width, origin.y), new Vector2(origin.x + width, origin.y + height), Color.red, 3f);
-    //    Debug.DrawLine(new Vector2(origin.x, origin.y + height), new Vector2(origin.x + width, origin.y + height), Color.red, 3f);
-
-    //    //bottom left
-    //    if (dungeonArea.IsFilled(origin.x, origin.y)) return false;
-    //    //bottom right
-    //    if (dungeonArea.IsFilled(origin.x+width-1, origin.y)) return false;
-    //    //top left
-    //    if (dungeonArea.IsFilled(origin.x, origin.y+height-1)) return false;
-    //    //top right
-    //    if (dungeonArea.IsFilled(origin.x+width-1, origin.y+height-1)) return false;
-
-        
-    //    //If it gets here, it's all free!
-    //    return true;
-    //}
 }
