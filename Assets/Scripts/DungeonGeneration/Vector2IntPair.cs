@@ -8,10 +8,27 @@ public class Vector2IntPair
     public Vector2Int value1;
     public Vector2Int value2;
 
+    public float sqrDistance
+    {
+        get
+        {
+            return (value1 - value2).sqrMagnitude;
+        }
+    }
+    public float distance
+    {
+        get
+        {
+            return (value1 - value2).magnitude;
+        }
+    }
+
     public Vector2IntPair(Vector2Int value1, Vector2Int value2) {
         this.value1 = value1;
         this.value2 = value2;
     }
+
+    
 
     public override bool Equals(object obj) {
 
