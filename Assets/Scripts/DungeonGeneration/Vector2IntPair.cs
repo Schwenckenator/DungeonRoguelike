@@ -28,7 +28,9 @@ public class Vector2IntPair
         this.value2 = value2;
     }
 
-    
+    public bool Contains(Vector2Int value) {
+        return (value == value1 || value == value2);
+    }
 
     public override bool Equals(object obj) {
 
