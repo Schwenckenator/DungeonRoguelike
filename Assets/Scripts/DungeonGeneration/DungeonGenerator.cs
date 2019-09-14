@@ -36,6 +36,7 @@ public class DungeonGenerator : MonoBehaviour
     private List<Vector2Int> roomCentres;
     private List<Vector2IntPair> connections;
     private Dictionary<Vector2Int, bool> roomHasConnection;
+    private Dictionary<Vector2Int, int> roomNumConnection;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,7 @@ public class DungeonGenerator : MonoBehaviour
 
         roomCentres = new List<Vector2Int>();
         roomHasConnection = new Dictionary<Vector2Int, bool>();
+        roomNumConnection = new Dictionary<Vector2Int, int>();
         connections = new List<Vector2IntPair>();
     }
 
@@ -275,7 +277,47 @@ public class DungeonGenerator : MonoBehaviour
         Scan();
     }
 
-    IEnumerator GenerateHallwaysShortestFirst(List<Vector2Int> roomCentres) {
+    IEnumerator GenerateHallwaysShortUnconnectedFirst(List<Vector2Int> roomCentres) {
+        //Find all possible connections
+        //sort into shortest distance -> longest distance
+        List<Vector2IntPair> roomConnections = FindAllRoomConnections(roomCentres);
+        PopulateDictionary();
+        //Make hallway connections in order
+
+        //When do I stop? When every room has at least one connection NO DUMB
+        //All rooms need to be connected to every other room, directly or indirectly
+        int currentConnectionAllowance = 0;
+        bool hasUnconnectedRooms = true;
+
+        while (hasUnconnectedRooms) {
+
+            foreach (var connection in roomConnections) {
+
+                if (connections.Contains(connection)) continue; // Don't re-add itself
+
+                if (roomNumConnection[connection.value1] > currentConnectionAllowance ||
+                    roomNumConnection[connection.value2] > currentConnectionAllowance) continue;
+
+
+                Vector2 drawCentre = connection.value1;
+                Vector2 drawNeighbour = connection.value2;
+                //Connect to that room
+                Debug.DrawLine(drawCentre, drawNeighbour, Color.cyan, 10f);
+
+
+
+                yield return null;
+            }
+        }
+    }
+
+    private void PopulateDictionary() {
+        foreach(var room in roomCentres) {
+            roomNumConnection.Add(room, 0);
+        }
+    }
+
+    IEnumerator GenerateHallwaysShortestFirst(List<Vector2Int> roomCentres, int maxConnections) {
         //Find all possible connections
         //sort into shortest distance -> longest distance
         List<Vector2IntPair> roomConnections = FindAllRoomConnections(roomCentres);
@@ -287,7 +329,7 @@ public class DungeonGenerator : MonoBehaviour
         int totalConnections = 40;
         int currentConnections = 0;
 
-        foreach(var connection in roomConnections) {
+        foreach (var connection in roomConnections) {
             Vector2 drawCentre = connection.value1;
             Vector2 drawNeighbour = connection.value2;
             //Connect to that room
@@ -296,56 +338,12 @@ public class DungeonGenerator : MonoBehaviour
 
             yield return null;
 
-            if(currentConnections >= totalConnections) {
+            if (currentConnections >= totalConnections) {
                 break;
             }
         }
 
-        
-
-
-    }
-
-    List<Vector2IntPair> FindAllRoomConnections(List<Vector2Int> roomCentres) {
-
-        var allConnections = new List<Vector2IntPair>();
-
-        foreach (var room in roomCentres) {
-            foreach(var neighbour in roomCentres) {
-                if (room == neighbour) continue; // Don't allow connections to itself
-
-                Vector2IntPair newConnection = new Vector2IntPair(room, neighbour);
-
-                if(ListContainsEquivalent(allConnections, newConnection)) {
-                    //Don't add, it already exists
-                } else {
-                    int index = FindInsertIndex(allConnections, newConnection);
-                    allConnections.Insert(index, newConnection);
-                }
-            }
-        }
-
-        return allConnections;
-    }
-
-    bool ListContainsEquivalent(List<Vector2IntPair> connections, Vector2IntPair newPair) {
-        foreach(var connection in connections) {
-            if (connection.Equals(newPair)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    int FindInsertIndex(List<Vector2IntPair> connections, Vector2IntPair newConnection) {
-        int insertIndex = 0;
-        for(int i=0; i<connections.Count; i++) {
-            if(connections[i].sqrDistance > newConnection.sqrDistance) {
-                insertIndex = i;
-                break;
-            }
-        }
-        return insertIndex;
+        throw new System.NotImplementedException();
     }
 
     IEnumerator GenerateMultipleHallways(List<Vector2Int> roomCentres, int numOfConnections) {
@@ -473,6 +471,77 @@ public class DungeonGenerator : MonoBehaviour
         throw new System.NotImplementedException();
     }
 
+    IEnumerator GenerateHallwaysShortestWalking(List<Vector2Int> roomCentres, int maxConnections) {
+        //Pick the starting room at random
+        Vector2Int currentRoom = roomCentres[0];
+        List<Vector2Int> roomCandidates = new List<Vector2Int>();
+
+        bool unconnectedRoomsExist = true;
+        
+        Color walkColour = RandomColour();
+
+        while (unconnectedRoomsExist) {
+            Debug.Log($"I'm a room! My position is {currentRoom}.");
+            //Find the nearest neighbour
+            Vector2Int nearestNeighbour = new Vector2Int(10000, 10000); //Arbitrarily large value
+            Vector2IntPair nearestConnection = new Vector2IntPair(currentRoom, nearestNeighbour);
+            foreach (var neighbour in roomCentres) {
+
+                if (currentRoom == neighbour) continue; //Can't be your own neighbour
+
+                Debug.Log($"My current closest neighbour's position is {nearestNeighbour}.\n Checking neighbour {neighbour}...");
+
+                Vector2IntPair currentConnection = new Vector2IntPair(currentRoom, neighbour);
+                if (currentConnection.sqrDistance < nearestConnection.sqrDistance) {
+                    Debug.Log("It's closer!");
+                    Debug.Log("Check for similar connection...");
+
+                    if (!IsSimilarConnection(currentConnection, connections)) {
+                        Debug.Log("New closest neighbour found!");
+                        nearestNeighbour = neighbour;
+                        nearestConnection = currentConnection;
+                    }
+                }
+
+            }
+
+            if (nearestConnection != null) {
+                Debug.Log($"Added Connection {nearestConnection.ToString()}.");
+                connections.Add(nearestConnection);
+            }
+
+            //Make path to that neighbour
+            DrawDebugHallway(currentRoom, nearestNeighbour, walkColour);
+
+            roomHasConnection[currentRoom] = true; //Current room has connection
+            roomHasConnection[nearestNeighbour] = true; //Neigbour also has connection
+
+            //If there are still unconnected rooms
+
+            yield return null;
+            //yield return new WaitForSeconds(0.25f);
+
+            if (!roomNumConnection.ContainsValue(0)) {
+                unconnectedRoomsExist = false;
+            } else {
+                if (!roomCandidates.Contains(nearestNeighbour) && roomNumConnection[nearestNeighbour] <= maxConnections) {
+                    roomCandidates.Add(nearestNeighbour);
+                }
+                
+            }
+            //    //Set the neighbour as the next room
+            //    currentRoom = roomCentres[0];
+            //    steps = 0;
+            //    walkColour = RandomColour();
+            //    Debug.LogWarning("Finished a walk and pausing.");
+            //    //Debug.Break();
+            //} else {
+            //    currentRoom = nearestNeighbour;
+            //    steps++;
+            //}
+        }
+    }
+
     bool IsSimilarConnection(Vector2IntPair testConnection, List<Vector2IntPair> connectionList) {
         
         foreach (var connection in connectionList) {
@@ -524,6 +593,47 @@ public class DungeonGenerator : MonoBehaviour
 
     }
 
+    List<Vector2IntPair> FindAllRoomConnections(List<Vector2Int> roomCentres) {
+
+        var allConnections = new List<Vector2IntPair>();
+
+        foreach (var room in roomCentres) {
+            foreach (var neighbour in roomCentres) {
+                if (room == neighbour) continue; // Don't allow connections to itself
+
+                Vector2IntPair newConnection = new Vector2IntPair(room, neighbour);
+
+                if (ListContainsEquivalent(allConnections, newConnection)) {
+                    //Don't add, it already exists
+                } else {
+                    int index = FindInsertIndex(allConnections, newConnection);
+                    allConnections.Insert(index, newConnection);
+                }
+            }
+        }
+
+        return allConnections;
+    }
+
+    bool ListContainsEquivalent(List<Vector2IntPair> connections, Vector2IntPair newPair) {
+        foreach (var connection in connections) {
+            if (connection.Equals(newPair)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int FindInsertIndex(List<Vector2IntPair> connections, Vector2IntPair newConnection) {
+        int insertIndex = 0;
+        for (int i = 0; i < connections.Count; i++) {
+            if (connections[i].sqrDistance > newConnection.sqrDistance) {
+                insertIndex = i;
+                break;
+            }
+        }
+        return insertIndex;
+    }
 
     static Color RandomColour() {
         int random = Random.Range(0, 8);

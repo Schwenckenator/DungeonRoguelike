@@ -332,6 +332,9 @@ MonoBehaviour:
   wallMap: {fileID: 1244218497}
   roomContainer: {fileID: 0}
   tilePairs: []
+  minConnections: 0
+  maxConnections: 0
+  maxSteps: 0
 --- !u!1 &804912868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5871,6 +5874,9 @@ MonoBehaviour:
   - colour: {r: 1, g: 0.49019608, b: 0, a: 1}
     tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
     layer: 1
+  minConnections: 0
+  maxConnections: 0
+  maxSteps: 10
 --- !u!156049354 &1561152106
 Grid:
   m_ObjectHideFlags: 0
