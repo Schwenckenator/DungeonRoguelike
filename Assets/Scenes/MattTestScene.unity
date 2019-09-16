@@ -5875,7 +5875,7 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
     layer: 1
   minConnections: 0
-  maxConnections: 0
+  maxConnections: 3
   maxSteps: 10
 --- !u!156049354 &1561152106
 Grid:
