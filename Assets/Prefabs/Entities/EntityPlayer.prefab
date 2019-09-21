@@ -232,7 +232,6 @@ MonoBehaviour:
     type: 3}
   distanceChecker1: {fileID: 5378027703029193767}
   distanceChecker2: {fileID: 5378027704109307127}
-  maxDistanceCurrent: 3
   maxDistance1: 1.5
   maxDistance2: 3
 --- !u!114 &5378027702334679076
