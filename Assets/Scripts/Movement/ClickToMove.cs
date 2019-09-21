@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Pathfinding;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using System.Collections;
 
 public class ClickToMove : MonoBehaviour
 {
@@ -77,12 +79,11 @@ public class ClickToMove : MonoBehaviour
         if (entityID == gameObject.GetInstanceID())
 
         {
-            //canMove = true;
             Debug.Log(gameObject.name + " Start turn");
             UpdateMaxDistance();
-            UpdateObstacles(entityID);
-            AstarPath.active.Scan();
-            highlightGroundActive = true;
+            //Quick fix to stop incorrect position being blocked off, would like to improve this later
+            StartCoroutine(DelayedCheckTurn(entityID));
+
         }
 
 
@@ -92,7 +93,6 @@ public class ClickToMove : MonoBehaviour
         //Check event to see if this id matches
         if (entityID == GetInstanceID())
         {
-            //canMove = false;
             UpdateMaxDistance();
             highlightGroundActive = false;
 
@@ -102,7 +102,6 @@ public class ClickToMove : MonoBehaviour
     private void UpdateObstacles(int entityID)
     {
         //Any object with the Single Node Blocker will count as an obstacle
-     //  var otherNodes = FindObjectsOfType<ClickToMove>();//all possible objects with a given component
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Entity");
 
@@ -119,6 +118,8 @@ public class ClickToMove : MonoBehaviour
 
             }
         }
+        Debug.Log("Update Obstacles called");
+
 
     }
     public void UpdateMaxDistance()
@@ -158,30 +159,38 @@ public class ClickToMove : MonoBehaviour
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
         bool validMove = true;
-        float baseX = worldPoint2d.x;
-        float baseY = worldPoint2d.y;
+        float baseX = Mathf.Floor(worldPoint2d.x);
+        float baseY = Mathf.Floor(worldPoint2d.y);
+
+
         float testX = 0;
         float testY = 0;
 
         GraphNode node;
         double foundWalkable = 0;
+        double countedNodes = 0;
 
-        //Using 1 and 10 to prevent the edge causing a problem
-        for(float y = 1; y < 9; y++)
+        for(float y = 0; y < 1; y+= 0.1f)
         {
-            for (float x = 1; x < 9; x++)
+            for (float x = 0; x < 1; x += 0.1f)
             {
-                testY = baseY + (y / 10);
-                testX = baseX + (x / 10);
+                //Get the decimal nodes within a tile
+                testY = baseY + y;
+                testX = baseX + x;
+
+
+
                 node = AstarPath.active.GetNearest(new Vector2(testX,testY)).node;
                 if (node.Walkable==true)
                 {
-                    foundWalkable += 1;
+                    foundWalkable += 1;  
                 }
+                countedNodes++;
             }
 
         }
-        if (foundWalkable / 100 > 0.5)
+
+        if (foundWalkable / countedNodes >= 0.90)
         {
             validMove = true;
 
@@ -192,7 +201,7 @@ public class ClickToMove : MonoBehaviour
 
         }
         Debug.Log("Checking Walkable Square " + worldPoint2d.x + " " + worldPoint2d.y);
-        Debug.Log("foundWalkable " + (foundWalkable / 100));
+        Debug.Log("foundWalkable " + (foundWalkable / countedNodes));
 
         return validMove;
     }
@@ -206,7 +215,7 @@ public class ClickToMove : MonoBehaviour
             {
                 highlightGroundRenderer.enabled = true;
                 lastHighlightPosition = position;
-                bool validMove = CheckValidMove(position);
+                bool validMove = CheckValidMove(worldPoint2d);
 
                 highlightGroundGO.transform.position = position;
 
@@ -280,8 +289,25 @@ public class ClickToMove : MonoBehaviour
 
 
     private void MoveComplete() {
+
+       
+
         seeking = false;
         aiPath.onTargetReached -= MoveComplete;
+
         myEntity.TurnScheduler.ActonFinished();
+
     }
+
+    IEnumerator DelayedCheckTurn(int entityID)
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        UpdateObstacles(entityID);
+        AstarPath.active.Scan();
+        highlightGroundActive = true;
+
+    }
+
+
 }
+

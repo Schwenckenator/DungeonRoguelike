@@ -13,7 +13,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.43363202, y: -0.00049835443}
+  m_Offset: {x: 0.46893775, y: -0.014516652}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -24,7 +24,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.03891301, y: 0.8938631}
+  m_Size: {x: 0.054750204, y: 0.96188056}
   m_EdgeRadius: 0
 --- !u!61 &2623794295686982619
 BoxCollider2D:
@@ -39,7 +39,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.4348781, y: -0.0019373298}
+  m_Offset: {x: -0.4710939, y: -0.014787376}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -50,7 +50,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.041103363, y: 0.89678323}
+  m_Size: {x: 0.05590248, y: 0.9624642}
   m_EdgeRadius: 0
 --- !u!61 &6628328424243495465
 BoxCollider2D:
@@ -65,7 +65,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.42201275}
+  m_Offset: {x: -0.0012985468, y: 0.43518746}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -76,7 +76,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.91169596, y: 0.043463588}
+  m_Size: {x: 0.99633, y: 0.064364195}
   m_EdgeRadius: 0
 --- !u!61 &8964920507927622947
 BoxCollider2D:
@@ -91,7 +91,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.008887172, y: -0.42732853}
+  m_Offset: {x: -0.0017483234, y: -0.46101117}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -102,7 +102,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.918432, y: 0.040481687}
+  m_Size: {x: 0.9981332, y: 0.06917}
   m_EdgeRadius: 0
 --- !u!114 &5697160878565973784
 MonoBehaviour:
@@ -264,7 +264,22 @@ PrefabInstance:
     - target: {fileID: 5688986332972663736, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: radius
-      value: 0.4
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688986332972663736, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: slowdownDistance
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688986332972663736, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: endReachedDistance
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688986332972663736, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: whenCloseToDestination
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7655959546134325522, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
@@ -324,17 +339,32 @@ PrefabInstance:
     - target: {fileID: 1042253517969308517, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0476
+      value: 0.115
       objectReference: {fileID: 0}
     - target: {fileID: 1042253517969308517, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.9048
       objectReference: {fileID: 0}
+    - target: {fileID: 1042253517969308517, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 4367331689997767131, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990565950207724042, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.009
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990565950207724042, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.687
       objectReference: {fileID: 0}
     - target: {fileID: 5688986332596991928, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
