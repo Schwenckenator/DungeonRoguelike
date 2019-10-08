@@ -1,11 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// A rectangular shaped room.
+/// </summary>
 public class Room
 {
 
     public Vector2Int Centre { get; }
+
+    public Vector2Int Size { get; }
+    // TODO: check below
+    // Will this get weird with odd-number sized numbers?
+    public int Width { get
+        {
+            return Size.x;
+        } }
+    public int Height { get
+        {
+            return Size.y;
+        } }
+    public BoundsInt Bounds { get; }
+
     public List<Room> Neighbours { get; }
     public int ConnectionCount
     {
@@ -15,8 +31,11 @@ public class Room
         }
     }
 
-    public Room(Vector2Int centre) {
+    //Constructor
+    public Room(Vector2Int centre, Vector2Int size) {
         Centre = centre;
+        Size = size;
+        Bounds = new BoundsInt((Vector3Int)centre, (Vector3Int)size);
         Neighbours = new List<Room>();
     }
 
