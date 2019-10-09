@@ -329,10 +329,14 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     IEnumerator GenerateHallways() {
+        Debug.Log("Waiting for 3 seconds...");
+        yield return new WaitForSeconds(3f);
 
         List<Room> finishedRooms = new List<Room>();
 
         foreach(var room in rooms) {
+
+            room.DebugDataDump();
             foreach(var neighbour in room.Neighbours) {
                 //Find approximate direction to neighbour centres
                 Vector2 approxDir = ApproximateDirection(room.Centre, neighbour.Centre);
@@ -341,50 +345,91 @@ public class DungeonGenerator : MonoBehaviour
                 Vector2Int origin = Vector2Int.zero;
                 Vector2Int target = Vector2Int.zero;
 
+                Color hallwayDebugColour = Color.black;
+
                 //Kinda gross, not good enough at maths to simplify yet
                 if (approxDir == Vector2.right) {
-                    int y = (room.Centre.y - neighbour.Centre.y) / 2;
-                    int xStart = room.Centre.x + room.Bounds.xMax;
-                    int xEnd = neighbour.Centre.x + neighbour.Bounds.xMin;
+                    int y = (room.Centre.y + neighbour.Centre.y) / 2;
+                    int xStart = room.Bounds.xMax;
+                    int xEnd = neighbour.Bounds.xMin;
                     origin = new Vector2Int(xStart, y);
                     target = new Vector2Int(xEnd, y);
+                    hallwayDebugColour = Color.blue;
 
                 } else if (approxDir == Vector2.left) { 
-                    int y = (room.Centre.y - neighbour.Centre.y) / 2;
-                    int xStart = room.Centre.x + room.Bounds.xMin;
-                    int xEnd = neighbour.Centre.x + neighbour.Bounds.xMax;
+                    int y = (room.Centre.y + neighbour.Centre.y) / 2;
+                    int xStart = room.Bounds.xMin;
+                    int xEnd = neighbour.Bounds.xMax;
                     origin = new Vector2Int(xStart, y);
                     target = new Vector2Int(xEnd, y);
+                    hallwayDebugColour = Color.yellow;
 
                 } else if (approxDir == Vector2.up) {
-                    int x = (room.Centre.x - neighbour.Centre.x) / 2;
+                    int x = (room.Centre.x + neighbour.Centre.x) / 2;
                     int yStart = room.Bounds.yMax;
                     int yEnd = neighbour.Bounds.yMin;
                     origin = new Vector2Int(x, yStart);
                     target = new Vector2Int(x, yEnd);
+                    hallwayDebugColour = Color.green;
 
                 } else if (approxDir == Vector2.down) {
-                    int x = (room.Centre.y - neighbour.Centre.y) / 2;
+                    int x = (room.Centre.x + neighbour.Centre.x) / 2;
                     int yStart = room.Bounds.yMin;
                     int yEnd = neighbour.Bounds.yMax;
                     origin = new Vector2Int(x, yStart);
                     target = new Vector2Int(x, yEnd);
+                    hallwayDebugColour = Color.magenta;
+
+                } else {
+                    throw new System.Exception("Hallway Vector has no direction!");
                 }
 
-                DrawDebugHallway(origin, target, Color.red);
+                DrawDebugHallway(origin, target, hallwayDebugColour);
 
+                Vector2Int[] tilesToDraw = MakeWallTilesFromLine(origin, target, 1); //TODO: remove magic numbers
+                Vector2Int[] tilesToRemove = MakeFloorTilesFromLine(origin, target, 1, 3);
+                DrawHallwayTiles(tilesToDraw, tilesToRemove, wallMap, tilePairs);
 
-                //DrawHallwayTiles(origin, target, wallMap, 1);
-                //Stop when it intersects
-                yield return null;
+                yield return new WaitForSeconds(0.5f);
             }
         }
 
 
-        throw new System.NotImplementedException();
+        throw new System.NotImplementedException("Finished");
     }
 
+    private Vector2Int[] MakeFloorTilesFromLine(Vector2Int origin, Vector2Int target, int width, int margin) {
+        List<Vector2Int> tileList = new List<Vector2Int>();
+        //Find axis
+        if (origin.x - target.x == 0) { //travels in y direction, 
+            for (int i = Mathf.Min(origin.y, target.y) - margin; i < Mathf.Max(origin.y, target.y) + margin; i++) {
+                tileList.Add(new Vector2Int(origin.x, i));
+            }
+        } else if (origin.y - target.y == 0) { // travels in x direction
+            for (int i = Mathf.Min(origin.x, target.x) - margin; i < Mathf.Max(origin.x, target.x) + margin; i++) {
+                tileList.Add(new Vector2Int(i, origin.y));
+                
+            }
+        }
+        return tileList.ToArray();
+    }
 
+    private Vector2Int[] MakeWallTilesFromLine(Vector2Int origin, Vector2Int target, int width) {
+        List<Vector2Int> tileList = new List<Vector2Int>();
+        //Find axis
+        if(origin.x - target.x == 0) { //travels in y direction, 
+            for(int i = Mathf.Min(origin.y, target.y); i < Mathf.Max(origin.y, target.y); i++) {
+                tileList.Add(new Vector2Int(origin.x + width, i));
+                tileList.Add(new Vector2Int(origin.x - width, i));
+            }
+        }else if(origin.y - target.y == 0) { // travels in x direction
+            for (int i = Mathf.Min(origin.x, target.x); i < Mathf.Max(origin.x, target.x); i++) {
+                tileList.Add(new Vector2Int(i, origin.y + width));
+                tileList.Add(new Vector2Int(i, origin.y - width));
+            }
+        }
+        return tileList.ToArray();
+    }
 
     void DrawDebugHallway(Vector2Int value1, Vector2Int value2, Color colour) {
         Vector2 drawValue1 = value1;
@@ -424,13 +469,13 @@ public class DungeonGenerator : MonoBehaviour
 
     }
 
-    void DrawHallwayTiles(Vector2Int[] tiles, Tilemap tilemap, int width) {
-        //Decide the tiles to be filled in
-        // in this test case, fill in tiles either side of the line, allowing a one tile path in the middle.
-
-        // Hallways only go in straight lines, with 90 deg turns
-        //Find nearest direction, move that way, halfway through turn 90 deg, move then one more 90 deg turn
-
+    void DrawHallwayTiles(Vector2Int[] drawTiles, Vector2Int[] removeTiles, Tilemap tileMap, List<TileInfo> tiles) {
+        foreach(var tile in drawTiles) {
+            tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), tiles[1].tile); //TODO: fix this [1] bad bad ju ju
+        }
+        foreach(var tile in removeTiles) {
+            tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), null);
+        }
     }
 
     static Vector2 ApproximateDirection(Vector2 origin, Vector2 target) {

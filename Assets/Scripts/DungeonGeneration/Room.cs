@@ -35,7 +35,10 @@ public class Room
     public Room(Vector2Int centre, Vector2Int size) {
         Centre = centre;
         Size = size;
-        Bounds = new BoundsInt((Vector3Int)centre, (Vector3Int)size);
+
+        Vector2Int min = centre - (new Vector2Int(size.x / 2, size.y / 2));
+
+        Bounds = new BoundsInt((Vector3Int)min, (Vector3Int)size);
         Neighbours = new List<Room>();
     }
 
@@ -58,5 +61,11 @@ public class Room
 
     public static float SqrDistance(Room value1, Room value2) {
         return (value1.Centre - value2.Centre).sqrMagnitude;
+    }
+
+    public void DebugDataDump() {
+        Debug.Log(
+            $"Room: {Centre.ToString()}\nSize: {Size.ToString()}\nBounds: {Bounds.ToString()}" +
+            $"Min X: {Bounds.xMin}, Max X: {Bounds.xMax}, Min Y: {Bounds.yMin}, Max Y:{Bounds.yMax}");
     }
 }
