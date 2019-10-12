@@ -336,7 +336,6 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach(var room in rooms) {
 
-            room.DebugDataDump();
             foreach(var neighbour in room.Neighbours) {
                 //Find approximate direction to neighbour centres
                 Vector2 approxDir = ApproximateDirection(room.Centre, neighbour.Centre);
@@ -346,6 +345,7 @@ public class DungeonGenerator : MonoBehaviour
                 Vector2Int target = Vector2Int.zero;
 
                 Color hallwayDebugColour = Color.black;
+                Vector2Int debugHallwayMargin = new Vector2Int(Mathf.RoundToInt(approxDir.x), Mathf.RoundToInt(approxDir.y));
 
                 //Kinda gross, not good enough at maths to simplify yet
                 if (approxDir == Vector2.right) {
@@ -384,10 +384,10 @@ public class DungeonGenerator : MonoBehaviour
                     throw new System.Exception("Hallway Vector has no direction!");
                 }
 
-                DrawDebugHallway(origin, target, hallwayDebugColour);
+                DrawDebugHallway(origin - debugHallwayMargin, target + debugHallwayMargin, hallwayDebugColour);
 
-                Vector2Int[] tilesToDraw = MakeWallTilesFromLine(origin, target, 1); //TODO: remove magic numbers
-                Vector2Int[] tilesToRemove = MakeFloorTilesFromLine(origin, target, 1, 3);
+                DesignateHallwayTiles(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
+
                 DrawHallwayTiles(tilesToDraw, tilesToRemove, wallMap, tilePairs);
 
                 yield return new WaitForSeconds(0.5f);
@@ -398,37 +398,82 @@ public class DungeonGenerator : MonoBehaviour
         throw new System.NotImplementedException("Finished");
     }
 
-    private Vector2Int[] MakeFloorTilesFromLine(Vector2Int origin, Vector2Int target, int width, int margin) {
-        List<Vector2Int> tileList = new List<Vector2Int>();
-        //Find axis
-        if (origin.x - target.x == 0) { //travels in y direction, 
-            for (int i = Mathf.Min(origin.y, target.y) - margin; i < Mathf.Max(origin.y, target.y) + margin; i++) {
-                tileList.Add(new Vector2Int(origin.x, i));
-            }
-        } else if (origin.y - target.y == 0) { // travels in x direction
-            for (int i = Mathf.Min(origin.x, target.x) - margin; i < Mathf.Max(origin.x, target.x) + margin; i++) {
-                tileList.Add(new Vector2Int(i, origin.y));
-                
-            }
-        }
-        return tileList.ToArray();
-    }
+    //private Vector2Int[] MakeFloorTilesFromLine(Vector2Int origin, Vector2Int target, int width, int margin) {
+    //    List<Vector2Int> tileList = new List<Vector2Int>();
 
-    private Vector2Int[] MakeWallTilesFromLine(Vector2Int origin, Vector2Int target, int width) {
-        List<Vector2Int> tileList = new List<Vector2Int>();
-        //Find axis
-        if(origin.x - target.x == 0) { //travels in y direction, 
-            for(int i = Mathf.Min(origin.y, target.y); i < Mathf.Max(origin.y, target.y); i++) {
-                tileList.Add(new Vector2Int(origin.x + width, i));
-                tileList.Add(new Vector2Int(origin.x - width, i));
+    //    Vector2 approxDir = ApproximateDirection(origin, target);
+    //    //Find axis
+    //    if (approxDir == Vector2.up || approxDir == Vector2.down) { //travels in y direction, 
+    //        for (int i = Mathf.Min(origin.y, target.y) - margin; i < Mathf.Max(origin.y, target.y) + margin; i++) {
+    //            tileList.Add(new Vector2Int(origin.x, i));
+    //        }
+    //    } else if (approxDir == Vector2.right || approxDir == Vector2.left) { // travels in x direction
+    //        for (int i = Mathf.Min(origin.x, target.x) - margin; i < Mathf.Max(origin.x, target.x) + margin; i++) {
+    //            tileList.Add(new Vector2Int(i, origin.y));
+                
+    //        }
+    //    }
+    //    return tileList.ToArray();
+    //}
+
+    //private Vector2Int[] MakeWallTilesFromLine(Vector2Int origin, Vector2Int target, int width) {
+    //    List<Vector2Int> tileList = new List<Vector2Int>();
+    //    //Find axis
+    //    if(origin.x - target.x == 0) { //travels in y direction, 
+    //        for(int i = Mathf.Min(origin.y, target.y); i < Mathf.Max(origin.y, target.y); i++) {
+    //            tileList.Add(new Vector2Int(origin.x + width, i));
+    //            tileList.Add(new Vector2Int(origin.x - width, i));
+    //        }
+    //    }else if(origin.y - target.y == 0) { // travels in x direction
+    //        for (int i = Mathf.Min(origin.x, target.x); i < Mathf.Max(origin.x, target.x); i++) {
+    //            tileList.Add(new Vector2Int(i, origin.y + width));
+    //            tileList.Add(new Vector2Int(i, origin.y - width));
+    //        }
+    //    }
+    //    return tileList.ToArray();
+    //}
+    
+    
+    /// <summary>
+    /// Returns two arrays with out, one where 
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="target"></param>
+    /// <param name="direction"></param>
+    /// <param name="wallTiles"></param>
+    /// <param name="floorTiles"></param>
+    /// <param name="width"></param>
+    /// <param name="margin"></param>
+    private void DesignateHallwayTiles(Vector2Int origin, Vector2Int target, Vector2 direction, out Vector2Int[] wallTiles, out Vector2Int[] floorTiles, int width = 1, int margin = 3) {
+        List<Vector2Int> wallTileList = new List<Vector2Int>();
+        List<Vector2Int> floorTileList = new List<Vector2Int>();
+
+        //TODO: clean up repetition... Don't know how I'd do it though
+        if (direction == Vector2.up || direction == Vector2.down) { //travels in y direction, 
+            for (int i = Mathf.Min(origin.y, target.y) - margin; i < Mathf.Max(origin.y, target.y) + margin; i++) {
+                //TODO: don't ignore width
+                floorTileList.Add(new Vector2Int(origin.x, i));
             }
-        }else if(origin.y - target.y == 0) { // travels in x direction
+
+            for (int i = Mathf.Min(origin.y, target.y); i < Mathf.Max(origin.y, target.y); i++) {
+                wallTileList.Add(new Vector2Int(origin.x + width, i));
+                wallTileList.Add(new Vector2Int(origin.x - width, i));
+            }
+
+        } else if (direction == Vector2.right || direction == Vector2.left) {
+            for (int i = Mathf.Min(origin.x, target.x) - margin; i < Mathf.Max(origin.x, target.x) + margin; i++) {
+                //TODO: don't ignore width
+                floorTileList.Add(new Vector2Int(i, origin.y));
+            }
+
             for (int i = Mathf.Min(origin.x, target.x); i < Mathf.Max(origin.x, target.x); i++) {
-                tileList.Add(new Vector2Int(i, origin.y + width));
-                tileList.Add(new Vector2Int(i, origin.y - width));
+                wallTileList.Add(new Vector2Int(i, origin.y + width));
+                wallTileList.Add(new Vector2Int(i, origin.y - width));
             }
+
         }
-        return tileList.ToArray();
+        wallTiles = wallTileList.ToArray();
+        floorTiles = floorTileList.ToArray();
     }
 
     void DrawDebugHallway(Vector2Int value1, Vector2Int value2, Color colour) {
@@ -475,6 +520,8 @@ public class DungeonGenerator : MonoBehaviour
         }
         foreach(var tile in removeTiles) {
             tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), null);
+            Vector2 pos = tile;
+            Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
         }
     }
 
@@ -486,19 +533,20 @@ public class DungeonGenerator : MonoBehaviour
             return Vector2.zero;
         }
 
-        if(displacement.x > Mathf.Abs(displacement.y)) {
+        if(displacement.x >= Mathf.Abs(displacement.y)) {
             return Vector2.right;
         }
-        if(-displacement.x > Mathf.Abs(displacement.y)) {
+        if(-displacement.x >= Mathf.Abs(displacement.y)) {
             return Vector2.left;
         }
-        if (displacement.y > Mathf.Abs(displacement.x)) {
+        if (displacement.y >= Mathf.Abs(displacement.x)) {
             return Vector2.up;
         }
-        if(-displacement.y > Mathf.Abs(displacement.x)) {
+        if(-displacement.y >= Mathf.Abs(displacement.x)) {
             return Vector2.down;
         }
-
-        return Vector2.zero;
+        throw new System.Exception(
+            $"Approximate Direction failed!\n" +
+            $"Origin: {origin.ToString()}, Target: {target.ToString()}, Displacement: {displacement.ToString()}");
     }
 }
