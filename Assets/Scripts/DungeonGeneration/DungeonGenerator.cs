@@ -34,6 +34,8 @@ public class DungeonGenerator : MonoBehaviour
     private Vector2Int mapCentre;
     private Vector2Int previousPosition;
     private List<Room> rooms;
+
+    private bool isLevelGeneratorRunning = false;
     
 
     // Start is called before the first frame update
@@ -125,8 +127,21 @@ public class DungeonGenerator : MonoBehaviour
         Invoke("Scan", 0.2f);
     }
     void AddRoomsRandom(int roomCount) {
+        if (isLevelGeneratorRunning) {
+            Debug.Log("Level generator already running! Aborting.");
+            return;
+        }
+        StartCoroutine(GenerateDungeonRandom(roomCount));
+    }
+    IEnumerator GenerateDungeonRandom(int roomCount) {
+        isLevelGeneratorRunning = true;
 
-        StartCoroutine(GenerateLevelRandom(roomCount));
+        yield return StartCoroutine(GenerateLevelRandom(roomCount));
+        yield return StartCoroutine(GenerateConnectionsShortestWalking());
+        yield return StartCoroutine(GenerateHallways());
+        yield return StartCoroutine(GenerateFloor());
+
+        isLevelGeneratorRunning = false;
     }
     /// <summary>
     /// Generates an entire level of map
@@ -235,7 +250,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         Debug.Log($"Dungeon Generated Randomly! {generatedRooms} rooms successfully generated.");
 
-        StartCoroutine(GenerateConnectionsShortestWalking());
+        //StartCoroutine(GenerateConnectionsShortestWalking());
     }
 
     IEnumerator GenerateConnectionsShortestWalking() {
@@ -250,7 +265,7 @@ public class DungeonGenerator : MonoBehaviour
         
 
         while (unconnectedRoomsExist) {
-            Debug.Log("Looking for new connection...");
+            //Debug.Log("Looking for new connection...");
             Room origin = null;
             Room nearestNeighbour = null;
             //Large number
@@ -258,29 +273,30 @@ public class DungeonGenerator : MonoBehaviour
 
             foreach (Room candidate in roomCandidates) {
                 foreach (Room neighbour in rooms) {
-                    Debug.Log($"Checking candidate {candidate.Centre} against room {neighbour.Centre}.");
+                    //Debug.Log($"Checking candidate {candidate.Centre} against room {neighbour.Centre}.");
                     if (candidate == neighbour) {
-                        Debug.Log($"Is itself, skipping.");
+                        //Debug.Log($"Is itself, skipping.");
                         continue;
                     }
                     if (candidate.Neighbours.Contains(neighbour)) {
-                        Debug.Log("Already connected to this room. Skipping.");
+                        //Debug.Log("Already connected to this room. Skipping.");
                         continue;
                     }
                     if (neighbour.ConnectionCount >= maxConnections) {
-                        Debug.Log($"Neighbour {neighbour.Centre} has {neighbour.ConnectionCount}, more or equal to maximum connections {maxConnections}.");
+                        //Debug.Log($"Neighbour {neighbour.Centre} has {neighbour.ConnectionCount}, more or equal to maximum connections {maxConnections}.");
                         continue;
                     }
 
 
-                    if(candidate.SqrDistance(neighbour) < nearestSqrDistance) {
-                        Debug.Log("This is the new nearest Connection!");
+                    if (candidate.SqrDistance(neighbour) < nearestSqrDistance) {
+                        //Debug.Log("This is the new nearest Connection!");
                         origin = candidate;
                         nearestNeighbour = neighbour;
                         nearestSqrDistance = candidate.SqrDistance(neighbour);
-                        Debug.Log($"Nearest sqrDistance is now {nearestSqrDistance}.");
-                    } else {
-                        Debug.Log($"SqrDistance {candidate.SqrDistance(neighbour)} is longer than {nearestSqrDistance}.");
+                        //Debug.Log($"Nearest sqrDistance is now {nearestSqrDistance}.");
+                        //} else {
+                        //    Debug.Log($"SqrDistance {candidate.SqrDistance(neighbour)} is longer than {nearestSqrDistance}.");
+                        //}
                     }
                 }
             }
@@ -320,26 +336,22 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             yield return null;
-            //yield return new WaitForSeconds(0.25f);
         }
 
         Debug.Log("Room Connections successfully generated!");
-        StartCoroutine(GenerateHallways());
 
     }
 
     IEnumerator GenerateHallways() {
-        Debug.Log("Waiting for 3 seconds...");
-        yield return new WaitForSeconds(3f);
 
         List<Room> finishedRooms = new List<Room>();
 
-        foreach(var room in rooms) {
+        foreach (var room in rooms) {
 
-            foreach(var neighbour in room.Neighbours) {
+            foreach (var neighbour in room.Neighbours) {
                 //Find approximate direction to neighbour centres
                 Vector2 approxDir = ApproximateDirection(room.Centre, neighbour.Centre);
-                
+
                 //Find halfway point between centres
                 Vector2Int origin = Vector2Int.zero;
                 Vector2Int target = Vector2Int.zero;
@@ -356,7 +368,7 @@ public class DungeonGenerator : MonoBehaviour
                     target = new Vector2Int(xEnd, y);
                     hallwayDebugColour = Color.blue;
 
-                } else if (approxDir == Vector2.left) { 
+                } else if (approxDir == Vector2.left) {
                     int y = (room.Centre.y + neighbour.Centre.y) / 2;
                     int xStart = room.Bounds.xMin;
                     int xEnd = neighbour.Bounds.xMax;
@@ -390,60 +402,26 @@ public class DungeonGenerator : MonoBehaviour
 
                 DrawHallwayTiles(tilesToDraw, tilesToRemove, wallMap, tilePairs);
 
-                yield return new WaitForSeconds(0.5f);
+                yield return null;
+            }
+        }
+    }
+    
+    IEnumerator GenerateFloor() {
+
+        bool[,] area = dungeonArea.GetArea();
+
+        for(int x = 0; x < area.GetUpperBound(0); x++) {
+            for(int y=0; y < area.GetUpperBound(1); y++) {
+                if (area[x, y] && wallMap.GetTile(new Vector3Int(x,y,0)) == null) {
+                    floorMap.SetTile(new Vector3Int(x, y, 0), tilePairs[0].tile);
+                    yield return null;
+                }
             }
         }
 
-
-        throw new System.NotImplementedException("Finished");
+        
     }
-
-    //private Vector2Int[] MakeFloorTilesFromLine(Vector2Int origin, Vector2Int target, int width, int margin) {
-    //    List<Vector2Int> tileList = new List<Vector2Int>();
-
-    //    Vector2 approxDir = ApproximateDirection(origin, target);
-    //    //Find axis
-    //    if (approxDir == Vector2.up || approxDir == Vector2.down) { //travels in y direction, 
-    //        for (int i = Mathf.Min(origin.y, target.y) - margin; i < Mathf.Max(origin.y, target.y) + margin; i++) {
-    //            tileList.Add(new Vector2Int(origin.x, i));
-    //        }
-    //    } else if (approxDir == Vector2.right || approxDir == Vector2.left) { // travels in x direction
-    //        for (int i = Mathf.Min(origin.x, target.x) - margin; i < Mathf.Max(origin.x, target.x) + margin; i++) {
-    //            tileList.Add(new Vector2Int(i, origin.y));
-                
-    //        }
-    //    }
-    //    return tileList.ToArray();
-    //}
-
-    //private Vector2Int[] MakeWallTilesFromLine(Vector2Int origin, Vector2Int target, int width) {
-    //    List<Vector2Int> tileList = new List<Vector2Int>();
-    //    //Find axis
-    //    if(origin.x - target.x == 0) { //travels in y direction, 
-    //        for(int i = Mathf.Min(origin.y, target.y); i < Mathf.Max(origin.y, target.y); i++) {
-    //            tileList.Add(new Vector2Int(origin.x + width, i));
-    //            tileList.Add(new Vector2Int(origin.x - width, i));
-    //        }
-    //    }else if(origin.y - target.y == 0) { // travels in x direction
-    //        for (int i = Mathf.Min(origin.x, target.x); i < Mathf.Max(origin.x, target.x); i++) {
-    //            tileList.Add(new Vector2Int(i, origin.y + width));
-    //            tileList.Add(new Vector2Int(i, origin.y - width));
-    //        }
-    //    }
-    //    return tileList.ToArray();
-    //}
-    
-    
-    /// <summary>
-    /// Returns two arrays with out, one where 
-    /// </summary>
-    /// <param name="origin"></param>
-    /// <param name="target"></param>
-    /// <param name="direction"></param>
-    /// <param name="wallTiles"></param>
-    /// <param name="floorTiles"></param>
-    /// <param name="width"></param>
-    /// <param name="margin"></param>
     private void DesignateHallwayTiles(Vector2Int origin, Vector2Int target, Vector2 direction, out Vector2Int[] wallTiles, out Vector2Int[] floorTiles, int width = 1, int margin = 3) {
         List<Vector2Int> wallTileList = new List<Vector2Int>();
         List<Vector2Int> floorTileList = new List<Vector2Int>();
@@ -523,6 +501,7 @@ public class DungeonGenerator : MonoBehaviour
             Vector2 pos = tile;
             Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
         }
+
     }
 
     static Vector2 ApproximateDirection(Vector2 origin, Vector2 target) {

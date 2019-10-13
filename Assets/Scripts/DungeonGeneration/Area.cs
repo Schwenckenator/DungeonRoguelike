@@ -65,4 +65,8 @@ public class Area {
             }
         }
     }
+
+    public void SetFilled(bool fill, Vector2Int min, Vector2Int max) {
+        SetFilled(fill, min.x, min.y, max.x, max.y);
+    }
 }
