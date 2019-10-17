@@ -339,7 +339,8 @@ public class DungeonGenerator : MonoBehaviour
 
                 hallways.Add(new Pair<Room>(room, neighbour));
 
-                yield return new WaitForSeconds(1f);
+                //yield return new WaitForSeconds(1f);
+                yield return null;
             }
         }
     }
@@ -408,60 +409,108 @@ public class DungeonGenerator : MonoBehaviour
         List<Vector2Int> wallTileList = new List<Vector2Int>();
         List<Vector2Int> floorTileList = new List<Vector2Int>();
 
+        bool wallHit = false;
+        bool breachedRoom = false;
+        Vector3Int hallwayCentre = new Vector3Int((origin.x + target.x) / 2, (origin.y + target.y) / 2, 0);
+        Vector3Int currentSquare = hallwayCentre;
+        Vector2Int currentDirection = direction.RoundToInt();
+
         if (direction == Vector2.up || direction == Vector2.down) {
-            bool wallHit = false;
-            bool breachedRoom = false;
-            Vector3Int hallwayCentre = new Vector3Int((origin.x + target.x) / 2, (origin.y + target.y) / 2, 0);
-            Vector3Int currentSquare = hallwayCentre;
-            Vector2Int currentDirection = direction.RoundToInt();
+
             while (!wallHit && !breachedRoom) {
                 
-
-
                 //If you already hit a wall and come to a blank tile
                 if (wallHit && wallMap.GetTile(currentSquare) == null) {
                     //The hallway has successfully breached the room
+                    Debug.Log("Breached Room!");
                     breachedRoom = true;
                 }
                 // if you hit a tile that isn't empty
                 if (wallMap.GetTile(currentSquare) != null) {
                     //You have hit a wall, probably
+                    Debug.Log("Wall Hit!");
                     wallHit = true;
                 }
 
                 //At current square
+                Debug.Log($"Adding current square {currentSquare.ToString()} to hallway tiles.");
                 floorTileList.Add(currentSquare.ToVector2Int());
                 wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.left * width);
                 wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.right * width);
                 currentSquare += currentDirection.ToVector3Int();
-
+                Debug.Log($"New current square is {currentSquare.ToString()}.");
             }
-            //Reverse direction and repeat
-            currentDirection *= -1;
-            wallHit = false;
-            breachedRoom = false;
-            currentSquare = hallwayCentre;
+            ////Reverse direction and repeat
+            //currentDirection *= -1;
+            //wallHit = false;
+            //breachedRoom = false;
+            //currentSquare = hallwayCentre;
 
 
-            while (!wallHit && !breachedRoom) {
-                //If you already hit a wall and come to a blank tile
-                if (wallHit && wallMap.GetTile(currentSquare) == null) {
-                    //The hallway has successfully breached the room
-                    breachedRoom = true;
-                }
-                // if you hit a tile that isn't empty
-                if (wallMap.GetTile(currentSquare) != null) {
-                    //You have hit a wall, probably
-                    wallHit = true;
-                }
-                //At current square
-                floorTileList.Add(currentSquare.ToVector2Int());
-                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.left * width);
-                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.right * width);
-                currentSquare += currentDirection.ToVector3Int();
-            }
+            //while (!wallHit && !breachedRoom) {
+            //    //If you already hit a wall and come to a blank tile
+            //    if (wallHit && wallMap.GetTile(currentSquare) == null) {
+            //        //The hallway has successfully breached the room
+            //        breachedRoom = true;
+            //    }
+            //    // if you hit a tile that isn't empty
+            //    if (wallMap.GetTile(currentSquare) != null) {
+            //        //You have hit a wall, probably
+            //        wallHit = true;
+            //    }
+            //    //At current square
+            //    floorTileList.Add(currentSquare.ToVector2Int());
+            //    wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.left * width);
+            //    wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.right * width);
+            //    currentSquare += currentDirection.ToVector3Int();
+            //}
 
         } else if (direction == Vector2.right || direction == Vector2.left) {
+
+            while (!wallHit && !breachedRoom) {
+
+                //If you already hit a wall and come to a blank tile
+                if (wallHit && wallMap.GetTile(currentSquare) == null) {
+                    //The hallway has successfully breached the room
+                    breachedRoom = true;
+                }
+                // if you hit a tile that isn't empty
+                if (wallMap.GetTile(currentSquare) != null) {
+                    //You have hit a wall, probably
+                    wallHit = true;
+                }
+
+                //At current square
+                floorTileList.Add(currentSquare.ToVector2Int());
+                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.up * width);
+                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.down * width);
+                currentSquare += currentDirection.ToVector3Int();
+
+            }
+            ////Reverse direction and repeat
+            //currentDirection *= -1;
+            //wallHit = false;
+            //breachedRoom = false;
+            //currentSquare = hallwayCentre;
+
+
+            //while (!wallHit && !breachedRoom) {
+            //    //If you already hit a wall and come to a blank tile
+            //    if (wallHit && wallMap.GetTile(currentSquare) == null) {
+            //        //The hallway has successfully breached the room
+            //        breachedRoom = true;
+            //    }
+            //    // if you hit a tile that isn't empty
+            //    if (wallMap.GetTile(currentSquare) != null) {
+            //        //You have hit a wall, probably
+            //        wallHit = true;
+            //    }
+            //    //At current square
+            //    floorTileList.Add(currentSquare.ToVector2Int());
+            //    wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.up * width);
+            //    wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.down * width);
+            //    currentSquare += currentDirection.ToVector3Int();
+            //}
 
         }
 
