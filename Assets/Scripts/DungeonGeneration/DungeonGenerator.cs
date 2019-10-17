@@ -60,12 +60,6 @@ public class DungeonGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C)) { //sCan
             AstarPath.active.Scan();
         }
-        if (Input.GetKeyDown(KeyCode.E)) { // Room
-            AddRoomsWanderer(1);
-        }
-        if (Input.GetKeyDown(KeyCode.P)) { //Wanderer
-            AddRoomsWanderer(roomsPerLevel);
-        }
         if (Input.GetKeyDown(KeyCode.R)){ //Random
             AddRoomsRandom(roomsPerLevel);
         }
@@ -120,12 +114,6 @@ public class DungeonGenerator : MonoBehaviour
         showFilledArea = false;
     }
 
-    void AddRoomsWanderer(int roomCount) {
-        
-        GenerateLevelWanderer(roomCount);
-
-        Invoke("Scan", 0.2f);
-    }
     void AddRoomsRandom(int roomCount) {
         if (isLevelGeneratorRunning) {
             Debug.Log("Level generator already running! Aborting.");
@@ -142,68 +130,8 @@ public class DungeonGenerator : MonoBehaviour
         yield return StartCoroutine(GenerateFloor());
 
         isLevelGeneratorRunning = false;
-    }
-    /// <summary>
-    /// Generates an entire level of map
-    /// </summary>
-    void GenerateLevelWanderer(int numberOfRooms) {
-        Vector2Int offset = Vector2Int.zero;
-        
-        for (int i=0; i<numberOfRooms; i++) {
-            
-            int roomID = Random.Range(0, roomContainer.rooms.Length);
-            //Remember its place origin
-            Vector2Int index = previousPosition;
 
-            bool placeFound = false;
-            int infiniteLoopProtector = 1000;
-
-            int scanDirection = Random.Range(0, 4); //Right, Up, Left, Down
-
-            while (!placeFound) {
-
-                //CheckCornersEmpty(index, roomContainer.rooms[roomID].width, roomContainer.rooms[roomID].height)
-                if (!dungeonArea.IsFilled(
-                    index.x, 
-                    index.y, 
-                    index.x + roomContainer.rooms[roomID].width - 1, 
-                    index.y + roomContainer.rooms[roomID].height - 1))
-                {
-                    offset = index;
-                    previousPosition = index;
-                    placeFound = true;
-
-                } else {
-                    //Scan in direction
-                    if (scanDirection == 0) { // Right
-                        index.x++;
-                    } else if (scanDirection == 1) { // Up
-                        index[1]++;
-                    } else if (scanDirection == 2) { // Left
-                        index[0]--;
-                    } else if (scanDirection == 3) { // Down
-                        index[1]--;
-                    }
-                    
-                    //If the generator has wandered out of bounds
-                    if (index.x >= dungeonArea.size || index.x < 0 || index.y >= dungeonArea.size || index.y < 0) {
-                        Debug.Log("Wandered out of bounds.");
-                        break;
-                    }
-                }
-
-                //Protect against infinite loops
-                if (infiniteLoopProtector-- <= 0) break;
-            }
-            if (placeFound) {
-                DrawRoomTiles(roomContainer.rooms[roomID], TileLayer.collision, offset, wallMap, tilePairs);
-            } else {
-                Debug.Log("Failed to generate room.");
-            }
-            
-            //GenerateRoom(roomContainer.rooms[roomID], TileLayer.noCollision, offset, floorMap, tilePairs);
-        }
-        
+        Invoke("Scan", 0.2f);
     }
 
     IEnumerator GenerateLevelRandom(int numberOfRooms){
@@ -344,11 +272,17 @@ public class DungeonGenerator : MonoBehaviour
 
     IEnumerator GenerateHallways() {
 
-        List<Room> finishedRooms = new List<Room>();
+        List<Pair<Room>> hallways = new List<Pair<Room>>();
 
         foreach (var room in rooms) {
 
             foreach (var neighbour in room.Neighbours) {
+                Pair<Room> newHallway = new Pair<Room>(room, neighbour);
+
+                if (HallwayExists(hallways, newHallway)) {
+                    continue;
+                }
+
                 //Find approximate direction to neighbour centres
                 Vector2 approxDir = ApproximateDirection(room.Centre, neighbour.Centre);
 
@@ -398,15 +332,31 @@ public class DungeonGenerator : MonoBehaviour
 
                 DrawDebugHallway(origin - debugHallwayMargin, target + debugHallwayMargin, hallwayDebugColour);
 
-                DesignateHallwayTiles(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
+                //DesignateHallwayTiles(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
+                DesignateHallwayTilesNEW(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
 
                 DrawHallwayTiles(tilesToDraw, tilesToRemove, wallMap, tilePairs);
 
-                yield return null;
+                hallways.Add(new Pair<Room>(room, neighbour));
+
+                yield return new WaitForSeconds(1f);
             }
         }
     }
-    
+
+    private static bool HallwayExists(List<Pair<Room>> hallways, Pair<Room> newHallway) {
+        bool hallwayExists = false;
+
+        foreach (var hallway in hallways) {
+            if (newHallway.Equals(hallway)) {
+                hallwayExists = true;
+                break;
+            }
+        }
+
+        return hallwayExists;
+    }
+
     IEnumerator GenerateFloor() {
 
         bool[,] area = dungeonArea.GetArea();
@@ -415,13 +365,13 @@ public class DungeonGenerator : MonoBehaviour
             for(int y=0; y < area.GetUpperBound(1); y++) {
                 if (area[x, y] && wallMap.GetTile(new Vector3Int(x,y,0)) == null) {
                     floorMap.SetTile(new Vector3Int(x, y, 0), tilePairs[0].tile);
-                    yield return null;
                 }
             }
         }
+        yield return null;
 
-        
     }
+
     private void DesignateHallwayTiles(Vector2Int origin, Vector2Int target, Vector2 direction, out Vector2Int[] wallTiles, out Vector2Int[] floorTiles, int width = 1, int margin = 3) {
         List<Vector2Int> wallTileList = new List<Vector2Int>();
         List<Vector2Int> floorTileList = new List<Vector2Int>();
@@ -454,15 +404,72 @@ public class DungeonGenerator : MonoBehaviour
         floorTiles = floorTileList.ToArray();
     }
 
-    void DrawDebugHallway(Vector2Int value1, Vector2Int value2, Color colour) {
-        Vector2 drawValue1 = value1;
-        Vector2 drawValue2 = value2;
-        //Connect to that room
-        Debug.DrawLine(drawValue1, drawValue2, colour, 100f);
+    void DesignateHallwayTilesNEW(Vector2Int origin, Vector2Int target, Vector2 direction, out Vector2Int[] wallTiles, out Vector2Int[] floorTiles, int width = 1) {
+        List<Vector2Int> wallTileList = new List<Vector2Int>();
+        List<Vector2Int> floorTileList = new List<Vector2Int>();
+
+        if (direction == Vector2.up || direction == Vector2.down) {
+            bool wallHit = false;
+            bool breachedRoom = false;
+            Vector3Int hallwayCentre = new Vector3Int((origin.x + target.x) / 2, (origin.y + target.y) / 2, 0);
+            Vector3Int currentSquare = hallwayCentre;
+            Vector2Int currentDirection = direction.RoundToInt();
+            while (!wallHit && !breachedRoom) {
+                
+
+
+                //If you already hit a wall and come to a blank tile
+                if (wallHit && wallMap.GetTile(currentSquare) == null) {
+                    //The hallway has successfully breached the room
+                    breachedRoom = true;
+                }
+                // if you hit a tile that isn't empty
+                if (wallMap.GetTile(currentSquare) != null) {
+                    //You have hit a wall, probably
+                    wallHit = true;
+                }
+
+                //At current square
+                floorTileList.Add(currentSquare.ToVector2Int());
+                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.left * width);
+                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.right * width);
+                currentSquare += currentDirection.ToVector3Int();
+
+            }
+            //Reverse direction and repeat
+            currentDirection *= -1;
+            wallHit = false;
+            breachedRoom = false;
+            currentSquare = hallwayCentre;
+
+
+            while (!wallHit && !breachedRoom) {
+                //If you already hit a wall and come to a blank tile
+                if (wallHit && wallMap.GetTile(currentSquare) == null) {
+                    //The hallway has successfully breached the room
+                    breachedRoom = true;
+                }
+                // if you hit a tile that isn't empty
+                if (wallMap.GetTile(currentSquare) != null) {
+                    //You have hit a wall, probably
+                    wallHit = true;
+                }
+                //At current square
+                floorTileList.Add(currentSquare.ToVector2Int());
+                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.left * width);
+                wallTileList.Add(currentSquare.ToVector2Int() + Vector2Int.right * width);
+                currentSquare += currentDirection.ToVector3Int();
+            }
+
+        } else if (direction == Vector2.right || direction == Vector2.left) {
+
+        }
+
+
+        wallTiles = wallTileList.ToArray();
+        floorTiles = floorTileList.ToArray();
     }
-    /// <summary>
-    /// Generates a single room
-    /// </summary>
+
     void DrawRoomTiles(Texture2D image, TileLayer layer, Vector2Int offset, Tilemap tileMap, List<TileInfo> tiles) {
 
         for (int x = 0; x < image.width; x++) {
@@ -495,11 +502,14 @@ public class DungeonGenerator : MonoBehaviour
     void DrawHallwayTiles(Vector2Int[] drawTiles, Vector2Int[] removeTiles, Tilemap tileMap, List<TileInfo> tiles) {
         foreach(var tile in drawTiles) {
             tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), tiles[1].tile); //TODO: fix this [1] bad bad ju ju
+            dungeonArea.SetFilled(true, tile);
         }
         foreach(var tile in removeTiles) {
             tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), null);
             Vector2 pos = tile;
             Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
+            Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
+            dungeonArea.SetFilled(true, tile);
         }
 
     }
@@ -527,5 +537,12 @@ public class DungeonGenerator : MonoBehaviour
         throw new System.Exception(
             $"Approximate Direction failed!\n" +
             $"Origin: {origin.ToString()}, Target: {target.ToString()}, Displacement: {displacement.ToString()}");
+    }
+
+    void DrawDebugHallway(Vector2Int value1, Vector2Int value2, Color colour) {
+        Vector2 drawValue1 = value1;
+        Vector2 drawValue2 = value2;
+        //Connect to that room
+        Debug.DrawLine(drawValue1, drawValue2, colour, 100f);
     }
 }
