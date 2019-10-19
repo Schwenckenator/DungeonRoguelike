@@ -154,8 +154,8 @@ public class DungeonGenerator : MonoBehaviour
                 if (!dungeonArea.IsFilled(
                     randomPos.x,
                     randomPos.y,
-                    randomPos.x + roomSize.x - 1,
-                    randomPos.y + roomSize.y - 1)) {
+                    randomPos.x + roomSize.x,
+                    randomPos.y + roomSize.y)) {
 
                     offset = randomPos;
                     placeFound = true;
@@ -271,6 +271,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     IEnumerator GenerateHallways() {
+        Debug.Log("Generating hallways!");
 
         List<Pair<Room>> hallways = new List<Pair<Room>>();
 
@@ -293,9 +294,29 @@ public class DungeonGenerator : MonoBehaviour
                 Color hallwayDebugColour = Color.black;
                 Vector2Int debugHallwayMargin = new Vector2Int(Mathf.RoundToInt(approxDir.x), Mathf.RoundToInt(approxDir.y));
 
+                //Find overlap
+                BoundsInt overlap = new BoundsInt();
+                int xMin = Mathf.Max(room.Bounds.xMin, neighbour.Bounds.xMin);
+                int yMin = Mathf.Max(room.Bounds.yMin, neighbour.Bounds.yMin);
+                int xMax = Mathf.Min(room.Bounds.xMax, neighbour.Bounds.xMax);
+                int yMax = Mathf.Min(room.Bounds.yMax, neighbour.Bounds.yMax);
+
+                overlap.SetMinMax(new Vector3Int(xMin, yMin, 0), new Vector3Int(xMax, yMax, 0));
+
+                Debug.DrawLine(new Vector3(overlap.xMax, overlap.yMax, 0), new Vector3(overlap.xMax, overlap.yMax, 0), Color.red, 100f); //No movement
+
+                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMin, 0), new Vector3(overlap.xMax, overlap.yMin, 0), Color.red, 100f);
+                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMin, 0), new Vector3(overlap.xMin, overlap.yMax, 0), Color.red, 100f);
+                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMin, 0), new Vector3(overlap.xMax, overlap.yMax, 0), Color.red, 100f);
+                Debug.DrawLine(new Vector3(overlap.xMax, overlap.yMax, 0), new Vector3(overlap.xMin, overlap.yMax, 0), Color.red, 100f);
+                Debug.DrawLine(new Vector3(overlap.xMax, overlap.yMax, 0), new Vector3(overlap.xMax, overlap.yMin, 0), Color.red, 100f);
+                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMax, 0), new Vector3(overlap.xMax, overlap.yMin, 0), Color.red, 100f);
+
+                int x = Mathf.RoundToInt(overlap.center.x);
+                int y = Mathf.RoundToInt(overlap.center.y);
+                
                 //Kinda gross, not good enough at maths to simplify yet
                 if (approxDir == Vector2.right) {
-                    int y = (room.Centre.y + neighbour.Centre.y) / 2;
                     int xStart = room.Bounds.xMax;
                     int xEnd = neighbour.Bounds.xMin;
                     origin = new Vector2Int(xStart, y);
@@ -303,7 +324,6 @@ public class DungeonGenerator : MonoBehaviour
                     hallwayDebugColour = Color.blue;
 
                 } else if (approxDir == Vector2.left) {
-                    int y = (room.Centre.y + neighbour.Centre.y) / 2;
                     int xStart = room.Bounds.xMin;
                     int xEnd = neighbour.Bounds.xMax;
                     origin = new Vector2Int(xStart, y);
@@ -311,7 +331,6 @@ public class DungeonGenerator : MonoBehaviour
                     hallwayDebugColour = Color.yellow;
 
                 } else if (approxDir == Vector2.up) {
-                    int x = (room.Centre.x + neighbour.Centre.x) / 2;
                     int yStart = room.Bounds.yMax;
                     int yEnd = neighbour.Bounds.yMin;
                     origin = new Vector2Int(x, yStart);
@@ -319,7 +338,6 @@ public class DungeonGenerator : MonoBehaviour
                     hallwayDebugColour = Color.green;
 
                 } else if (approxDir == Vector2.down) {
-                    int x = (room.Centre.x + neighbour.Centre.x) / 2;
                     int yStart = room.Bounds.yMin;
                     int yEnd = neighbour.Bounds.yMax;
                     origin = new Vector2Int(x, yStart);
@@ -333,7 +351,8 @@ public class DungeonGenerator : MonoBehaviour
                 DrawDebugHallway(origin - debugHallwayMargin, target + debugHallwayMargin, hallwayDebugColour);
 
                 //DesignateHallwayTiles(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
-                DesignateHallwayTilesNEW(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
+                //DesignateHallwayTilesNEW(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
+                DesignateHallwayTilesNEWAGAIN(origin, target, approxDir, out Vector2Int[] tilesToDraw, out Vector2Int[] tilesToRemove);
 
                 DrawHallwayTiles(tilesToDraw, tilesToRemove, wallMap, tilePairs);
 
@@ -519,6 +538,85 @@ public class DungeonGenerator : MonoBehaviour
         floorTiles = floorTileList.ToArray();
     }
 
+    void DesignateHallwayTilesNEWAGAIN(Vector2Int origin, Vector2Int target, Vector2 direction, out Vector2Int[] wallTiles, out Vector2Int[] floorTiles, int width = 1) {
+        List<Vector2Int> wallTileList = new List<Vector2Int>();
+        List<Vector2Int> floorTileList = new List<Vector2Int>();
+        Vector2Int currentSquare = origin;
+        Vector2Int dir = direction.RoundToInt();
+        Vector2Int perpendicular = direction.RotateDeg(90).RoundToInt();
+
+        Vector2 debugDirection = ApproximateDirection(origin, target);
+
+        Debug.Log($"Origin is {origin.ToString()}, target is {target.ToString()}. Difference is {(target - origin).ToString()}");
+
+        Debug.Log($"Included direction is {DirectionString(direction)}, Calculated direction is {DirectionString(debugDirection)}. Do they match?");
+
+        //Generate Gap closer
+        int infLoopProtector = 0;
+        bool finished = false;
+        while(!finished && infLoopProtector < 25) {
+            Debug.Log($"Entered loop No. {infLoopProtector}.");
+            Debug.Log($"Current square is {currentSquare.ToString()}, target is {target.ToString()}");
+            floorTileList.Add(currentSquare);
+            wallTileList.Add(currentSquare + perpendicular);
+            wallTileList.Add(currentSquare - perpendicular);
+
+            if(currentSquare == target + dir) {
+                Debug.Log("Reached the target!");
+                finished = true;
+            } else {
+
+                currentSquare += dir;
+                Debug.Log($"Not yet reached target {target.ToString()}, advancing to {currentSquare.ToString()}");
+            }
+            infLoopProtector++;
+            
+        }
+        //Generate breaching tiles, start from target
+        infLoopProtector = 0;
+        finished = false;
+        currentSquare = target;
+        while (!finished && infLoopProtector < 25) {
+            Debug.Log($"Entered loop No. {infLoopProtector}.");
+            floorTileList.Add(currentSquare);
+            if(wallMap.GetTile(currentSquare.ToVector3Int()) == null) {
+                finished = true;
+            } else {
+                currentSquare += dir;
+            }
+
+            infLoopProtector++;
+        }
+
+        //Generate breaching tiles, start from origin
+        infLoopProtector = 0;
+        finished = false;
+        currentSquare = origin;
+        dir *= -1; // Reverse direction, penetrate into original room
+        while (!finished && infLoopProtector < 25) {
+            Debug.Log($"Entered loop No. {infLoopProtector}.");
+            floorTileList.Add(currentSquare);
+            TileBase currentTile = wallMap.GetTile(currentSquare.ToVector3Int());
+            if(currentTile != null) {
+                Debug.Log(currentTile.ToString());
+            } else {
+                Debug.Log($"{currentSquare.ToString()} is null!");
+            }
+            
+
+            if (currentTile == null) {
+                finished = true;
+            } else {
+                currentSquare += dir;
+            }
+
+            infLoopProtector++;
+        }
+
+        wallTiles = wallTileList.ToArray();
+        floorTiles = floorTileList.ToArray();
+    }
+
     void DrawRoomTiles(Texture2D image, TileLayer layer, Vector2Int offset, Tilemap tileMap, List<TileInfo> tiles) {
 
         for (int x = 0; x < image.width; x++) {
@@ -586,6 +684,25 @@ public class DungeonGenerator : MonoBehaviour
         throw new System.Exception(
             $"Approximate Direction failed!\n" +
             $"Origin: {origin.ToString()}, Target: {target.ToString()}, Displacement: {displacement.ToString()}");
+    }
+    static string DirectionString(Vector2 direction) {
+
+        if (direction == Vector2.zero) {
+            return "Null";
+        }
+        if (direction == Vector2.right) {
+            return "Right";
+        }
+        if (direction == Vector2.left) {
+            return "Left";
+        }
+        if (direction == Vector2.up) {
+            return "Up";
+        }
+        if (direction == Vector2.down) {
+            return "Down";
+        }
+        return "Non-pure Direction";
     }
 
     void DrawDebugHallway(Vector2Int value1, Vector2Int value2, Color colour) {
