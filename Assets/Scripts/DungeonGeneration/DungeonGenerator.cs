@@ -303,43 +303,36 @@ public class DungeonGenerator : MonoBehaviour
 
                 overlap.SetMinMax(new Vector3Int(xMin, yMin, 0), new Vector3Int(xMax, yMax, 0));
 
-                Debug.DrawLine(new Vector3(overlap.xMax, overlap.yMax, 0), new Vector3(overlap.xMax, overlap.yMax, 0), Color.red, 100f); //No movement
-
-                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMin, 0), new Vector3(overlap.xMax, overlap.yMin, 0), Color.red, 100f);
-                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMin, 0), new Vector3(overlap.xMin, overlap.yMax, 0), Color.red, 100f);
-                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMin, 0), new Vector3(overlap.xMax, overlap.yMax, 0), Color.red, 100f);
-                Debug.DrawLine(new Vector3(overlap.xMax, overlap.yMax, 0), new Vector3(overlap.xMin, overlap.yMax, 0), Color.red, 100f);
-                Debug.DrawLine(new Vector3(overlap.xMax, overlap.yMax, 0), new Vector3(overlap.xMax, overlap.yMin, 0), Color.red, 100f);
-                Debug.DrawLine(new Vector3(overlap.xMin, overlap.yMax, 0), new Vector3(overlap.xMax, overlap.yMin, 0), Color.red, 100f);
+                DrawingDebug.DrawCrossBox(overlap.min, overlap.max, Color.red);
 
                 int x = Mathf.RoundToInt(overlap.center.x);
                 int y = Mathf.RoundToInt(overlap.center.y);
                 
                 //Kinda gross, not good enough at maths to simplify yet
                 if (approxDir == Vector2.right) {
-                    int xStart = room.Bounds.xMax;
-                    int xEnd = neighbour.Bounds.xMin;
+                    int xStart = room.Bounds.xMax - 1;
+                    int xEnd = neighbour.Bounds.xMin + 1;
                     origin = new Vector2Int(xStart, y);
                     target = new Vector2Int(xEnd, y);
                     hallwayDebugColour = Color.blue;
 
                 } else if (approxDir == Vector2.left) {
-                    int xStart = room.Bounds.xMin;
-                    int xEnd = neighbour.Bounds.xMax;
+                    int xStart = room.Bounds.xMin + 1;
+                    int xEnd = neighbour.Bounds.xMax - 1;
                     origin = new Vector2Int(xStart, y);
                     target = new Vector2Int(xEnd, y);
                     hallwayDebugColour = Color.yellow;
 
                 } else if (approxDir == Vector2.up) {
-                    int yStart = room.Bounds.yMax;
-                    int yEnd = neighbour.Bounds.yMin;
+                    int yStart = room.Bounds.yMax - 1;
+                    int yEnd = neighbour.Bounds.yMin + 1;
                     origin = new Vector2Int(x, yStart);
                     target = new Vector2Int(x, yEnd);
                     hallwayDebugColour = Color.green;
 
                 } else if (approxDir == Vector2.down) {
-                    int yStart = room.Bounds.yMin;
-                    int yEnd = neighbour.Bounds.yMax;
+                    int yStart = room.Bounds.yMin + 1;
+                    int yEnd = neighbour.Bounds.yMax - 1;
                     origin = new Vector2Int(x, yStart);
                     target = new Vector2Int(x, yEnd);
                     hallwayDebugColour = Color.magenta;
@@ -358,8 +351,8 @@ public class DungeonGenerator : MonoBehaviour
 
                 hallways.Add(new Pair<Room>(room, neighbour));
 
-                //yield return new WaitForSeconds(1f);
-                yield return null;
+                yield return new WaitForSeconds(0.5f);
+                //yield return null;
             }
         }
     }
@@ -542,7 +535,7 @@ public class DungeonGenerator : MonoBehaviour
         List<Vector2Int> wallTileList = new List<Vector2Int>();
         List<Vector2Int> floorTileList = new List<Vector2Int>();
         Vector2Int currentSquare = origin;
-        Vector2Int dir = direction.RoundToInt();
+        Vector2Int step = direction.RoundToInt();
         Vector2Int perpendicular = direction.RotateDeg(90).RoundToInt();
 
         Vector2 debugDirection = ApproximateDirection(origin, target);
@@ -551,67 +544,120 @@ public class DungeonGenerator : MonoBehaviour
 
         Debug.Log($"Included direction is {DirectionString(direction)}, Calculated direction is {DirectionString(debugDirection)}. Do they match?");
 
+        DrawingDebug.DrawCrossBox(origin.ToVector3Int(), Color.cyan); // Origin
+        DrawingDebug.DrawCrossBox(target.ToVector3Int(), Color.yellow); // Target
+
         //Generate Gap closer
         int infLoopProtector = 0;
         bool finished = false;
         while(!finished && infLoopProtector < 25) {
             Debug.Log($"Entered loop No. {infLoopProtector}.");
             Debug.Log($"Current square is {currentSquare.ToString()}, target is {target.ToString()}");
+
+            currentSquare += step;
+
             floorTileList.Add(currentSquare);
             wallTileList.Add(currentSquare + perpendicular);
             wallTileList.Add(currentSquare - perpendicular);
 
-            if(currentSquare == target + dir) {
+            if(currentSquare == target) {
                 Debug.Log("Reached the target!");
                 finished = true;
             } else {
 
-                currentSquare += dir;
+                //currentSquare += step;
                 Debug.Log($"Not yet reached target {target.ToString()}, advancing to {currentSquare.ToString()}");
             }
             infLoopProtector++;
             
         }
-        //Generate breaching tiles, start from target
-        infLoopProtector = 0;
-        finished = false;
-        currentSquare = target;
-        while (!finished && infLoopProtector < 25) {
-            Debug.Log($"Entered loop No. {infLoopProtector}.");
-            floorTileList.Add(currentSquare);
-            if(wallMap.GetTile(currentSquare.ToVector3Int()) == null) {
-                finished = true;
-            } else {
-                currentSquare += dir;
-            }
 
-            infLoopProtector++;
-        }
+        //infLoopProtector = 0;
+        //finished = false;
+        //bool reversed = false;
+        //currentSquare = target;
+        //Debug.Log("Beginning to breach!");
 
-        //Generate breaching tiles, start from origin
-        infLoopProtector = 0;
-        finished = false;
-        currentSquare = origin;
-        dir *= -1; // Reverse direction, penetrate into original room
-        while (!finished && infLoopProtector < 25) {
-            Debug.Log($"Entered loop No. {infLoopProtector}.");
-            floorTileList.Add(currentSquare);
-            TileBase currentTile = wallMap.GetTile(currentSquare.ToVector3Int());
-            if(currentTile != null) {
-                Debug.Log(currentTile.ToString());
-            } else {
-                Debug.Log($"{currentSquare.ToString()} is null!");
-            }
+        //while(!finished && infLoopProtector < 25) {
+        //    Debug.Log($"Entered loop No. {infLoopProtector}.");
+        //    floorTileList.Add(currentSquare);
+
+        //    TileBase currentTile = wallMap.GetTile(currentSquare.ToVector3Int());
+        //    if (currentTile != null) {
+        //        Debug.Log(currentTile.ToString());
+        //    } else {
+        //        Debug.Log($"{currentSquare.ToString()} is null!");
+        //    }
+
+        //    if (currentTile == null) {
+        //        Debug.Log("Reached the target!");
+
+        //        if (reversed) {
+        //            finished = true;
+        //        } else {
+        //            reversed = true;
+        //            infLoopProtector = 0;
+        //            currentSquare = origin;
+        //            step *= -1;
+        //            Debug.Log("Reverse Breach!");
+        //            continue;
+        //        }
+
+        //    } else {
+        //        Debug.Log($"Not yet reached target {target.ToString()}, advancing to {currentSquare.ToString()}");
+        //        currentSquare += step;
+        //    }
+
+        //    infLoopProtector++;
+        //}
+
+        ////Generate breaching tiles, start from target
+        //infLoopProtector = 0;
+        //finished = false;
+        //currentSquare = target;
+        //Debug.Log("Beginning to breach!");
+        //while (!finished && infLoopProtector < 25) {
+        //    Debug.Log($"Entered loop No. {infLoopProtector}.");
+        //    floorTileList.Add(currentSquare);
+
+        //    if(wallMap.GetTile(currentSquare.ToVector3Int()) == null) {
+        //        finished = true;
+        //    } else {
+        //        currentSquare += step;
+        //    }
+
+
+
+        //    infLoopProtector++;
+        //}
+
+        ////Generate breaching tiles, start from origin
+        //infLoopProtector = 0;
+        //finished = false;
+        //currentSquare = origin;
+        //step *= -1; // Reverse direction, penetrate into original room
+        //Debug.Log("Reverse Breach!");
+        //while (!finished && infLoopProtector < 25) {
+        //    Debug.Log($"Entered loop No. {infLoopProtector}.");
+        //    floorTileList.Add(currentSquare);
+        //    TileBase currentTile = wallMap.GetTile(currentSquare.ToVector3Int());
+        //    if(currentTile != null) {
+        //        Debug.Log(currentTile.ToString());
+        //    } else {
+        //        Debug.Log($"{currentSquare.ToString()} is null!");
+        //    }
             
 
-            if (currentTile == null) {
-                finished = true;
-            } else {
-                currentSquare += dir;
-            }
+        //    if (currentTile == null) {
+        //        Debug.Log("Reached the target!");
+        //        finished = true;
+        //    } else {
+        //        Debug.Log($"Not yet reached target {target.ToString()}, advancing to {currentSquare.ToString()}");
+        //        currentSquare += step;
+        //    }
 
-            infLoopProtector++;
-        }
+        //    infLoopProtector++;
+        //}
 
         wallTiles = wallTileList.ToArray();
         floorTiles = floorTileList.ToArray();

@@ -47,6 +47,11 @@ public class Room
         other.Neighbours.Add(this);
     }
 
+    public void Disconnect(Room other) {
+        Neighbours.Remove(other);
+        other.Neighbours.Remove(this);
+    }
+
     public float Distance(Room other) {
         return Distance(this, other);
     }
