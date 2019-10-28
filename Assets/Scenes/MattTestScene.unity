@@ -5939,7 +5939,6 @@ MonoBehaviour:
   - colour: {r: 0, g: 0, b: 0, a: 0}
     tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
     layer: 0
-  minConnections: 0
   maxConnections: 4
   maxSteps: 10
 --- !u!1001 &1115927483046538932
