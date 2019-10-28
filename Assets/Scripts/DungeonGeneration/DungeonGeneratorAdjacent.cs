@@ -92,7 +92,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
 
         yield return StartCoroutine(GenerateRooms(numOfRooms));
         yield return StartCoroutine(GenerateHallways());
-        //yield return StartCoroutine(GenerateFloor());
+        yield return StartCoroutine(GenerateFloor());
 
         isLevelGeneratorRunning = false;
 
@@ -233,6 +233,21 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator GenerateFloor() {
+
+        bool[,] area = dungeonArea.GetArea();
+
+        for (int x = 0; x < area.GetUpperBound(0); x++) {
+            for (int y = 0; y < area.GetUpperBound(1); y++) {
+                if (area[x, y] && wallMap.GetTile(new Vector3Int(x, y, 0)) == null) {
+                    floorMap.SetTile(new Vector3Int(x, y, 0), tilePairs[0].tile);
+                }
+            }
+        }
+        yield return null;
+
+    }
+
     void DrawRoomTiles(Texture2D image, TileLayer layer, Vector2Int offset, Tilemap tileMap, List<TileInfo> tiles) {
         Debug.Log("Drawing Room Tiles.");
         for (int x = 0; x < image.width; x++) {
@@ -287,31 +302,31 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         }
     }
 
-    Vector2Int[] DesignateHallwayTiles(Vector2Int origin, Vector2Int target) {
-        List<Vector2Int> newTiles = new List<Vector2Int>();
+    //Vector2Int[] DesignateHallwayTiles(Vector2Int origin, Vector2Int target) {
+    //    List<Vector2Int> newTiles = new List<Vector2Int>();
 
-        Vector2Int direction = target - origin;
+    //    Vector2Int direction = target - origin;
 
-        Debug.Log($"Vectors subtracted! {target} - {origin} = {direction}");
+    //    Debug.Log($"Vectors subtracted! {target} - {origin} = {direction}");
 
-        direction.Clamp(new Vector2Int(-1, -1), new Vector2Int(1, 1));
+    //    direction.Clamp(new Vector2Int(-1, -1), new Vector2Int(1, 1));
 
-        Debug.Log($"Vector Clamped! {direction}");
+    //    Debug.Log($"Vector Clamped! {direction}");
 
-        int loopProtection = 100;
-        Vector2Int currentSquare = origin;
-        while(currentSquare != target && loopProtection-- > 0) {
-            Debug.Log($"Hallway loops remaining: {loopProtection}.");
-            Debug.Log($"Current square is now {currentSquare}, target is {target}.");
+    //    int loopProtection = 100;
+    //    Vector2Int currentSquare = origin;
+    //    while(currentSquare != target && loopProtection-- > 0) {
+    //        Debug.Log($"Hallway loops remaining: {loopProtection}.");
+    //        Debug.Log($"Current square is now {currentSquare}, target is {target}.");
 
-            newTiles.Add(currentSquare);
-            currentSquare += direction;
+    //        newTiles.Add(currentSquare);
+    //        currentSquare += direction;
             
-        }
+    //    }
 
 
-        return newTiles.ToArray();
-    }
+    //    return newTiles.ToArray();
+    //}
 
     Vector2Int[] DesignateDoorTiles(Room origin, Room target) {
         List<Vector2Int> newTiles = new List<Vector2Int>();
