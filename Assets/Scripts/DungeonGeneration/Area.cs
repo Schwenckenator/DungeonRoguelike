@@ -34,11 +34,14 @@ public class Area {
     /// </summary>
     /// <returns>Returns true if any square inside is filled</returns>
     public bool IsFilled(int minX, int minY, int maxX, int maxY) {
-        //Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
+        Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
+
+        //DebugDraw.CrossBox(new Vector3(minX, minY, 0), new Vector3(maxX, maxY, 0), Color.red);
+
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
 
-                //Debug.DrawLine(new Vector2(x - 0.5f, y - 0.5f), new Vector2(x + 0.5f, y + 0.5f), Color.red, 3f);
+                
                 if (IsFilled(x, y)) return true;
             }
         }

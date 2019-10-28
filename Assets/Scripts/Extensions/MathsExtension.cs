@@ -22,6 +22,18 @@ public static class MathsExtension {
         return output;
     }
 
+    public static Vector2Int Rotate90(this Vector2Int input, int times = 1) {
+        
+        
+        Vector2Int output = input;
+
+        for(int i=0; i < times; i++) {
+
+            output = new Vector2Int(-output.y, output.x);
+        }
+        Debug.Log($"Rotate 90! input was {input.ToString()}, output is {output.ToString()}!");
+        return output;
+    }
     public static Vector2Int RoundToInt(this Vector2 input) {
         return new Vector2Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
     }
@@ -51,5 +63,13 @@ public static class MathsExtension {
 
         return output;
     }
-       
+      
+    /// <summary>
+    /// Multiplies the terms of the vectors and returns the result.
+    /// </summary>
+    /// <returns></returns>
+
+    public static Vector2Int DivideByScalar(this Vector2Int input, int scalar) {
+        return new Vector2Int(input.x / scalar, input.y / scalar);
+    }
 }

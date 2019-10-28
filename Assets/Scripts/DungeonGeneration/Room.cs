@@ -1,28 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// A rectangular shaped room.
 /// </summary>
 public class Room
 {
-
-    public Vector2Int Centre { get; }
-
-    public Vector2Int Size { get; }
     // TODO: check below
     // Will this get weird with odd-number sized numbers?
-    public int Width { get
-        {
-            return Size.x;
-        } }
-    public int Height { get
-        {
-            return Size.y;
-        } }
     public BoundsInt Bounds { get; }
 
     public List<Room> Neighbours { get; }
+    public List<Room> Children { get; }
     public int ConnectionCount
     {
         get
@@ -31,24 +21,27 @@ public class Room
         }
     }
 
+    public Vector2Int Centre { get;}
+
     //Constructor
     public Room(Vector2Int centre, Vector2Int size) {
         Centre = centre;
-        Size = size;
 
-        Vector2Int min = centre - (new Vector2Int(size.x / 2, size.y / 2));
-
-        Bounds = new BoundsInt((Vector3Int)min, (Vector3Int)size);
+        Vector2Int min = new Vector2Int(centre.x - size.x / 2, centre.y - size.y / 2);
+        Bounds = new BoundsInt((Vector3Int)min, new Vector3Int (size.x, size.y, 1)); // Adds 1 for reasons
         Neighbours = new List<Room>();
+        Children = new List<Room>();
     }
 
     public void Connect(Room other) {
         Neighbours.Add(other);
+        Children.Add(other);
         other.Neighbours.Add(this);
     }
 
     public void Disconnect(Room other) {
         Neighbours.Remove(other);
+        Children.Remove(other);
         other.Neighbours.Remove(this);
     }
 
@@ -61,7 +54,7 @@ public class Room
     }
 
     public static float Distance(Room value1, Room value2) {
-        return (value1.Centre - value2.Centre).magnitude;
+        return (value1.Bounds.center - value2.Bounds.center).magnitude;
     }
 
     public static float SqrDistance(Room value1, Room value2) {
@@ -70,7 +63,7 @@ public class Room
 
     public void DebugDataDump() {
         Debug.Log(
-            $"Room: {Centre.ToString()}\nSize: {Size.ToString()}\nBounds: {Bounds.ToString()}" +
+            $"Room: {Bounds.center.ToString()}\nSize: {Bounds.size.ToString()}\nBounds: {Bounds.ToString()}" +
             $"Min X: {Bounds.xMin}, Max X: {Bounds.xMax}, Min Y: {Bounds.yMin}, Max Y:{Bounds.yMax}");
     }
 }

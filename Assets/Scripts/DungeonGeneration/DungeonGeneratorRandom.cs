@@ -4,16 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Pathfinding;
 
-public enum TileLayer { noCollision, collision }
-
-[System.Serializable]
-public class TileInfo {
-    public Color colour;
-    public TileBase tile;
-    public TileLayer layer;
-}
-
-public class DungeonGenerator : MonoBehaviour
+public class DungeonGeneratorRandom : MonoBehaviour
 {
     public int roomsPerLevel;
     public int maxSize;
@@ -303,7 +294,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 overlap.SetMinMax(new Vector3Int(xMin, yMin, 0), new Vector3Int(xMax, yMax, 0));
 
-                DrawingDebug.DrawCrossBox(overlap.min, overlap.max, Color.red);
+                DebugDraw.CrossBox(overlap.min, overlap.max, Color.red);
 
                 int x = Mathf.RoundToInt(overlap.center.x);
                 int y = Mathf.RoundToInt(overlap.center.y);
@@ -544,8 +535,8 @@ public class DungeonGenerator : MonoBehaviour
 
         Debug.Log($"Included direction is {DirectionString(direction)}, Calculated direction is {DirectionString(debugDirection)}. Do they match?");
 
-        DrawingDebug.DrawCrossBox(origin.ToVector3Int(), Color.cyan); // Origin
-        DrawingDebug.DrawCrossBox(target.ToVector3Int(), Color.yellow); // Target
+        DebugDraw.CrossBox(origin.ToVector3Int(), Color.cyan); // Origin
+        DebugDraw.CrossBox(target.ToVector3Int(), Color.yellow); // Target
 
         //Generate Gap closer
         int infLoopProtector = 0;
