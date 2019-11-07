@@ -247,6 +247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 173508081}
+  - component: {fileID: 173508082}
   m_Layer: 0
   m_Name: DungeonGenerator
   m_TagString: Untagged
@@ -268,6 +269,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &173508082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173508080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33ec6b4d688ed14585dc0a983e80506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomsPerLevel: 20
+  maxSize: 100
+  floorMap: {fileID: 811465839}
+  wallMap: {fileID: 1480709486}
+  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
+  tilePairs:
+  - colour: {r: 1, g: 1, b: 1, a: 1}
+    tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 1}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 1
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  maxConnections: 4
+  maxSteps: 10
+  dungeon: {fileID: 0}
 --- !u!1 &213442479
 GameObject:
   m_ObjectHideFlags: 0
@@ -5833,8 +5870,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1561152107}
   - component: {fileID: 1561152106}
-  - component: {fileID: 1561152105}
-  - component: {fileID: 1561152108}
   m_Layer: 0
   m_Name: Grid (1)
   m_TagString: Untagged
@@ -5842,42 +5877,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1561152105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1561152104}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomsPerLevel: 30
-  maxSize: 100
-  floorMap: {fileID: 811465839}
-  wallMap: {fileID: 1480709486}
-  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
-  tilePairs:
-  - colour: {r: 1, g: 1, b: 1, a: 1}
-    tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
-    layer: 0
-  - colour: {r: 0, g: 0, b: 0, a: 1}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 1
-  - colour: {r: 0, g: 0, b: 1, a: 1}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 1
-  - colour: {r: 1, g: 0, b: 0, a: 1}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 1
-  - colour: {r: 1, g: 0.49019608, b: 0, a: 1}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 1
-  minConnections: 0
-  maxConnections: 3
-  maxSteps: 10
 --- !u!156049354 &1561152106
 Grid:
   m_ObjectHideFlags: 0
@@ -5906,41 +5905,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1561152108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1561152104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f33ec6b4d688ed14585dc0a983e80506, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomsPerLevel: 20
-  maxSize: 100
-  floorMap: {fileID: 811465839}
-  wallMap: {fileID: 1480709486}
-  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
-  tilePairs:
-  - colour: {r: 1, g: 1, b: 1, a: 1}
-    tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
-    layer: 0
-  - colour: {r: 0, g: 0, b: 0, a: 1}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 1
-  - colour: {r: 0, g: 0, b: 0, a: 0}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 0
-  - colour: {r: 0, g: 0, b: 0, a: 0}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 0
-  - colour: {r: 0, g: 0, b: 0, a: 0}
-    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-    layer: 0
-  maxConnections: 4
-  maxSteps: 10
 --- !u!1001 &1115927483046538932
 PrefabInstance:
   m_ObjectHideFlags: 0
