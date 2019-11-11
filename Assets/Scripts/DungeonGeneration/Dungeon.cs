@@ -5,22 +5,23 @@ using UnityEngine.Tilemaps;
 
 public class Dungeon : MonoBehaviour
 {
-    private Area filledArea;
-    private Area spawnableArea;
+    public Area FilledArea { get; set; }
+    public Area SpawnableArea { get; set; }
 
-    private Grid grid;
+    public Grid grid;
 
     public Tilemap floorMap;
     public Tilemap wallMap;
 
-    public IDungeonGenerator generator;
+    private IDungeonGenerator generator;
 
     private bool showFilledArea = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        generator = GetComponent<IDungeonGenerator>();
+        Debug.Log(generator.ToString());
     }
 
     // Update is called once per frame
@@ -35,7 +36,7 @@ public class Dungeon : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.G)) { //Generate
-            generator.AttemptToGenerateDungeon();
+            generator.AttemptToGenerateDungeon(this);
         }
         if (Input.GetKeyDown(KeyCode.Q)) {
             showFilledArea = true;
@@ -45,14 +46,34 @@ public class Dungeon : MonoBehaviour
 
     }
 
-    void Scan() {
+    public void Scan() {
         AstarPath.active.Scan();
+    }
+
+    public Vector2Int RandomSpawnablePosition() {
+        
+        Vector2Int position = Vector2Int.zero;
+
+        int loopProtection = 100;
+        bool found = false;
+
+        while(!found && loopProtection-- > 0){
+            int x = Random.Range(0, FilledArea.size);
+            int y = Random.Range(0, FilledArea.size);
+
+            if (SpawnableArea.GetPoint(x,y)) {
+                //Found a free space
+                position = new Vector2Int(x, y);
+                found = true;
+            }
+        }
+        return position;
     }
 
     private void OnDrawGizmos() {
         if (!showFilledArea) return;
 
-        bool[,] area = filledArea.GetArea();
+        bool[,] area = FilledArea.GetArea();
 
         for (int x = 0; x < area.GetUpperBound(0); x++) {
             for (int y = 0; y < area.GetUpperBound(1); y++) {

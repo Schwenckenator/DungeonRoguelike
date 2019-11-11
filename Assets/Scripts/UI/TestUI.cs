@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TestUI : MonoBehaviour
 {
+    public Dungeon dungeon;
     public GameObject hero;
     public GameObject monster;
     public Character warrior;
@@ -11,12 +12,23 @@ public class TestUI : MonoBehaviour
     public Character cleric;
     public Character goblin;
 
+    private void Start() {
+        dungeon = FindObjectOfType<Dungeon>();
+    }
+
     public void StartBattle() {
         BattleController.Instance.StartBattle();
     }
 
     public void EndBattle() {
         BattleController.Instance.EndBattle();
+    }
+
+    public void SpawnUnits(int number) {
+        Debug.Log($"Spawning {number} warriors.");
+        for(int i=0; i < number; ++i) {
+            Spawn(hero, warrior);
+        }
     }
 
     public void SpawnHero(string heroType) {
@@ -29,7 +41,8 @@ public class TestUI : MonoBehaviour
     }
     public void Spawn(GameObject obj, Character character) {
         //Get Random position
-        Vector2 randomPosition = new Vector2(Random.Range(2, 48), Random.Range(2, 48));
+        Vector2 randomPosition = dungeon.RandomSpawnablePosition();
+
         GameObject newEntity = Instantiate(obj, randomPosition, Quaternion.identity);
         newEntity.GetComponent<Entity>().character = character;
         newEntity.GetComponent<Entity>().Initialise();

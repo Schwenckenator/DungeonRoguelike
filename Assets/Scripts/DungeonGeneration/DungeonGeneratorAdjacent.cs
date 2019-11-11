@@ -23,6 +23,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
     public Dungeon dungeon;
 
     private Area dungeonArea;
+    private Area spawnableArea;
 
     private Vector2Int mapCentre;
     private Vector2Int previousPosition;
@@ -34,6 +35,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
     void Start()
     {
         dungeonArea = new Area(maxSize);
+        spawnableArea = new Area(maxSize);
 
         mapCentre = new Vector2Int(dungeonArea.size / 2, dungeonArea.size / 2);
         previousPosition = mapCentre;
@@ -42,24 +44,27 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         rooms = new List<Room>();
     }
 
-    void IDungeonGenerator.AttemptToGenerateDungeon() {
+    void IDungeonGenerator.AttemptToGenerateDungeon(Dungeon dungeon) {
         if (isLevelGeneratorRunning) {
             Debug.Log("Level generator already running! Aborting.");
             return;
         }
-        StartCoroutine(GenerateDungeon(roomsPerLevel));
+        StartCoroutine(GenerateDungeon(roomsPerLevel, dungeon));
     }
 
-    IEnumerator GenerateDungeon(int numOfRooms) {
+    IEnumerator GenerateDungeon(int numOfRooms, Dungeon newDungeon) {
         isLevelGeneratorRunning = true;
 
         yield return StartCoroutine(GenerateRooms(numOfRooms));
         yield return StartCoroutine(GenerateHallways());
         yield return StartCoroutine(GenerateFloor());
 
+        newDungeon.SpawnableArea = spawnableArea;
+        newDungeon.FilledArea = dungeonArea;
+
         isLevelGeneratorRunning = false;
 
-        Invoke("Scan", 0.2f);
+        dungeon.Invoke("Scan", 0.2f);
     }
 
     IEnumerator GenerateRooms(int numOfRooms) {
@@ -204,6 +209,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
             for (int y = 0; y < area.GetUpperBound(1); y++) {
                 if (area[x, y] && wallMap.GetTile(new Vector3Int(x, y, 0)) == null) {
                     floorMap.SetTile(new Vector3Int(x, y, 0), tilePairs[0].tile);
+                    spawnableArea.SetPoint(true, x, y);
                 }
             }
         }
@@ -237,7 +243,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
             }
         }
 
-        dungeonArea.SetFilled(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
+        dungeonArea.SetArea(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
 
 
     }

@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IDungeonGenerator
 {
-    void AttemptToGenerateDungeon();
+    void AttemptToGenerateDungeon(Dungeon newDungeon);
 
 }
