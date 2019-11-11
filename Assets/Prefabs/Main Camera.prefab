@@ -100,6 +100,7 @@ MonoBehaviour:
   panSpeed: 1
   boost: 2
   zoomSpeed: 1.5
+  minZoomLevel: 1
 --- !u!114 &8095893790469602222
 MonoBehaviour:
   m_ObjectHideFlags: 0
