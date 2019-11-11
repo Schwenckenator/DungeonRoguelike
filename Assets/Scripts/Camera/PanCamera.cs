@@ -8,6 +8,8 @@ public class PanCamera : MonoBehaviour
     public float boost = 2f;
     public float zoomSpeed = 1.5f;
 
+    public float minZoomLevel = 1f;
+
     private new Camera camera;
 
     // Start is called before the first frame update
@@ -25,10 +27,15 @@ public class PanCamera : MonoBehaviour
         transform.Translate(move * panSpeed * boostSpeed * camera.orthographicSize * Time.deltaTime);
 
         if(Input.GetAxis("Mouse ScrollWheel") < 0) {
+            
             camera.orthographicSize += zoomSpeed;
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-            camera.orthographicSize -= zoomSpeed;
+            float newSize = camera.orthographicSize - zoomSpeed;
+            if(newSize < minZoomLevel) {
+                newSize = minZoomLevel;
+            }
+            camera.orthographicSize = newSize;
         }
     }
 
