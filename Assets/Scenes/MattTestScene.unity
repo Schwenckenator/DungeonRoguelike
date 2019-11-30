@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   data:
-    dataString: UEsDBBQAAAgIAABIIeypFfE7XwIAAAMFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMziVjAw6htxYI6YHAxOnk4ouQ11iDLHkkOXxk+O9dyTZ26fRkefft6r23a38RLk0JzCq90jxdqxTI9wFxZ/Jt0CVf4ET3Ssb8Ai3mg6c2dyDqMW/UcoXx0JUZVYDVnP2Qe+HAAQYryTOli2W6h7ky1mA4o8IAprSyrlpi6GtATvgYzlzJGU+jqTtd8DQLBlc8MpAWdAcdRS0yaoA1rpJM0KKE1JHu4FHbOKphEuU0iODBdWBKCG4aNsSeS682LnPQ4OSmnKI4z2CErznwfW6bl1vtJssM2Ea5pucF1+hR3ZT8VLVxBTWHmtgnFRV4CY+eVN10/U9+GPp0plXx0t4bBu4Om3N2eKNnRo3tOdsPLzrioffnSMWB7gR85CBf1UqrSqaYtLpypZWB0aJ7vUmb58AOXbymehesys7w1u/wYfr0FI5nj+PlMJg2o3KCrt6K01zwYuenMKkDsVDee78KoHFOv5C9XxTT9MWoo/TbwDvd9zeqSTxzbSymGsnScd2pSjsoWXoDnbTKzpWWoPsdSpBU2PMW+9j7gd7l/l/1TN3H09ze5Npv4q7Ehzt8ENyltup4G53J1XENJt9UVnAJne8u8YpGzZWU9b71JbVlcaUzynpl+4qnfy8aCemEjSc0mIWMZdkEhlHIomzKwt10PKZsxojfRC5RJxXbmmhjD45Nds0lbl37TxmsNC397qeaHlf8UijTIbnMVMw0gNzUHW7EQeMl+JGmy5SjQTFYy6UfOPlKiFDsAGlya5R4pcuT1TTpuiSk5J/KukhC5v4nkpAruf4BUEsDBBQAAAgIAABIIewFEJIEbAAAAHcAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0rPQUVBKL0osyCgGChiCOKWZKSB2tJJhokmysUmigaVhcnJamkmqrqlhsmmaebJhkrmxcWKyZbJSLFB9SWVBql9ibipET0BiSUZaZl5KZl66nntRZoo7yGil2FoAUEsBAi0AFAAACAgAAEgh7KkV8TtfAgAAAwUAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAAEgh7AUQkgRsAAAAdwAAAAkAJAAAAAAAAAAAAAAArAIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAABjAwAAAAA=
+    dataString: UEsDBBQAAAgIAABIIezarluGUgIAAPgEAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE2T2jAM/SuMz6WTAClDb21g2R5YmKU7e8nFOEriwbEztrN87PDfKzsJSen0FFl6kvWe5HwSLk0FzCq91jzdqBTI9xFxNvky6oPPcKa5knt+hQ7zzlNbOBD1mFdquUJ/6NKMKsFqzn7IXDhwgM5a8kzpcpXmECtjDbozKgxgSCvrsiW6PkfkjJ/xwqVc0JrMnXVFaxGMbmgykBZ0D406ZNQBG1wtmaBlBalruoeHQYdHywMlEmoxwdfI3aCE4Kbth9hL5fnuqwI0OMIpp0jP9zDBYwE8L2x7uOdus8yAbblrellyjSo1RclP1UhXUnNsWvugonbXTKJvvqmm6Oaf+Dj04Uyr8rm7t6FkC86Or/TCqLEDbYfuZd946BU6UXGkBwHvBcgXtdaqlikGra5dam1gsuyPd2pxAezY+5tWH5x11UveCd7Nx3G4efbnWPDy4IWfNY69UF5uP3/QOJpf2LDfDtOWQK/r4s3Ab5oP16gNPHFtLIZaltK1d1C1dlCy8po5NrWNlZaghxUqkFTYyw7r2McZPsT+n/VE3Ytpb29j3UN4SPHuHh8ED6GdOt2nZQp12oAptrUVXEIvtQu8oFCxkrJZsSGlLm1f64yyQVpe8/Tv3SIhnbHpjAaLkLEsm8E4ClmUzVl4mE+nlC0Y8cvHJfKkYtc02sqDY5N9cYmL1v1IRmtNK7/uqaanNb+WyvRILjO1ZxpAbpsK98ZB4yX4LtNVylGgPVjLpR84+UyIUOwIaXIvlHimq7PVNOmrJKTiH8o6T0Ji/+dIyI3c/gBQSwMEFAAACAgAAEgh7AUQkgRsAAAAdwAAAAkAJABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGrVipLLSrOzM9TslIw0TPSs9BRUEovSizIKAYKGII4pZkpIHa0kmGiSbKxSaKBpWFyclqaSaquqWGyaZp5smGSubFxYrJlslIsUH1JZUGqX2JuKkRPQGJJRlpmXkpmXrqee1FmijvIaKXYWgBQSwECLQAUAAAICAAASCHs2q5bhlICAAD4BAAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAASCHsBRCSBGwAAAB3AAAACQAkAAAAAAAAAAAAAACfAgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAACAAIAuAAAAFYDAAAAAA==
     upgradeData: 
     file_cachedStartup: {fileID: 0}
     data_cachedStartup: 
@@ -223,7 +223,7 @@ MonoBehaviour:
     seed: 0
     pivotPointRoot: {fileID: 0}
     spreadOutCount: 1
-  showGraphs: 0
+  showGraphs: 1
 --- !u!4 &64361436
 Transform:
   m_ObjectHideFlags: 0
@@ -232,11 +232,41 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64361434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4875162, y: 0.8050456, z: -22.920292}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &173508080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 173508081}
+  m_Layer: 0
+  m_Name: DungeonGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &173508081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173508080}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24, y: 24, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &213442479
 GameObject:
@@ -296,12 +326,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsPerLevel: 0
+  maxSize: 0
   floorMap: {fileID: 804912872}
   wallMap: {fileID: 1244218497}
-  floorTile: {fileID: 0}
-  wallTile: {fileID: 0}
-  design: {fileID: 0}
+  roomContainer: {fileID: 0}
   tilePairs: []
+  minConnections: 0
+  maxConnections: 0
+  maxSteps: 0
 --- !u!1 &804912868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5503,12 +5536,12 @@ PrefabInstance:
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
@@ -5796,6 +5829,7 @@ GameObject:
   - component: {fileID: 1561152107}
   - component: {fileID: 1561152106}
   - component: {fileID: 1561152105}
+  - component: {fileID: 1561152108}
   m_Layer: 0
   m_Name: Grid (1)
   m_TagString: Untagged
@@ -5810,16 +5844,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1561152104}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsPerLevel: 30
+  maxSize: 100
   floorMap: {fileID: 811465839}
   wallMap: {fileID: 1480709486}
-  floorTile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
-  wallTile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-  design: {fileID: 2800000, guid: c4eccce86c9e05945b26529fa1518d66, type: 3}
+  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
   tilePairs:
   - colour: {r: 1, g: 1, b: 1, a: 1}
     tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
@@ -5836,6 +5870,9 @@ MonoBehaviour:
   - colour: {r: 1, g: 0.49019608, b: 0, a: 1}
     tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
     layer: 1
+  minConnections: 0
+  maxConnections: 3
+  maxSteps: 10
 --- !u!156049354 &1561152106
 Grid:
   m_ObjectHideFlags: 0
@@ -5864,6 +5901,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1561152108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561152104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33ec6b4d688ed14585dc0a983e80506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomsPerLevel: 20
+  maxSize: 100
+  floorMap: {fileID: 811465839}
+  wallMap: {fileID: 1480709486}
+  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
+  tilePairs:
+  - colour: {r: 1, g: 1, b: 1, a: 1}
+    tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 1}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 1
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  maxConnections: 4
+  maxSteps: 10
 --- !u!1001 &1115927483046538932
 PrefabInstance:
   m_ObjectHideFlags: 0
