@@ -166,7 +166,6 @@ namespace Pathfinding {
 
 		/// <summary>\copydoc Pathfinding::IAstarAI::Teleport</summary>
 		public override void Teleport (Vector3 newPosition, bool clearPath = true) {
-			if (clearPath) interpolator.SetPath(null);
 			reachedEndOfPath = false;
 			base.Teleport(newPosition, clearPath);
 		}
@@ -255,11 +254,8 @@ namespace Pathfinding {
 		/// This method will be called again if a new path is calculated as the destination may have changed.
 		/// So when the agent is close to the destination this method will typically be called every <see cref="repathRate"/> seconds.
 		/// </summary>
-		protected virtual void OnTargetReached () {
-            onTargetReached?.Invoke();
+		public virtual void OnTargetReached () {
 		}
-
-        public System.Action onTargetReached;
 
 		/// <summary>
 		/// Called when a requested path has been calculated.
@@ -318,6 +314,12 @@ namespace Pathfinding {
 				reachedEndOfPath = true;
 				OnTargetReached();
 			}
+		}
+
+		protected override void ClearPath () {
+			CancelCurrentPathRequest();
+			interpolator.SetPath(null);
+			reachedEndOfPath = false;
 		}
 
 		/// <summary>Called during either Update or FixedUpdate depending on if rigidbodies are used for movement or not</summary>

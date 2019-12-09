@@ -14,6 +14,7 @@ public class ClickToMove : MonoBehaviour
     public GameObject distanceChecker1;
     public GameObject distanceChecker2;
 
+    public float finishTurnDelay = 1;
     private float maxDistanceCurrent;
 
     //Would like to retrieve this programatically but for short term this works
@@ -157,7 +158,9 @@ public class ClickToMove : MonoBehaviour
     }
     Vector2 AlignToGridOffset(Vector2 input)
     {
-        return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
+        //return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
+        return new Vector2( Mathf.Floor(input.x), Mathf.Floor(input.y));
+
     }
 
     private bool CheckValidMove(Vector2 worldPoint2d)
@@ -179,9 +182,9 @@ public class ClickToMove : MonoBehaviour
         double foundWalkable = 0;
         double countedNodes = 0;
 
-        for(float y =0.1f; y < 1; y+= 0.1f)
+        for(float y =0.1f; y < 0.9f; y+= 0.05f)
         {
-            for (float x = 0.1f; x < 1; x += 0.1f)
+            for (float x = 0.1f; x < 0.9f; x += 0.5f)
             {
                 //Get the decimal nodes within a tile
                 testY = baseY + y;
@@ -277,7 +280,10 @@ public class ClickToMove : MonoBehaviour
 
             myEntity.TurnScheduler.SpendActions(actionsToSpend);
             seeking = true;
+            aiPath.isStopped = false;
+            aiPath.canSearch = true;
             myEntity.TurnScheduler.ActionStarted();
+
         }
         else{
             Debug.Log("Move order invalid, aborting.");
@@ -300,18 +306,23 @@ public class ClickToMove : MonoBehaviour
         }
         //  Debug.Log(target.position);
         UpdateMaxDistance();
-        aiPath.onTargetReached += MoveComplete;
+
+        //bool wasTargetReached = aiPath.reachedDestination;
+        //aiPath.onPathComplete += MoveComplete;
+
+
     }
 
+    void MoveComplete() {
 
-    private void MoveComplete() {
 
-       
+            //aiPath.onTargetReached -= MoveComplete;
 
-        seeking = false;
-        aiPath.onTargetReached -= MoveComplete;
+            aiPath.isStopped = true;
+            aiPath.canSearch = false;
+            myEntity.TurnScheduler.ActonFinished();
 
-        myEntity.TurnScheduler.ActonFinished();
+
 
     }
 
@@ -322,6 +333,15 @@ public class ClickToMove : MonoBehaviour
         AstarPath.active.Scan();
         highlightGroundActive = true;
 
+    }
+    private void FixedUpdate()
+    {
+        //Pathfinding update required new way to check destination
+        if (seeking && aiPath.reachedDestination)
+        {
+            seeking = false;
+            Invoke("MoveComplete", finishTurnDelay);
+        }
     }
 
 

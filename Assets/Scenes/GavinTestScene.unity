@@ -151,12 +151,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   data:
-    dataString: UEsDBBQAAAgIAABIIezG0IDjXwIAAAUFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMzoWx+Qiht9YQ0gOBCenk4ouQ11iDLHkkOXwN/70r2cYunZ4Qu29X771d+Uq4NAUwq/RS82SlEiDfe8Sdybdem3yFE90rueUXaDCfPLGZA1GPeaeWK4yHrsyoHKzm7IfcCwcOMFhKniqdL5I9RMpYg+GUCgOY0sq6aomha4+c8Kc/cyVnPA2n7nTB0yzo3fDIQFrQLXQ4aZCTGljhSskEzQtIHOkWPmkaTyqYRDk1Ihg48kwJwU3Nhthz4dVuiww0OLkJpyjOMwgG7soM+D6zjkC3ep2mBmytXdPznGt0qWpLfqrKupyaQ0Xti4oSvIgnT6tquvon3w99OtUqf23uDQN3h804O7zTM6PGdrzthuct9dA7dKTiQHcCPjOQb2qpVSkTTFpdutLSwHDe/r1LizJghzZeUX0IlkVreeN4OJg+P4ej2dNo0Q+m9bCcoJu34hQJnu+8reMqsBXKu++XATRO6hey96ti6r4YdZR+G/ig++5O1YkXro3FVC1ZOq47VWoHJQtvoJNW2khpCbrboQBJhT1vsI99HOhD7v9VL9Q9n/r2Ote8iocSH27xQfCQ2qjjfXQmU8cVmGxdWsEltL67xBsaFSkpq33rSmrKtqVOKeuU7Uue/L1oJKRjNhrTYBYylqZj6E9CNkmnLNxNRyPKZoz4TeQSdVKxqYjW9uDYZNtc4tY1X5XeUtPC736i6XHJL7kyLZLLVG2ZBpDrqsOdOGi8BJ9pskg4GrQFa7n0AyfXmAjFDpDE90axV7o4WU3jtktMCv6lrIvEJPKfkZjcyO0PUEsDBBQAAAgIAABIIewFEJIEbAAAAHcAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0rPQUVBKL0osyCgGChiCOKWZKSB2tJJhokmysUmigaVhcnJamkmqrqlhsmmaebJhkrmxcWKyZbJSLFB9SWVBql9ibipET0BiSUZaZl5KZl66nntRZoo7yGil2FoAUEsBAi0AFAAACAgAAEgh7MbQgONfAgAABQUAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAAEgh7AUQkgRsAAAAdwAAAAkAJAAAAAAAAAAAAAAArAIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAABjAwAAAAA=
+    dataString: UEsDBBQAAAgIAABIIezarluGUgIAAPgEAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE2T2jAM/SuMz6WTAClDb21g2R5YmKU7e8nFOEriwbEztrN87PDfKzsJSen0FFl6kvWe5HwSLk0FzCq91jzdqBTI9xFxNvky6oPPcKa5knt+hQ7zzlNbOBD1mFdquUJ/6NKMKsFqzn7IXDhwgM5a8kzpcpXmECtjDbozKgxgSCvrsiW6PkfkjJ/xwqVc0JrMnXVFaxGMbmgykBZ0D406ZNQBG1wtmaBlBalruoeHQYdHywMlEmoxwdfI3aCE4Kbth9hL5fnuqwI0OMIpp0jP9zDBYwE8L2x7uOdus8yAbblrellyjSo1RclP1UhXUnNsWvugonbXTKJvvqmm6Oaf+Dj04Uyr8rm7t6FkC86Or/TCqLEDbYfuZd946BU6UXGkBwHvBcgXtdaqlikGra5dam1gsuyPd2pxAezY+5tWH5x11UveCd7Nx3G4efbnWPDy4IWfNY69UF5uP3/QOJpf2LDfDtOWQK/r4s3Ab5oP16gNPHFtLIZaltK1d1C1dlCy8po5NrWNlZaghxUqkFTYyw7r2McZPsT+n/VE3Ytpb29j3UN4SPHuHh8ED6GdOt2nZQp12oAptrUVXEIvtQu8oFCxkrJZsSGlLm1f64yyQVpe8/Tv3SIhnbHpjAaLkLEsm8E4ClmUzVl4mE+nlC0Y8cvHJfKkYtc02sqDY5N9cYmL1v1IRmtNK7/uqaanNb+WyvRILjO1ZxpAbpsK98ZB4yX4LtNVylGgPVjLpR84+UyIUOwIaXIvlHimq7PVNOmrJKTiH8o6T0Ji/+dIyI3c/gBQSwMEFAAACAgAAEgh7AUQkgRsAAAAdwAAAAkAJABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGrVipLLSrOzM9TslIw0TPSs9BRUEovSizIKAYKGII4pZkpIHa0kmGiSbKxSaKBpWFyclqaSaquqWGyaZp5smGSubFxYrJlslIsUH1JZUGqX2JuKkRPQGJJRlpmXkpmXrqee1FmijvIaKXYWgBQSwECLQAUAAAICAAASCHs2q5bhlICAAD4BAAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAASCHsBRCSBGwAAAB3AAAACQAkAAAAAAAAAAAAAACfAgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAACAAIAuAAAAFYDAAAAAA==
     upgradeData: 
     file_cachedStartup: {fileID: 0}
     data_cachedStartup: 
     cacheStartup: 0
-  showNavGraphs: 1
+  showNavGraphs: 0
   showUnwalkableNodes: 1
   debugMode: 0
   debugFloor: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
     - {r: 0, g: 0, b: 0, a: 0}
   tagNames:
   - Basic Ground
-  - Entity
+  - 1
   - 2
   - 3
   - 4
@@ -232,11 +232,41 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64361434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4875162, y: 0.8050456, z: -22.920292}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &173508080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 173508081}
+  m_Layer: 0
+  m_Name: DungeonGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &173508081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173508080}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24, y: 24, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &213442479
 GameObject:
@@ -5506,12 +5536,12 @@ PrefabInstance:
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
@@ -5799,6 +5829,7 @@ GameObject:
   - component: {fileID: 1561152107}
   - component: {fileID: 1561152106}
   - component: {fileID: 1561152105}
+  - component: {fileID: 1561152108}
   m_Layer: 0
   m_Name: Grid (1)
   m_TagString: Untagged
@@ -5813,16 +5844,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1561152104}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomsPerLevel: 0
-  maxSize: 0
+  roomsPerLevel: 30
+  maxSize: 100
   floorMap: {fileID: 811465839}
   wallMap: {fileID: 1480709486}
-  roomContainer: {fileID: 0}
+  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
   tilePairs:
   - colour: {r: 1, g: 1, b: 1, a: 1}
     tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
@@ -5840,8 +5871,8 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
     layer: 1
   minConnections: 0
-  maxConnections: 0
-  maxSteps: 0
+  maxConnections: 3
+  maxSteps: 10
 --- !u!156049354 &1561152106
 Grid:
   m_ObjectHideFlags: 0
@@ -5862,7 +5893,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1561152104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 811465842}
@@ -5870,6 +5901,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1561152108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561152104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33ec6b4d688ed14585dc0a983e80506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomsPerLevel: 20
+  maxSize: 100
+  floorMap: {fileID: 811465839}
+  wallMap: {fileID: 1480709486}
+  roomContainer: {fileID: 11400000, guid: 20843187783abd141ae23f226554c232, type: 2}
+  tilePairs:
+  - colour: {r: 1, g: 1, b: 1, a: 1}
+    tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 1}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 1
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  - colour: {r: 0, g: 0, b: 0, a: 0}
+    tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
+    layer: 0
+  maxConnections: 4
+  maxSteps: 10
 --- !u!1001 &1115927483046538932
 PrefabInstance:
   m_ObjectHideFlags: 0
