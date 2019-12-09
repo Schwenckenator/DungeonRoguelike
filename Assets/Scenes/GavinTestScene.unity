@@ -156,7 +156,7 @@ MonoBehaviour:
     file_cachedStartup: {fileID: 0}
     data_cachedStartup: 
     cacheStartup: 0
-  showNavGraphs: 0
+  showNavGraphs: 1
   showUnwalkableNodes: 1
   debugMode: 0
   debugFloor: 0
@@ -296,12 +296,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsPerLevel: 0
+  maxSize: 0
   floorMap: {fileID: 804912872}
   wallMap: {fileID: 1244218497}
-  floorTile: {fileID: 0}
-  wallTile: {fileID: 0}
-  design: {fileID: 0}
+  roomContainer: {fileID: 0}
   tilePairs: []
+  minConnections: 0
+  maxConnections: 0
+  maxSteps: 0
 --- !u!1 &804912868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5815,11 +5818,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b7c5ab9b70f144e93381a7fc5765a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsPerLevel: 0
+  maxSize: 0
   floorMap: {fileID: 811465839}
   wallMap: {fileID: 1480709486}
-  floorTile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
-  wallTile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
-  design: {fileID: 2800000, guid: c4eccce86c9e05945b26529fa1518d66, type: 3}
+  roomContainer: {fileID: 0}
   tilePairs:
   - colour: {r: 1, g: 1, b: 1, a: 1}
     tile: {fileID: 11400000, guid: 84f5a8cb641d46b4da008e78abe50772, type: 2}
@@ -5836,6 +5839,9 @@ MonoBehaviour:
   - colour: {r: 1, g: 0.49019608, b: 0, a: 1}
     tile: {fileID: 11400000, guid: b28b928dff2a98f4d8b8c64582e76624, type: 2}
     layer: 1
+  minConnections: 0
+  maxConnections: 0
+  maxSteps: 0
 --- !u!156049354 &1561152106
 Grid:
   m_ObjectHideFlags: 0
