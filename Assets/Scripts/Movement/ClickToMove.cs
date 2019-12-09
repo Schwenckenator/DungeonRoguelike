@@ -155,12 +155,21 @@ public class ClickToMove : MonoBehaviour
     Vector2 AlignToGrid(Vector2 input) {
         return new Vector2(input.x.RoundToValue(0.5f), input.y.RoundToValue(0.5f));
     }
+    Vector2 AlignToGridOffset(Vector2 input)
+    {
+        return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
+    }
 
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
         bool validMove = true;
         float baseX = Mathf.Floor(worldPoint2d.x);
         float baseY = Mathf.Floor(worldPoint2d.y);
+
+        //float baseX = AlignToGrid(worldPoint2d).x;
+        //float baseY = AlignToGrid(worldPoint2d).y;
+
+
 
 
         float testX = 0;
@@ -170,9 +179,9 @@ public class ClickToMove : MonoBehaviour
         double foundWalkable = 0;
         double countedNodes = 0;
 
-        for(float y = 0; y < 1; y+= 0.1f)
+        for(float y =0.1f; y < 1; y+= 0.1f)
         {
-            for (float x = 0; x < 1; x += 0.1f)
+            for (float x = 0.1f; x < 1; x += 0.1f)
             {
                 //Get the decimal nodes within a tile
                 testY = baseY + y;
@@ -190,7 +199,7 @@ public class ClickToMove : MonoBehaviour
 
         }
 
-        if (foundWalkable / countedNodes >= 0.90)
+        if (foundWalkable / countedNodes >= 0.9)
         {
             validMove = true;
 
@@ -208,14 +217,21 @@ public class ClickToMove : MonoBehaviour
 
     public void HighlightPath(Vector2 worldPoint2d)
     {
+
         if (highlightGroundActive)
         {
-            Vector2 position = AlignToGrid(worldPoint2d);
+            //Vector2 position =(worldPoint2d);
+
+            Vector2 position = AlignToGridOffset(worldPoint2d);
             if (position != lastHighlightPosition)
             {
+
+                Debug.Log("Highlight x " + position.x+ " y " + position.y);
+
                 highlightGroundRenderer.enabled = true;
                 lastHighlightPosition = position;
-                bool validMove = CheckValidMove(worldPoint2d);
+           //     bool validMove = CheckValidMove(worldPoint2d);
+                bool validMove = CheckValidMove(position);
 
                 highlightGroundGO.transform.position = position;
 
