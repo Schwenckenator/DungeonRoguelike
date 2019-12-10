@@ -6,6 +6,9 @@ using System.Collections;
 
 public class ClickToMove : MonoBehaviour
 {
+    [SerializeField]
+    public List<Vector2> nodes;
+
     //public bool canMove = false;
     public GameObject moveTarget;
     AIDestinationSetter aiDestination;
@@ -166,9 +169,11 @@ public class ClickToMove : MonoBehaviour
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
         bool validMove = true;
-        float baseX = Mathf.Floor(worldPoint2d.x);
-        float baseY = Mathf.Floor(worldPoint2d.y);
+        //float baseX = Mathf.Floor(worldPoint2d.x);
+        //float baseY = Mathf.Floor(worldPoint2d.y);
 
+        float baseX = worldPoint2d.x;
+        float baseY = worldPoint2d.y;
         //float baseX = AlignToGrid(worldPoint2d).x;
         //float baseY = AlignToGrid(worldPoint2d).y;
 
@@ -177,22 +182,32 @@ public class ClickToMove : MonoBehaviour
 
         float testX = 0;
         float testY = 0;
+        float offset = -.5f;
+
+        float minCoord = 0.1f + offset;
+        float maxCoord = 0.9f + offset;
 
         GraphNode node;
         double foundWalkable = 0;
         double countedNodes = 0;
-
-        for(float y =0.1f; y < 0.9f; y+= 0.05f)
+        nodes = new List<Vector2>();
+        for (float y = minCoord; y < maxCoord; y+= 0.05f)
         {
-            for (float x = 0.1f; x < 0.9f; x += 0.5f)
+            for (float x = minCoord; x < maxCoord; x += 0.05f)
             {
                 //Get the decimal nodes within a tile
                 testY = baseY + y;
                 testX = baseX + x;
 
+                    //NNInfo vectorOnGraphInfo = AstarPath.active.GetNearest(new Vector2(testX, testY), NNConstraint.Default);
+                  node = AstarPath.active.GetNearest(new Vector2(testX, testY)).node;
+                nodes.Add(AstarPath.active.GetNearest(new Vector2(testX, testY)).position);
+                 // node.position.x.
+                //if (node.position.x.IsWithin(minCoord, maxCoord) &&
+                    //node.position.y.IsWithin(minCoord, maxCoord)) { 
+               
+                //}
 
-
-                node = AstarPath.active.GetNearest(new Vector2(testX,testY)).node;
                 if (node.Walkable==true)
                 {
                     foundWalkable += 1;  
@@ -202,7 +217,7 @@ public class ClickToMove : MonoBehaviour
 
         }
 
-        if (foundWalkable / countedNodes >= 0.9)
+        if (foundWalkable / countedNodes >= 0.5)
         {
             validMove = true;
 
@@ -214,10 +229,16 @@ public class ClickToMove : MonoBehaviour
         }
         Debug.Log("Checking Walkable Square " + worldPoint2d.x + " " + worldPoint2d.y);
         Debug.Log("foundWalkable " + (foundWalkable / countedNodes));
+        Debug.Log("foundWalkable " + foundWalkable +" / "+ countedNodes);
 
         return validMove;
     }
 
+
+    //public static bool IsWithin(this int value, int minimum, int maximum)
+    //{
+    //    return value >= minimum && value <= maximum;
+    //}
     public void HighlightPath(Vector2 worldPoint2d)
     {
 
