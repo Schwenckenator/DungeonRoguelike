@@ -6,8 +6,6 @@ using System.Collections;
 
 public class ClickToMove : MonoBehaviour
 {
-    [SerializeField]
-    public List<Vector2> nodes;
 
     //public bool canMove = false;
     public GameObject moveTarget;
@@ -162,35 +160,30 @@ public class ClickToMove : MonoBehaviour
     Vector2 AlignToGridOffset(Vector2 input)
     {
         //return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
-        return new Vector2( Mathf.Floor(input.x), Mathf.Floor(input.y));
+        return new Vector2( Mathf.Round(input.x), Mathf.Round(input.y));
 
     }
 
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
         bool validMove = true;
-        //float baseX = Mathf.Floor(worldPoint2d.x);
-        //float baseY = Mathf.Floor(worldPoint2d.y);
-
         float baseX = worldPoint2d.x;
         float baseY = worldPoint2d.y;
-        //float baseX = AlignToGrid(worldPoint2d).x;
-        //float baseY = AlignToGrid(worldPoint2d).y;
 
 
 
 
         float testX = 0;
         float testY = 0;
-        float offset = -.5f;
 
+        //TODO
+        float offset = -.5f;
         float minCoord = 0.1f + offset;
         float maxCoord = 0.9f + offset;
 
         GraphNode node;
         double foundWalkable = 0;
         double countedNodes = 0;
-        nodes = new List<Vector2>();
         for (float y = minCoord; y < maxCoord; y+= 0.05f)
         {
             for (float x = minCoord; x < maxCoord; x += 0.05f)
@@ -201,7 +194,6 @@ public class ClickToMove : MonoBehaviour
 
                     //NNInfo vectorOnGraphInfo = AstarPath.active.GetNearest(new Vector2(testX, testY), NNConstraint.Default);
                   node = AstarPath.active.GetNearest(new Vector2(testX, testY)).node;
-                nodes.Add(AstarPath.active.GetNearest(new Vector2(testX, testY)).position);
                  // node.position.x.
                 //if (node.position.x.IsWithin(minCoord, maxCoord) &&
                     //node.position.y.IsWithin(minCoord, maxCoord)) { 
