@@ -415,12 +415,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7655959546134325522}
-  - component: {fileID: 5688986332972663742}
   - component: {fileID: 5688986332972663738}
   - component: {fileID: 5688986332972663739}
   - component: {fileID: 5688986332972663736}
   - component: {fileID: 5688986332972663737}
   - component: {fileID: 4128388199214397066}
+  - component: {fileID: 477038049162429210}
   - component: {fileID: 4061216150727006508}
   - component: {fileID: 7674847316774029211}
   - component: {fileID: 7737369020264792062}
@@ -454,22 +454,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &5688986332972663742
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4061216150727006419}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!114 &5688986332972663738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79b5e26d091d47b4a2de9fda77da356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foundPathCoords: []
   moveTarget: {fileID: 1418595462190279686, guid: 04e143f05f1d345c994dacc6f2c5f5aa,
     type: 3}
   distanceChecker1: {fileID: 5688986332596991928}
@@ -494,6 +479,7 @@ MonoBehaviour:
     type: 3}
   pathValidColor: {r: 0.19127488, g: 1, b: 0, a: 0.53333336}
   pathInvalidColor: {r: 1, g: 0, b: 0, a: 0.5176471}
+  pathManager: {fileID: 0}
 --- !u!114 &5688986332972663739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,6 +572,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 11400000, guid: 4b07725ce20341848b81d9a313427f56, type: 2}
   allegiance: 0
+--- !u!114 &477038049162429210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4061216150727006419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02d9e7e73067c43d29b114b05e5002ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  speed: 200
+  nextWaypointDistance: 3
+  seekingActive: 0
 --- !u!114 &4061216150727006508
 MonoBehaviour:
   m_ObjectHideFlags: 0

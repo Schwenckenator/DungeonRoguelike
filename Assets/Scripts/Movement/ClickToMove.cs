@@ -7,7 +7,8 @@ using System.Collections;
 public class ClickToMove : MonoBehaviour
 {
 
-    //public bool canMove = false;
+    public List<Vector3> foundPathCoords;
+
     public GameObject moveTarget;
     AIDestinationSetter aiDestination;
     AIPath aiPath;
@@ -36,6 +37,10 @@ public class ClickToMove : MonoBehaviour
     private bool highlightGroundActive;
     private Vector2 lastHighlightPosition;
 
+    public PathManager pathManager;
+
+
+
     public void Initialise()
     {
   
@@ -43,6 +48,7 @@ public class ClickToMove : MonoBehaviour
         aiPath = GetComponent<AIPath>();
         turnScheduler = GetComponent<EntityTurnScheduler>();
         myEntity = GetComponent<Entity>();
+        pathManager = GetComponent<PathManager>();
 
         UpdateMaxDistance();
 
@@ -151,7 +157,6 @@ public class ClickToMove : MonoBehaviour
             highlightGroundActive = false;
 
         }
-       // Debug.Log("MaxDist " + maxDistanceCurrent);
     }
 
     Vector2 AlignToGrid(Vector2 input) {
@@ -159,7 +164,6 @@ public class ClickToMove : MonoBehaviour
     }
     Vector2 AlignToGridOffset(Vector2 input)
     {
-        //return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
         return new Vector2( Mathf.Round(input.x), Mathf.Round(input.y));
 
     }
@@ -169,14 +173,10 @@ public class ClickToMove : MonoBehaviour
         bool validMove = true;
         float baseX = worldPoint2d.x;
         float baseY = worldPoint2d.y;
-
-
-
-
         float testX = 0;
         float testY = 0;
 
-        //TODO
+        //TODO make this into extension
         float offset = -.5f;
         float minCoord = 0.1f + offset;
         float maxCoord = 0.9f + offset;
@@ -191,14 +191,8 @@ public class ClickToMove : MonoBehaviour
                 //Get the decimal nodes within a tile
                 testY = baseY + y;
                 testX = baseX + x;
-
-                    //NNInfo vectorOnGraphInfo = AstarPath.active.GetNearest(new Vector2(testX, testY), NNConstraint.Default);
-                  node = AstarPath.active.GetNearest(new Vector2(testX, testY)).node;
-                 // node.position.x.
-                //if (node.position.x.IsWithin(minCoord, maxCoord) &&
-                    //node.position.y.IsWithin(minCoord, maxCoord)) { 
-               
-                //}
+                node = AstarPath.active.GetNearest(new Vector2(testX, testY)).node;
+     
 
                 if (node.Walkable==true)
                 {
@@ -219,34 +213,30 @@ public class ClickToMove : MonoBehaviour
             validMove = false;
 
         }
-        Debug.Log("Checking Walkable Square " + worldPoint2d.x + " " + worldPoint2d.y);
-        Debug.Log("foundWalkable " + (foundWalkable / countedNodes));
-        Debug.Log("foundWalkable " + foundWalkable +" / "+ countedNodes);
+        //Debug.Log("Checking Walkable Square " + worldPoint2d.x + " " + worldPoint2d.y);
+        //Debug.Log("foundWalkable " + (foundWalkable / countedNodes));
+        //Debug.Log("foundWalkable " + foundWalkable +" / "+ countedNodes);
 
         return validMove;
     }
 
 
-    //public static bool IsWithin(this int value, int minimum, int maximum)
-    //{
-    //    return value >= minimum && value <= maximum;
-    //}
     public void HighlightPath(Vector2 worldPoint2d)
     {
 
         if (highlightGroundActive)
         {
-            //Vector2 position =(worldPoint2d);
 
             Vector2 position = AlignToGridOffset(worldPoint2d);
             if (position != lastHighlightPosition)
             {
+                foundPathCoords = pathManager.UpdatePath(worldPoint2d);
+              //  Debug.Log("Path coords" + drawPath.UpdatePath(worldPoint2d));
 
-                Debug.Log("Highlight x " + position.x+ " y " + position.y);
+                //Debug.Log("Highlight x " + position.x+ " y " + position.y);
 
                 highlightGroundRenderer.enabled = true;
                 lastHighlightPosition = position;
-           //     bool validMove = CheckValidMove(worldPoint2d);
                 bool validMove = CheckValidMove(position);
 
                 highlightGroundGO.transform.position = position;
