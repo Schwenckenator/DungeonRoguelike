@@ -72,4 +72,10 @@ public static class MathsExtension {
     public static Vector2Int DivideByScalar(this Vector2Int input, int scalar) {
         return new Vector2Int(input.x / scalar, input.y / scalar);
     }
+
+
+    public static bool IsWithin(this float value, float minimum, float maximum)
+    {
+        return value >= minimum && value <= maximum;
+    }
 }

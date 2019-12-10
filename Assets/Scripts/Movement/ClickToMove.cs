@@ -6,6 +6,7 @@ using System.Collections;
 
 public class ClickToMove : MonoBehaviour
 {
+
     //public bool canMove = false;
     public GameObject moveTarget;
     AIDestinationSetter aiDestination;
@@ -14,6 +15,7 @@ public class ClickToMove : MonoBehaviour
     public GameObject distanceChecker1;
     public GameObject distanceChecker2;
 
+    public float finishTurnDelay = 1;
     private float maxDistanceCurrent;
 
     //Would like to retrieve this programatically but for short term this works
@@ -157,17 +159,16 @@ public class ClickToMove : MonoBehaviour
     }
     Vector2 AlignToGridOffset(Vector2 input)
     {
-        return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
+        //return new Vector2(input.x.RoundToValue(0.0f), input.y.RoundToValue(0.0f));
+        return new Vector2( Mathf.Round(input.x), Mathf.Round(input.y));
+
     }
 
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
         bool validMove = true;
-        float baseX = Mathf.Floor(worldPoint2d.x);
-        float baseY = Mathf.Floor(worldPoint2d.y);
-
-        //float baseX = AlignToGrid(worldPoint2d).x;
-        //float baseY = AlignToGrid(worldPoint2d).y;
+        float baseX = worldPoint2d.x;
+        float baseY = worldPoint2d.y;
 
 
 
@@ -175,21 +176,30 @@ public class ClickToMove : MonoBehaviour
         float testX = 0;
         float testY = 0;
 
+        //TODO
+        float offset = -.5f;
+        float minCoord = 0.1f + offset;
+        float maxCoord = 0.9f + offset;
+
         GraphNode node;
         double foundWalkable = 0;
         double countedNodes = 0;
-
-        for(float y =0.1f; y < 1; y+= 0.1f)
+        for (float y = minCoord; y < maxCoord; y+= 0.05f)
         {
-            for (float x = 0.1f; x < 1; x += 0.1f)
+            for (float x = minCoord; x < maxCoord; x += 0.05f)
             {
                 //Get the decimal nodes within a tile
                 testY = baseY + y;
                 testX = baseX + x;
 
+                    //NNInfo vectorOnGraphInfo = AstarPath.active.GetNearest(new Vector2(testX, testY), NNConstraint.Default);
+                  node = AstarPath.active.GetNearest(new Vector2(testX, testY)).node;
+                 // node.position.x.
+                //if (node.position.x.IsWithin(minCoord, maxCoord) &&
+                    //node.position.y.IsWithin(minCoord, maxCoord)) { 
+               
+                //}
 
-
-                node = AstarPath.active.GetNearest(new Vector2(testX,testY)).node;
                 if (node.Walkable==true)
                 {
                     foundWalkable += 1;  
@@ -199,7 +209,7 @@ public class ClickToMove : MonoBehaviour
 
         }
 
-        if (foundWalkable / countedNodes >= 0.9)
+        if (foundWalkable / countedNodes >= 0.5)
         {
             validMove = true;
 
@@ -211,10 +221,16 @@ public class ClickToMove : MonoBehaviour
         }
         Debug.Log("Checking Walkable Square " + worldPoint2d.x + " " + worldPoint2d.y);
         Debug.Log("foundWalkable " + (foundWalkable / countedNodes));
+        Debug.Log("foundWalkable " + foundWalkable +" / "+ countedNodes);
 
         return validMove;
     }
 
+
+    //public static bool IsWithin(this int value, int minimum, int maximum)
+    //{
+    //    return value >= minimum && value <= maximum;
+    //}
     public void HighlightPath(Vector2 worldPoint2d)
     {
 
@@ -277,7 +293,10 @@ public class ClickToMove : MonoBehaviour
 
             myEntity.TurnScheduler.SpendActions(actionsToSpend);
             seeking = true;
+            aiPath.isStopped = false;
+            aiPath.canSearch = true;
             myEntity.TurnScheduler.ActionStarted();
+
         }
         else{
             Debug.Log("Move order invalid, aborting.");
@@ -300,18 +319,23 @@ public class ClickToMove : MonoBehaviour
         }
         //  Debug.Log(target.position);
         UpdateMaxDistance();
-        aiPath.onTargetReached += MoveComplete;
+
+        //bool wasTargetReached = aiPath.reachedDestination;
+        //aiPath.onPathComplete += MoveComplete;
+
+
     }
 
+    void MoveComplete() {
 
-    private void MoveComplete() {
 
-       
+            //aiPath.onTargetReached -= MoveComplete;
 
-        seeking = false;
-        aiPath.onTargetReached -= MoveComplete;
+            aiPath.isStopped = true;
+            aiPath.canSearch = false;
+            myEntity.TurnScheduler.ActonFinished();
 
-        myEntity.TurnScheduler.ActonFinished();
+
 
     }
 
@@ -322,6 +346,15 @@ public class ClickToMove : MonoBehaviour
         AstarPath.active.Scan();
         highlightGroundActive = true;
 
+    }
+    private void FixedUpdate()
+    {
+        //Pathfinding update required new way to check destination
+        if (seeking && aiPath.reachedDestination)
+        {
+            seeking = false;
+            Invoke("MoveComplete", finishTurnDelay);
+        }
     }
 
 
