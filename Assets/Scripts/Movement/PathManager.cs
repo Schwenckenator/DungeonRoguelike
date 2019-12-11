@@ -14,7 +14,7 @@ public class PathManager : MonoBehaviour
     private Renderer highlightGroundRenderer;
     public Color pathValidColor;
     public Color pathInvalidColor;
-    private bool highlightGroundActive;
+    public bool highlightGroundActive;
     private Vector2 lastHighlightPosition;
 
     //From Click to move
@@ -48,6 +48,8 @@ public class PathManager : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("PATH MANAGER OnEnable");
+
         PlayerInput.Instance.onMouseHover += HighlightPath;
 
     }
@@ -60,7 +62,7 @@ public class PathManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log("PATH MANAGER Start");
         highlightGroundGO = Instantiate(highlightGroundGO);
         highlightGroundGO.transform.position = transform.position;
 
@@ -78,14 +80,21 @@ public class PathManager : MonoBehaviour
         {
             //Quick fix to stop incorrect position being blocked off, would like to improve this later
 
+            Debug.Log("PATH MANAGER OnEnable");
+
+            highlightGroundActive = true;
+
         }
+
 
 
     }
     private void OnFinishPlayerTurn(int entityID)
     {
-
-
+        if (entityID == GetInstanceID())
+        {
+            highlightGroundActive = false;
+        }
     }
 
     public List<Vector3> GetPathCoords(Vector2 targetPos)
@@ -160,6 +169,8 @@ public class PathManager : MonoBehaviour
 
     public void HighlightPath(Vector2 worldPoint2d)
     {
+        Debug.Log("PATH MANAGER HighlightPath");
+
 
         if (highlightGroundActive)
         {
@@ -172,7 +183,13 @@ public class PathManager : MonoBehaviour
 
                 //Debug.Log("Highlight x " + position.x+ " y " + position.y);
 
-                highlightGroundRenderer.enabled = true;
+
+                if (!highlightGroundRenderer)
+                    highlightGroundRenderer = highlightGroundGO.GetComponent<Renderer>();
+                    highlightGroundRenderer.enabled = true;
+                    
+
+
                 lastHighlightPosition = position;
                 bool validMove = CheckValidMove(position);
 

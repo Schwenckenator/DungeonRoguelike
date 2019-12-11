@@ -30,12 +30,12 @@ public class ClickToMove : MonoBehaviour
     private Transform target;
 
     //Highlight Vars
-    public GameObject highlightGroundGO;
-    private Renderer highlightGroundRenderer;
-    public Color pathValidColor;
-    public Color pathInvalidColor;
-    private bool highlightGroundActive;
-    private Vector2 lastHighlightPosition;
+    //public GameObject highlightGroundGO;
+    //private Renderer highlightGroundRenderer;
+    //public Color pathValidColor;
+    //public Color pathInvalidColor;
+    //private bool highlightGroundActive;
+    //private Vector2 lastHighlightPosition;
 
     public PathManager pathManager;
 
@@ -91,6 +91,7 @@ public class ClickToMove : MonoBehaviour
             UpdateMaxDistance();
             //Quick fix to stop incorrect position being blocked off, would like to improve this later
             StartCoroutine(DelayedCheckTurn(entityID));
+            pathManager.highlightGroundActive = true;
 
         }
 
@@ -102,7 +103,8 @@ public class ClickToMove : MonoBehaviour
         if (entityID == GetInstanceID())
         {
             UpdateMaxDistance();
-            highlightGroundActive = false;
+            //highlightGroundActive = false;
+            pathManager.highlightGroundActive = false;
 
         }
 
@@ -139,14 +141,14 @@ public class ClickToMove : MonoBehaviour
             distanceChecker1.SetActive(true);
 
             distanceChecker2.SetActive(true);
-            highlightGroundActive = true;
+            //highlightGroundActive = true;
         }
         else if (turnScheduler && turnScheduler.actionsRemaining > 0)
         {
             maxDistanceCurrent = maxDistance1;
             distanceChecker1.SetActive(true);
             distanceChecker2.SetActive(false);
-            highlightGroundActive = true;
+            //highlightGroundActive = true;
 
         }
         else
@@ -154,7 +156,7 @@ public class ClickToMove : MonoBehaviour
             maxDistanceCurrent = maxDistance1;
             distanceChecker1.SetActive(false);
             distanceChecker2.SetActive(false);
-            highlightGroundActive = false;
+            //highlightGroundActive = false;
 
         }
     }
@@ -334,7 +336,7 @@ public class ClickToMove : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         UpdateObstacles(entityID);
         AstarPath.active.Scan();
-        //highlightGroundActive = true;
+        //pathManager.highlightGroundActive = true;
 
     }
     private void FixedUpdate()
