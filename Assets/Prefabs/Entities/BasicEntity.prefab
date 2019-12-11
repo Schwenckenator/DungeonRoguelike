@@ -479,7 +479,7 @@ MonoBehaviour:
     type: 3}
   pathValidColor: {r: 0.19127488, g: 1, b: 0, a: 0.53333336}
   pathInvalidColor: {r: 1, g: 0, b: 0, a: 0.5176471}
-  pathManager: {fileID: 0}
+  pathManager: {fileID: 477038049162429210}
 --- !u!114 &5688986332972663739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,10 +584,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d9e7e73067c43d29b114b05e5002ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  speed: 200
-  nextWaypointDistance: 3
-  seekingActive: 0
+  highlightGroundGO: {fileID: 6965303329720741291, guid: 69b26cec52b6d4820af1a3ad90f6d554,
+    type: 3}
+  pathValidColor: {r: 0.19215687, g: 1, b: 0, a: 0.53333336}
+  pathInvalidColor: {r: 1, g: 0, b: 0, a: 0.5176471}
+  foundPathCoords: []
 --- !u!114 &4061216150727006508
 MonoBehaviour:
   m_ObjectHideFlags: 0

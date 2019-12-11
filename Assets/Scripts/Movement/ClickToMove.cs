@@ -57,9 +57,9 @@ public class ClickToMove : MonoBehaviour
         GameEvents.current.onFinishPlayerTurn += OnFinishPlayerTurn;
 
         //Highlight
-        highlightGroundGO = Instantiate(highlightGroundGO);
-        highlightGroundGO.transform.position = transform.position;
-        highlightGroundRenderer = highlightGroundGO.GetComponent<Renderer>();
+        //highlightGroundGO = Instantiate(highlightGroundGO);
+        //highlightGroundGO.transform.position = transform.position;
+        //highlightGroundRenderer = highlightGroundGO.GetComponent<Renderer>();
     }
 
     private void OnDestroy()
@@ -71,12 +71,12 @@ public class ClickToMove : MonoBehaviour
 
     private void OnEnable() {
         PlayerInput.Instance.onLeftMouseButtonPressed += MoveOrder;
-        PlayerInput.Instance.onMouseHover += HighlightPath;
+        //PlayerInput.Instance.onMouseHover += pathManager.HighlightPath;
 
     }
     private void OnDisable() {
         PlayerInput.Instance.onLeftMouseButtonPressed -= MoveOrder;
-        PlayerInput.Instance.onMouseHover -= HighlightPath;
+        //PlayerInput.Instance.onMouseHover -= pathManager.HighlightPath;
 
     }
 
@@ -221,46 +221,46 @@ public class ClickToMove : MonoBehaviour
     }
 
 
-    public void HighlightPath(Vector2 worldPoint2d)
-    {
+    //public void HighlightPath(Vector2 worldPoint2d)
+    //{
 
-        if (highlightGroundActive)
-        {
+    //    if (highlightGroundActive)
+    //    {
 
-            Vector2 position = AlignToGridOffset(worldPoint2d);
-            if (position != lastHighlightPosition)
-            {
-                foundPathCoords = pathManager.UpdatePath(worldPoint2d);
-              //  Debug.Log("Path coords" + drawPath.UpdatePath(worldPoint2d));
+    //        Vector2 position = AlignToGridOffset(worldPoint2d);
+    //        if (position != lastHighlightPosition)
+    //        {
+    //            foundPathCoords = pathManager.GetPathCoords(worldPoint2d);
+    //          //  Debug.Log("Path coords" + drawPath.UpdatePath(worldPoint2d));
 
-                //Debug.Log("Highlight x " + position.x+ " y " + position.y);
+    //            //Debug.Log("Highlight x " + position.x+ " y " + position.y);
 
-                highlightGroundRenderer.enabled = true;
-                lastHighlightPosition = position;
-                bool validMove = CheckValidMove(position);
+    //            highlightGroundRenderer.enabled = true;
+    //            lastHighlightPosition = position;
+    //            bool validMove = CheckValidMove(position);
 
-                highlightGroundGO.transform.position = position;
+    //            highlightGroundGO.transform.position = position;
 
 
 
-                if (validMove)
-                {
+    //            if (validMove)
+    //            {
 
-                    highlightGroundRenderer.material.color = pathValidColor;
-                }
-                else
-                {
-                    highlightGroundRenderer.material.color = pathInvalidColor;
-                }
-            }
-        }
-        else
-        {
-            highlightGroundRenderer.enabled = false;
+    //                highlightGroundRenderer.material.color = pathValidColor;
+    //            }
+    //            else
+    //            {
+    //                highlightGroundRenderer.material.color = pathInvalidColor;
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        highlightGroundRenderer.enabled = false;
 
-        }
+    //    }
         
-    }
+    //}
 
     public void MoveOrder(Vector2 worldPoint2d)
     {
@@ -334,7 +334,7 @@ public class ClickToMove : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         UpdateObstacles(entityID);
         AstarPath.active.Scan();
-        highlightGroundActive = true;
+        //highlightGroundActive = true;
 
     }
     private void FixedUpdate()
