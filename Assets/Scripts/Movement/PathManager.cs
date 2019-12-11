@@ -169,7 +169,6 @@ public class PathManager : MonoBehaviour
 
     public void HighlightPath(Vector2 worldPoint2d)
     {
-        Debug.Log("PATH MANAGER HighlightPath");
 
 
         if (highlightGroundActive)
