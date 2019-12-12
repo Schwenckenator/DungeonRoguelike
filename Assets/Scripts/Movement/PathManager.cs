@@ -17,6 +17,8 @@ public class PathManager : MonoBehaviour
     public bool highlightGroundActive;
     private Vector2 lastHighlightPosition;
 
+
+
     //From Click to move
     public List<Vector3> foundPathCoords;
 
@@ -114,7 +116,7 @@ public class PathManager : MonoBehaviour
 
     //From Click To Move
 
-    private bool CheckValidMove(Vector2 worldPoint2d)
+    public bool CheckValidMove(Vector2 worldPoint2d)
     {
         bool validMove = true;
         float baseX = worldPoint2d.x;
@@ -151,7 +153,15 @@ public class PathManager : MonoBehaviour
 
         if (foundWalkable / countedNodes >= 0.5)
         {
+
+            foundPathCoords= GetPathCoords(worldPoint2d);
+            float pathDistance = Mathf.Round((foundPathCoords.Count - 1) / 4);
+            if (pathDistance > 0)
+            {
+                Debug.Log("Distance is: " + pathDistance);
+            }
             validMove = true;
+
 
         }
         else

@@ -152,49 +152,8 @@ public class ClickToMove : MonoBehaviour
 
     private bool CheckValidMove(Vector2 worldPoint2d)
     {
-        bool validMove = true;
-        float baseX = worldPoint2d.x;
-        float baseY = worldPoint2d.y;
-        float testX = 0;
-        float testY = 0;
-
-        //TODO make this into extension
-        float offset = -.5f;
-        float minCoord = 0.1f + offset;
-        float maxCoord = 0.9f + offset;
-
-        GraphNode node;
-        double foundWalkable = 0;
-        double countedNodes = 0;
-        for (float y = minCoord; y < maxCoord; y+= 0.05f)
-        {
-            for (float x = minCoord; x < maxCoord; x += 0.05f)
-            {
-                //Get the decimal nodes within a tile
-                testY = baseY + y;
-                testX = baseX + x;
-                node = AstarPath.active.GetNearest(new Vector2(testX, testY)).node;
-     
-                if (node.Walkable==true)
-                {
-                    foundWalkable += 1;  
-                }
-                countedNodes++;
-            }
-        }
-
-        if (foundWalkable / countedNodes >= 0.5)
-        {
-            validMove = true;
-
-        }
-        else
-        {
-            validMove = false;
-
-        }
-
-        return validMove;
+        //Moved to path Manager
+        return pathManager.CheckValidMove(worldPoint2d);
     }
 
     public void MoveOrder(Vector2 worldPoint2d)
