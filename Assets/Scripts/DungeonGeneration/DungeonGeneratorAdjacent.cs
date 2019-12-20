@@ -61,6 +61,9 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
 
         newDungeon.SpawnableArea = spawnableArea;
         newDungeon.FilledArea = dungeonArea;
+        newDungeon.rooms = rooms;
+
+        EncounterGenerator.Instance.GenerateEncounters(newDungeon);
 
         isLevelGeneratorRunning = false;
 
