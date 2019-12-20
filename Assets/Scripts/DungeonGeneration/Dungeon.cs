@@ -13,7 +13,11 @@ public class Dungeon : MonoBehaviour
     public Tilemap floorMap;
     public Tilemap wallMap;
 
+    public List<Room> rooms;
+
     private IDungeonGenerator generator;
+
+    
 
     private bool showFilledArea = false;
 

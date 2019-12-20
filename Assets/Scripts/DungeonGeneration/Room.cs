@@ -33,6 +33,28 @@ public class Room
         Children = new List<Room>();
     }
 
+    public Vector2Int RandomSpawnablePoint() {
+
+        Vector2Int position = Vector2Int.zero;
+
+        int loopProtection = 100;
+        bool found = false;
+
+        
+        while (!found && loopProtection-- > 0) {
+            int x = Random.Range(Bounds.xMin, Bounds.xMax);
+            int y = Random.Range(Bounds.yMin, Bounds.yMax);
+
+            //Check for walls & obstacles HERE TODO make it check
+            //Found a free space
+            position = new Vector2Int(x, y);
+            found = true;
+            
+        }
+        return position;
+
+    }
+
     public void Connect(Room other) {
         Neighbours.Add(other);
         Children.Add(other);
