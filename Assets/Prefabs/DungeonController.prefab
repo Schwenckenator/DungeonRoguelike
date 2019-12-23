@@ -469,10 +469,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1209282043229702827}
+  - component: {fileID: 1209282043229702806}
   - component: {fileID: 1209282043229702824}
   - component: {fileID: 1209282043229702825}
-  - component: {fileID: 1209282043229702806}
   - component: {fileID: 1693130927}
+  - component: {fileID: 6930159919683982566}
   m_Layer: 0
   m_Name: DungeonController
   m_TagString: Untagged
@@ -496,6 +497,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!156049354 &1209282043229702806
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209282043229702807}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 0}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
 --- !u!114 &1209282043229702824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,18 +560,6 @@ MonoBehaviour:
   maxConnections: 4
   maxSteps: 10
   dungeon: {fileID: 1209282043229702824}
---- !u!156049354 &1209282043229702806
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209282043229702807}
-  m_Enabled: 1
-  m_CellSize: {x: 1, y: 1, z: 0}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 0
-  m_CellSwizzle: 0
 --- !u!114 &1693130927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,3 +579,19 @@ MonoBehaviour:
     Min: 3
     Max: 7
   monster: {fileID: 11400000, guid: fc38a7c2d6ef02b4d80c0e07b8867d67, type: 2}
+--- !u!114 &6930159919683982566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209282043229702807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2a6aaa37a9db1c45a2b76e02edea9b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroesToSpawn:
+  - {fileID: 11400000, guid: f94d9f059ffb0864f91a4bca5a5bdf57, type: 2}
+  - {fileID: 11400000, guid: a677e3aaf43c9b64fb83a7431cf14815, type: 2}
+  - {fileID: 11400000, guid: 4b07725ce20341848b81d9a313427f56, type: 2}

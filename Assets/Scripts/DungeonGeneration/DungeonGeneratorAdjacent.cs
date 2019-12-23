@@ -64,6 +64,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         newDungeon.rooms = rooms;
 
         EncounterGenerator.Instance.GenerateEncounters(newDungeon);
+        HeroSpawner.Instance.SpawnHeroes(rooms[0]); // Spawn heroes in first room
 
         isLevelGeneratorRunning = false;
 
@@ -150,7 +151,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
                 }
 
             } else {
-                //Debug.Log("Is the first room!");
+                Debug.Log("Is the first room!");
                 //place room in centre
                 newRoomCentre = new Vector2Int(maxSize/ 2, maxSize / 2);
             }
@@ -158,7 +159,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
             Room newRoom = new Room(newRoomCentre, newRoomSize);
             rooms.Add(newRoom);
             candidates.Add(newRoom);
-
+            Debug.Log($"There are {rooms.Count} rooms on the list.");
             if(parentRoom != null) {
                 parentRoom.Connect(newRoom);
                 DebugDraw.Line(parentRoom.Centre.ToVector3Int(), newRoom.Centre.ToVector3Int(), Color.cyan);
