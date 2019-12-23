@@ -37,7 +37,7 @@ public class Area {
     /// </summary>
     /// <returns>Returns true if any square inside is filled</returns>
     public bool IsFilled(int minX, int minY, int maxX, int maxY) {
-        Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
+        //Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
 
         //DebugDraw.CrossBox(new Vector3(minX, minY, 0), new Vector3(maxX, maxY, 0), Color.red);
 

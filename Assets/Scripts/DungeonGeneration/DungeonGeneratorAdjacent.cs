@@ -46,7 +46,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
 
     void IDungeonGenerator.AttemptToGenerateDungeon(Dungeon dungeon) {
         if (isLevelGeneratorRunning) {
-            Debug.Log("Level generator already running! Aborting.");
+            Debug.LogWarning("Level generator already running! Aborting.");
             return;
         }
         StartCoroutine(GenerateDungeon(roomsPerLevel, dungeon));
@@ -82,14 +82,14 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         
 
         for(int i = 0; i < numOfRooms; i++) {
-            Debug.Log($"Making room no. {i}.");
+            //Debug.Log($"Making room no. {i}.");
             Vector2Int newRoomCentre = Vector2Int.zero;
             int roomID = Random.Range(0, roomContainer.rooms.Length);
             Vector2Int newRoomSize = new Vector2Int(roomContainer.rooms[roomID].width, roomContainer.rooms[roomID].height);
             Room parentRoom = null;
 
             if (i != 0) {
-                Debug.Log("Not the first room.");
+                //Debug.Log("Not the first room.");
                 //From the candidate list, pick a non-filled direction
                 if (candidates.Count <= 0) {
                     Debug.LogError("Candidate list has no candidates!");
@@ -101,8 +101,8 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
                 Vector2Int direction = RandomExtension.CardinalDirection(); // Picks a random cardinal direction
                 int loopProtection = 4;
                 while (!placeFound && loopProtection-- > 0) {
-                    Debug.Log("New room place not found.");
-                    Debug.Log($"{loopProtection} loops remaining.");
+                    //Debug.Log("New room place not found.");
+                    //Debug.Log($"{loopProtection} loops remaining.");
                     //Checks the nominated direction for a room
                     
                     Vector2Int newCentre = Vector2Int.zero;
@@ -150,7 +150,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
                 }
 
             } else {
-                Debug.Log("Is the first room!");
+                //Debug.Log("Is the first room!");
                 //place room in centre
                 newRoomCentre = new Vector2Int(maxSize/ 2, maxSize / 2);
             }
@@ -263,11 +263,11 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
 
         Vector2Int direction = target.Centre - origin.Centre;
 
-        Debug.Log($"Vectors subtracted! {target.Centre} - {origin.Centre} = {direction}");
+        //Debug.Log($"Vectors subtracted! {target.Centre} - {origin.Centre} = {direction}");
 
         direction.Clamp(new Vector2Int(-1, -1), new Vector2Int(1, 1));
 
-        Debug.Log($"Vector Clamped! {direction}");
+        //Debug.Log($"Vector Clamped! {direction}");
 
         int loopProtection = 100;
    
@@ -276,30 +276,30 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         int completedRooms = 0;
         //bool inWallTiles = false;
         while (completedRooms < 2 && loopProtection-- > 0) {
-            Debug.Log($"Hallway loops remaining: {loopProtection}.");
-            Debug.Log($"Current square is now {currentSquare}, target is {target.Centre}.");
-            Debug.Log($"Current rooms bounds are {currentRoom.Bounds.min} & {currentRoom.Bounds.max}.");
+            //Debug.Log($"Hallway loops remaining: {loopProtection}.");
+            //Debug.Log($"Current square is now {currentSquare}, target is {target.Centre}.");
+            //Debug.Log($"Current rooms bounds are {currentRoom.Bounds.min} & {currentRoom.Bounds.max}.");
 
             //TEST BOUNDS
-            Debug.Log($"Is {currentSquare.ToVector3Int()} in {currentRoom.Bounds}? {currentRoom.Bounds.Contains(currentSquare.ToVector3Int())}.");
+            //Debug.Log($"Is {currentSquare.ToVector3Int()} in {currentRoom.Bounds}? {currentRoom.Bounds.Contains(currentSquare.ToVector3Int())}.");
 
 
 
             if (!currentRoom.Bounds.Contains(currentSquare.ToVector3Int())) {
-                Debug.Log("Left current room, let's designate tiles!");
+                //Debug.Log("Left current room, let's designate tiles!");
                 //Out of the room, cut!
                 if(wallMap.GetTile(currentSquare.ToVector3Int()) != null) {
-                    Debug.Log($"Adding {currentSquare} to list.");
+                    //Debug.Log($"Adding {currentSquare} to list.");
                     newTiles.Add(currentSquare);
                 } else {
                     //The door should be clear?
-                    Debug.Log("Reversing direction!");
+                   //Debug.Log("Reversing direction!");
                     direction *= -1;
                     currentRoom = target;
                     completedRooms++;
                 }
             } else {
-                Debug.Log("Still inside current room.");
+                //Debug.Log("Still inside current room.");
             }
 
             //newTiles.Add(currentSquare);

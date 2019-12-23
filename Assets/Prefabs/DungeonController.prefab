@@ -472,6 +472,7 @@ GameObject:
   - component: {fileID: 1209282043229702824}
   - component: {fileID: 1209282043229702825}
   - component: {fileID: 1209282043229702806}
+  - component: {fileID: 1693130927}
   m_Layer: 0
   m_Name: DungeonController
   m_TagString: Untagged
@@ -558,3 +559,22 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &1693130927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209282043229702807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 493b202ba8383244ca66e39dc7f7dc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numOfEncounters:
+    Min: 10
+    Max: 15
+  monstersPerEncounter:
+    Min: 3
+    Max: 7
+  monster: {fileID: 11400000, guid: fc38a7c2d6ef02b4d80c0e07b8867d67, type: 2}
