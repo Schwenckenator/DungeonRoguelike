@@ -678,7 +678,7 @@ public class DungeonGeneratorRandom : MonoBehaviour
             }
         }
 
-        dungeonArea.SetFilled(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
+        dungeonArea.SetArea(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
 
 
     }
@@ -686,14 +686,14 @@ public class DungeonGeneratorRandom : MonoBehaviour
     void DrawHallwayTiles(Vector2Int[] drawTiles, Vector2Int[] removeTiles, Tilemap tileMap, List<TileInfo> tiles) {
         foreach(var tile in drawTiles) {
             tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), tiles[1].tile); //TODO: fix this [1] bad bad ju ju
-            dungeonArea.SetFilled(true, tile);
+            dungeonArea.SetPoint(true, tile);
         }
         foreach(var tile in removeTiles) {
             tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), null);
             Vector2 pos = tile;
             Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
             Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
-            dungeonArea.SetFilled(true, tile);
+            dungeonArea.SetPoint(true, tile);
         }
 
     }

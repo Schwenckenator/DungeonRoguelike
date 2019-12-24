@@ -6,8 +6,7 @@ using UnityEngine.Tilemaps;
 /// <summary>
 /// A dungeon generator that generates adjacent rooms, with no need for long hallways
 /// </summary>
-public class DungeonGeneratorAdjacent : MonoBehaviour
-{
+public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
 
     public int roomsPerLevel;
     public int maxSize;
@@ -21,8 +20,10 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
 
     public int maxSteps;
 
+    public Dungeon dungeon;
+
     private Area dungeonArea;
-    private bool showFilledArea = false;
+    private Area spawnableArea;
 
     private Vector2Int mapCentre;
     private Vector2Int previousPosition;
@@ -34,6 +35,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
     void Start()
     {
         dungeonArea = new Area(maxSize);
+        spawnableArea = new Area(maxSize);
 
         mapCentre = new Vector2Int(dungeonArea.size / 2, dungeonArea.size / 2);
         previousPosition = mapCentre;
@@ -42,61 +44,31 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         rooms = new List<Room>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.C)) { //sCan
-            AstarPath.active.Scan();
-        }
-        if (Input.GetKeyDown(KeyCode.G)) { //Generate
-            AttemptToGenerateDungeon(roomsPerLevel);
-        }
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            showFilledArea = true;
-            Invoke("ResetShowFilledArea", 1.5f);
-        }
-        if (Input.GetKeyDown(KeyCode.T)) {
-            BoundsTest();
-        }
-    }
-
-    void Scan() {
-        AstarPath.active.Scan();
-    }
-
-    private void OnDrawGizmos() {
-        if (!showFilledArea) return;
-
-        bool[,] area = dungeonArea.GetArea();
-
-        for (int x = 0; x < area.GetUpperBound(0); x++) {
-            for (int y = 0; y < area.GetUpperBound(1); y++) {
-                if (area[x, y]) {
-                    Vector2 centre = new Vector2(x + 0.5f, y + 0.5f);
-                    Gizmos.DrawWireSphere(centre, 0.5f);
-                }
-            }
-        }
-    }
-
-    void AttemptToGenerateDungeon(int numOfRooms) {
+    void IDungeonGenerator.AttemptToGenerateDungeon(Dungeon dungeon) {
         if (isLevelGeneratorRunning) {
-            Debug.Log("Level generator already running! Aborting.");
+            Debug.LogWarning("Level generator already running! Aborting.");
             return;
         }
-        StartCoroutine(GenerateDungeon(numOfRooms));
+        StartCoroutine(GenerateDungeon(roomsPerLevel, dungeon));
     }
 
-    IEnumerator GenerateDungeon(int numOfRooms) {
+    IEnumerator GenerateDungeon(int numOfRooms, Dungeon newDungeon) {
         isLevelGeneratorRunning = true;
 
         yield return StartCoroutine(GenerateRooms(numOfRooms));
         yield return StartCoroutine(GenerateHallways());
         yield return StartCoroutine(GenerateFloor());
 
+        newDungeon.SpawnableArea = spawnableArea;
+        newDungeon.FilledArea = dungeonArea;
+        newDungeon.rooms = rooms;
+
+        EncounterGenerator.Instance.GenerateEncounters(newDungeon);
+        HeroSpawner.Instance.SpawnHeroes(rooms[0]); // Spawn heroes in first room
+
         isLevelGeneratorRunning = false;
 
-        Invoke("Scan", 0.2f);
+        dungeon.Invoke("Scan", 0.2f);
     }
 
     IEnumerator GenerateRooms(int numOfRooms) {
@@ -111,17 +83,17 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         
 
         for(int i = 0; i < numOfRooms; i++) {
-            Debug.Log($"Making room no. {i}.");
+            //Debug.Log($"Making room no. {i}.");
             Vector2Int newRoomCentre = Vector2Int.zero;
             int roomID = Random.Range(0, roomContainer.rooms.Length);
             Vector2Int newRoomSize = new Vector2Int(roomContainer.rooms[roomID].width, roomContainer.rooms[roomID].height);
             Room parentRoom = null;
 
             if (i != 0) {
-                Debug.Log("Not the first room.");
+                //Debug.Log("Not the first room.");
                 //From the candidate list, pick a non-filled direction
                 if (candidates.Count <= 0) {
-                    Debug.LogError("Candidate list has no candidates!");
+                    Debug.LogWarning("Candidate list has no candidates!");
                     break;
                 }
                 //Choose a candidate at random
@@ -130,8 +102,8 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
                 Vector2Int direction = RandomExtension.CardinalDirection(); // Picks a random cardinal direction
                 int loopProtection = 4;
                 while (!placeFound && loopProtection-- > 0) {
-                    Debug.Log("New room place not found.");
-                    Debug.Log($"{loopProtection} loops remaining.");
+                    //Debug.Log("New room place not found.");
+                    //Debug.Log($"{loopProtection} loops remaining.");
                     //Checks the nominated direction for a room
                     
                     Vector2Int newCentre = Vector2Int.zero;
@@ -187,7 +159,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
             Room newRoom = new Room(newRoomCentre, newRoomSize);
             rooms.Add(newRoom);
             candidates.Add(newRoom);
-
+            
             if(parentRoom != null) {
                 parentRoom.Connect(newRoom);
                 DebugDraw.Line(parentRoom.Centre.ToVector3Int(), newRoom.Centre.ToVector3Int(), Color.cyan);
@@ -199,7 +171,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
             yield return null;
         }
 
-        
+        Debug.Log($"Successfully generated {rooms.Count} rooms.");
     }
 
     IEnumerator GenerateHallways() {
@@ -231,6 +203,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         }
 
         yield return null;
+        Debug.Log("Successfully generated hallways.");
     }
 
     IEnumerator GenerateFloor() {
@@ -241,6 +214,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
             for (int y = 0; y < area.GetUpperBound(1); y++) {
                 if (area[x, y] && wallMap.GetTile(new Vector3Int(x, y, 0)) == null) {
                     floorMap.SetTile(new Vector3Int(x, y, 0), tilePairs[0].tile);
+                    spawnableArea.SetPoint(true, x, y);
                 }
             }
         }
@@ -274,27 +248,10 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
             }
         }
 
-        dungeonArea.SetFilled(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
+        dungeonArea.SetArea(true, offset.x, offset.y, offset.x + image.width, offset.y + image.height);
 
 
     }
-
-    /*
-    void DrawHallwayTiles(Vector2Int[] drawTiles, Vector2Int[] removeTiles, Tilemap tileMap, List<TileInfo> tiles) {
-        foreach (var tile in drawTiles) {
-            tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), tiles[1].tile); //TODO: fix this [1] bad bad ju ju
-            dungeonArea.SetFilled(true, tile);
-        }
-        foreach (var tile in removeTiles) {
-            tileMap.SetTile(new Vector3Int(tile.x, tile.y, 0), null);
-            Vector2 pos = tile;
-            Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
-            Debug.DrawLine(new Vector2(pos.x, pos.y), new Vector2(pos.x + 1, pos.y + 1), Color.magenta, 100f);
-            dungeonArea.SetFilled(true, tile);
-        }
-
-    }
-    */
 
     void DrawTiles(Vector2Int[] tilesToDraw, Tilemap tileMap, TileBase tileGraphic) {
         foreach(var tile in tilesToDraw) {
@@ -302,42 +259,17 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         }
     }
 
-    //Vector2Int[] DesignateHallwayTiles(Vector2Int origin, Vector2Int target) {
-    //    List<Vector2Int> newTiles = new List<Vector2Int>();
-
-    //    Vector2Int direction = target - origin;
-
-    //    Debug.Log($"Vectors subtracted! {target} - {origin} = {direction}");
-
-    //    direction.Clamp(new Vector2Int(-1, -1), new Vector2Int(1, 1));
-
-    //    Debug.Log($"Vector Clamped! {direction}");
-
-    //    int loopProtection = 100;
-    //    Vector2Int currentSquare = origin;
-    //    while(currentSquare != target && loopProtection-- > 0) {
-    //        Debug.Log($"Hallway loops remaining: {loopProtection}.");
-    //        Debug.Log($"Current square is now {currentSquare}, target is {target}.");
-
-    //        newTiles.Add(currentSquare);
-    //        currentSquare += direction;
-            
-    //    }
-
-
-    //    return newTiles.ToArray();
-    //}
 
     Vector2Int[] DesignateDoorTiles(Room origin, Room target) {
         List<Vector2Int> newTiles = new List<Vector2Int>();
 
         Vector2Int direction = target.Centre - origin.Centre;
 
-        Debug.Log($"Vectors subtracted! {target.Centre} - {origin.Centre} = {direction}");
+        //Debug.Log($"Vectors subtracted! {target.Centre} - {origin.Centre} = {direction}");
 
         direction.Clamp(new Vector2Int(-1, -1), new Vector2Int(1, 1));
 
-        Debug.Log($"Vector Clamped! {direction}");
+        //Debug.Log($"Vector Clamped! {direction}");
 
         int loopProtection = 100;
    
@@ -346,30 +278,30 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         int completedRooms = 0;
         //bool inWallTiles = false;
         while (completedRooms < 2 && loopProtection-- > 0) {
-            Debug.Log($"Hallway loops remaining: {loopProtection}.");
-            Debug.Log($"Current square is now {currentSquare}, target is {target.Centre}.");
-            Debug.Log($"Current rooms bounds are {currentRoom.Bounds.min} & {currentRoom.Bounds.max}.");
+            //Debug.Log($"Hallway loops remaining: {loopProtection}.");
+            //Debug.Log($"Current square is now {currentSquare}, target is {target.Centre}.");
+            //Debug.Log($"Current rooms bounds are {currentRoom.Bounds.min} & {currentRoom.Bounds.max}.");
 
             //TEST BOUNDS
-            Debug.Log($"Is {currentSquare.ToVector3Int()} in {currentRoom.Bounds}? {currentRoom.Bounds.Contains(currentSquare.ToVector3Int())}.");
+            //Debug.Log($"Is {currentSquare.ToVector3Int()} in {currentRoom.Bounds}? {currentRoom.Bounds.Contains(currentSquare.ToVector3Int())}.");
 
 
 
             if (!currentRoom.Bounds.Contains(currentSquare.ToVector3Int())) {
-                Debug.Log("Left current room, let's designate tiles!");
+                //Debug.Log("Left current room, let's designate tiles!");
                 //Out of the room, cut!
                 if(wallMap.GetTile(currentSquare.ToVector3Int()) != null) {
-                    Debug.Log($"Adding {currentSquare} to list.");
+                    //Debug.Log($"Adding {currentSquare} to list.");
                     newTiles.Add(currentSquare);
                 } else {
                     //The door should be clear?
-                    Debug.Log("Reversing direction!");
+                   //Debug.Log("Reversing direction!");
                     direction *= -1;
                     currentRoom = target;
                     completedRooms++;
                 }
             } else {
-                Debug.Log("Still inside current room.");
+                //Debug.Log("Still inside current room.");
             }
 
             //newTiles.Add(currentSquare);
@@ -384,13 +316,4 @@ public class DungeonGeneratorAdjacent : MonoBehaviour
         return newTiles.ToArray();
     }
 
-    void BoundsTest() {
-        BoundsInt testBounds = new BoundsInt(new Vector3Int(40, 40, 0), new Vector3Int(20, 20, 1));
-        Debug.Log($"Bounds are {testBounds.min}, {testBounds.max}.");
-        for(int x = 30; x < 70; x++) {
-            for(int y= 30; y < 70; y++) {
-                Debug.Log($"Testing {x},{y}; {testBounds.Contains(new Vector3Int(x,y,0))}.");
-            }
-        }
-    }
 }

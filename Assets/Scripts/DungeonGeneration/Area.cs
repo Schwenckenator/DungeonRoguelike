@@ -14,6 +14,9 @@ public class Area {
     public bool[,] GetArea() {
         return filled;
     }
+    public bool GetPoint(int x, int y) {
+        return filled[x, y];
+    }
 
     public bool IsFilled(int x, int y) {
         //Squares out of bounds count as filled
@@ -34,7 +37,7 @@ public class Area {
     /// </summary>
     /// <returns>Returns true if any square inside is filled</returns>
     public bool IsFilled(int minX, int minY, int maxX, int maxY) {
-        Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
+        //Debug.Log($"Checking if area filled, min {minX},{minY}; max {maxX},{maxY}.");
 
         //DebugDraw.CrossBox(new Vector3(minX, minY, 0), new Vector3(maxX, maxY, 0), Color.red);
 
@@ -56,7 +59,7 @@ public class Area {
         return IsFilled(min.x, min.y, max.x, max.y);
     }
 
-    public void SetFilled(bool fill, int minX, int minY, int maxX, int maxY) {
+    public void SetArea(bool fill, int minX, int minY, int maxX, int maxY) {
         if (maxX < minX || maxY < minY) {
             Debug.LogError("MIN is bigger than MAX, swap them around!");
             return;
@@ -69,11 +72,14 @@ public class Area {
         }
     }
 
-    public void SetFilled(bool fill, Vector2Int min, Vector2Int max) {
-        SetFilled(fill, min.x, min.y, max.x, max.y);
+    public void SetArea(bool fill, Vector2Int min, Vector2Int max) {
+        SetArea(fill, min.x, min.y, max.x, max.y);
     }
 
-    public void SetFilled(bool fill, Vector2Int position) {
+    public void SetPoint(bool fill, Vector2Int position) {
         filled[position.x, position.y] = fill;
+    }
+    public void SetPoint(bool fill, int x, int y) {
+        SetPoint(fill, new Vector2Int(x, y));
     }
 }

@@ -9,6 +9,9 @@ public class PanCamera : MonoBehaviour
     public float zoomSpeed = 1.5f;
 
     public float minZoomLevel = 1f;
+    public float maxZoomLevel = 60f;
+
+    public bool startAtMaxZoom = false;
 
     private new Camera camera;
 
@@ -16,27 +19,41 @@ public class PanCamera : MonoBehaviour
     void Start()
     {
         camera = Camera.main;
+
+        if (startAtMaxZoom) {
+            camera.orthographicSize = maxZoomLevel;
+        }
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        Vector2 move = GetInputVector();
-        float boostSpeed = Input.GetKey(KeyCode.LeftShift) ? boost : 1;
-        //Camera size makes it relative to window size
-        transform.Translate(move * panSpeed * boostSpeed * camera.orthographicSize * Time.deltaTime);
+    void Update() {
 
-        if(Input.GetAxis("Mouse ScrollWheel") < 0) {
-            
-            camera.orthographicSize += zoomSpeed;
+        Translate();
+        AdjustZoom();
+    }
+
+    private void AdjustZoom() {
+        if (Input.GetAxis("Mouse ScrollWheel") < 0) {
+            float newSize = camera.orthographicSize + zoomSpeed;
+            if (newSize > maxZoomLevel) {
+                newSize = maxZoomLevel;
+            }
+            camera.orthographicSize = newSize;
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
             float newSize = camera.orthographicSize - zoomSpeed;
-            if(newSize < minZoomLevel) {
+            if (newSize < minZoomLevel) {
                 newSize = minZoomLevel;
             }
             camera.orthographicSize = newSize;
         }
+    }
+
+    private void Translate() {
+        Vector2 move = GetInputVector();
+        float boostSpeed = Input.GetKey(KeyCode.LeftShift) ? boost : 1;
+        //Camera size makes it relative to window size
+        transform.Translate(move * panSpeed * boostSpeed * camera.orthographicSize * Time.deltaTime);
     }
 
     Vector2 GetInputVector() {
