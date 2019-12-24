@@ -9,20 +9,26 @@ public class BattleController : MonoBehaviour {
     public int CurrentTick { get; private set; }
     public Entity currentEntity;
 
+    public float aggroRadius;
+
+    public bool highlightCombatants = true;
+
     private List<Turn> turnQueue;
     private bool acceptingNewTurns = true;
+
 
     private void Awake() {
         Instance = this;
         turnQueue = new List<Turn>();
         Random.InitState(System.DateTime.Now.Millisecond);
     }
+    #region publicMethods
 
     public void StartBattle() {
         //Search for combatants
         acceptingNewTurns = true;
-        //Just grab all entities for now
-        EntityTurnScheduler[] combatants = FindObjectsOfType<EntityTurnScheduler>();
+        //Find combatants
+        EntityTurnScheduler[] combatants = FindCombatants();
         //All combatants schedule a turn
         foreach(var combatant in combatants) {
             combatant.ScheduleTurn();
@@ -98,6 +104,60 @@ public class BattleController : MonoBehaviour {
             Debug.Log($"Turn {turnCount++}, Entity {turn.Entity.ToString()} with Tick {turn.Tick}.");
         }
     }
+
+    #endregion
+
+    #region privateMethods
+
+    /// <summary>
+    /// This method is used to find which entities to add to the combat.
+    /// </summary>
+    private EntityTurnScheduler[] FindCombatants() {
+        //Find all monsters within aggro radius of a hero
+        var newCombatants = new List<EntityTurnScheduler>();
+
+        var allPossibleCombatants = FindObjectsOfType<EntityTurnScheduler>();
+        var heroes = new List<EntityTurnScheduler>();
+
+        //Find all heroes
+        foreach (var entity in allPossibleCombatants) {
+            if(entity.GetComponent<Entity>().allegiance == EntityAllegiance.player) {
+                //It's a hero!
+                heroes.Add(entity);
+                newCombatants.Add(entity);
+            }
+        }
+        
+        //Find all entities within aggro radius of heroes
+        foreach(var hero in heroes) {
+            Collider2D[] hits = Physics2D.OverlapCircleAll(hero.transform.position, aggroRadius);
+            foreach(var hit in hits) {
+                if (hit.transform == hero.transform) continue; // Don't count yourself
+                if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
+                if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.player) continue; //Don't count heroes
+
+                //If it's here, it should be a monster!
+                EntityTurnScheduler monster = hit.GetComponent<EntityTurnScheduler>();
+                if (!newCombatants.Contains(monster)) {
+                    newCombatants.Add(monster);
+                }
+            }
+        }
+        //Return a list of those entities
+        
+
+        return newCombatants.ToArray();
+    }
+
+    private void OnDrawGizmos() {
+        if (highlightCombatants && Application.isPlaying) {
+            foreach (var turn in turnQueue) {
+                Gizmos.DrawWireSphere(turn.Entity.transform.position, 1.0f);
+            }
+        }
+    }
+
+    #endregion
 }
 
 [CustomEditor(typeof(BattleController))]

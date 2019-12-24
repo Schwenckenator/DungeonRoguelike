@@ -156,7 +156,7 @@ MonoBehaviour:
     file_cachedStartup: {fileID: 0}
     data_cachedStartup: 
     cacheStartup: 0
-  showNavGraphs: 1
+  showNavGraphs: 0
   showUnwalkableNodes: 1
   debugMode: 0
   debugFloor: 0
@@ -304,6 +304,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8784567091710726893, guid: 10d5518479cc07944b0407c5f84c3c01,
+        type: 3}
+      propertyPath: aggroRadius
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10d5518479cc07944b0407c5f84c3c01, type: 3}
@@ -695,12 +700,12 @@ PrefabInstance:
     - target: {fileID: 1209282043229702827, guid: 2681b7a1d9e88c04d8724e116f410737,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1209282043229702827, guid: 2681b7a1d9e88c04d8724e116f410737,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1209282043229702827, guid: 2681b7a1d9e88c04d8724e116f410737,
         type: 3}
