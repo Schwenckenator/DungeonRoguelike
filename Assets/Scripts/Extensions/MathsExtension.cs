@@ -31,8 +31,7 @@ public static class MathsExtension {
 
             output = new Vector2Int(-output.y, output.x);
         }
-        //
-Debug.Log($"Rotate 90! input was {input.ToString()}, output is {output.ToString()}!");
+        //Debug.Log($"Rotate 90! input was {input.ToString()}, output is {output.ToString()}!");
         return output;
     }
     public static Vector2Int RoundToInt(this Vector2 input) {

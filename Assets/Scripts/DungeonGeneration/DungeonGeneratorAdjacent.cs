@@ -93,7 +93,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
                 //Debug.Log("Not the first room.");
                 //From the candidate list, pick a non-filled direction
                 if (candidates.Count <= 0) {
-                    Debug.LogError("Candidate list has no candidates!");
+                    Debug.LogWarning("Candidate list has no candidates!");
                     break;
                 }
                 //Choose a candidate at random
@@ -159,7 +159,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
             Room newRoom = new Room(newRoomCentre, newRoomSize);
             rooms.Add(newRoom);
             candidates.Add(newRoom);
-            Debug.Log($"There are {rooms.Count} rooms on the list.");
+            
             if(parentRoom != null) {
                 parentRoom.Connect(newRoom);
                 DebugDraw.Line(parentRoom.Centre.ToVector3Int(), newRoom.Centre.ToVector3Int(), Color.cyan);
@@ -171,7 +171,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
             yield return null;
         }
 
-        
+        Debug.Log($"Successfully generated {rooms.Count} rooms.");
     }
 
     IEnumerator GenerateHallways() {
@@ -203,6 +203,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         }
 
         yield return null;
+        Debug.Log("Successfully generated hallways.");
     }
 
     IEnumerator GenerateFloor() {
