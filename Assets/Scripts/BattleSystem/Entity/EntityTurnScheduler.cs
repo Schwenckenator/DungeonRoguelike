@@ -14,7 +14,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public GameObject selectionRingObj;
 
-    public int actionsPerGo = 2;
+    public int actionsPerTurn = 2;
     public int actionsRemaining;
 
     public Image[] actionArrows;
@@ -53,7 +53,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
         //Say its my turn
         myTurn = true;
-        actionsRemaining = actionsPerGo;
+        actionsRemaining = actionsPerTurn;
         selectionRingObj.SetActive(true);
         myEntity.State = EntityState.idle;
         myEntity.ClickToMove.UpdateMaxDistance();
