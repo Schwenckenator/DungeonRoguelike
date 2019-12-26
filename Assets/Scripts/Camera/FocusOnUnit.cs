@@ -7,16 +7,20 @@ public class FocusOnUnit : MonoBehaviour
     public static FocusOnUnit Instance { get; private set; }
 
     public float smoothTime = 0.3f;
+    public float zoomLevel = 10f;
 
     private Vector2 velocity = Vector2.zero;
+    private float zoomVelocity = 0f;
 
     PanCamera panCamera;
+    Camera camera;
     Transform target;
 
     // Start is called before the first frame update
     void Start()
     {
         panCamera = GetComponent<PanCamera>();
+        camera = Camera.main;
         Instance = this;
         this.enabled = false;
     }
@@ -29,7 +33,9 @@ public class FocusOnUnit : MonoBehaviour
 
         transform.position = newPosition;
 
-        if(((Vector2)transform.position - (Vector2)target.position).sqrMagnitude < 0.1f) { // If the square mag is small
+        camera.orthographicSize = Mathf.SmoothDamp(camera.orthographicSize, zoomLevel, ref zoomVelocity, smoothTime);
+
+        if (((Vector2)transform.position - (Vector2)target.position).sqrMagnitude < 0.1f) { // If the square mag is small
             SetEnabled(false);
         }
     }
