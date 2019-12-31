@@ -29,7 +29,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
     private Vector2Int previousPosition;
     private List<Room> rooms;
 
-    private bool isLevelGeneratorRunning = false;
+    private bool isDungeonGeneratorRunning = false;
 
     // Start is called before the first frame update
     void Start()
@@ -45,17 +45,17 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
     }
 
     void IDungeonGenerator.AttemptToGenerateDungeon(Dungeon dungeon) {
-        if (isLevelGeneratorRunning) {
+        if (isDungeonGeneratorRunning) {
             Debug.LogWarning("Level generator already running! Aborting.");
             return;
         }
-        StartCoroutine(GenerateDungeon(roomsPerLevel, dungeon));
+        StartCoroutine(GenerateDungeon(dungeon));
     }
 
-    IEnumerator GenerateDungeon(int numOfRooms, Dungeon newDungeon) {
-        isLevelGeneratorRunning = true;
+     public IEnumerator GenerateDungeon(Dungeon newDungeon) {
+        isDungeonGeneratorRunning = true;
 
-        yield return StartCoroutine(GenerateRooms(numOfRooms));
+        yield return StartCoroutine(GenerateRooms(roomsPerLevel));
         yield return StartCoroutine(GenerateHallways());
         yield return StartCoroutine(GenerateFloor());
 
@@ -63,10 +63,10 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         newDungeon.FilledArea = dungeonArea;
         newDungeon.rooms = rooms;
 
-        EncounterGenerator.Instance.GenerateEncounters(newDungeon);
-        HeroSpawner.Instance.SpawnHeroes(rooms[0]); // Spawn heroes in first room
+        //EncounterGenerator.Instance.GenerateEncounters(newDungeon);
+        //HeroSpawner.Instance.SpawnHeroes(rooms[0]); // Spawn heroes in first room
 
-        isLevelGeneratorRunning = false;
+        isDungeonGeneratorRunning = false;
 
         dungeon.Invoke("Scan", 0.2f);
     }

@@ -13,7 +13,7 @@ public class FocusOnUnit : MonoBehaviour
     private float zoomVelocity = 0f;
 
     PanCamera panCamera;
-    Camera camera;
+    new Camera camera;
     Transform target;
 
     // Start is called before the first frame update
