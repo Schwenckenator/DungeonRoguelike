@@ -27,8 +27,8 @@ public class Room
     public Room(Vector2Int centre, Vector2Int size) {
         Centre = centre;
 
-        Vector2Int min = new Vector2Int(centre.x - size.x / 2, centre.y - size.y / 2);
-        Bounds = new BoundsInt((Vector3Int)min, new Vector3Int (size.x, size.y, 1)); // Adds 1 for reasons
+        Vector2Int min = new Vector2Int(centre.x - size.x / 2 + 1, centre.y - size.y / 2 + 1);
+        Bounds = new BoundsInt((Vector3Int)min, new Vector3Int (size.x, size.y, 1)); // Zed is 1 for bound checking
         Neighbours = new List<Room>();
         Children = new List<Room>();
     }
@@ -46,7 +46,7 @@ public class Room
 
             Vector2Int newPoint = new Vector2Int(Random.Range(Bounds.xMin, Bounds.xMax), Random.Range(Bounds.yMin, Bounds.yMax));
             //Check for walls & obstacles HERE TODO make it check
-            var hit = Physics2D.OverlapCircle(newPoint, 0.45f, LayerMask.NameToLayer("Obstacle")); //Not quite a 1 unit diameter circle
+            var hit = Physics2D.OverlapCircle(newPoint, 0.45f, LayerMask.GetMask("Obstacle")); //Not quite a 1 unit diameter circle
             if (hit != null) {
                 //There is an obstacle here
                 obstructed = true;

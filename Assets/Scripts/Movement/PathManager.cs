@@ -158,7 +158,7 @@ public class PathManager : MonoBehaviour
             float pathDistance = Mathf.Round((foundPathCoords.Count - 1) / 4);
             if (pathDistance > 0)
             {
-                Debug.Log("Distance is: " + pathDistance);
+                //Debug.Log("Distance is: " + pathDistance);
             }
             validMove = true;
 
