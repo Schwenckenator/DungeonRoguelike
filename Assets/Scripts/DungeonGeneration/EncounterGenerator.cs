@@ -21,7 +21,7 @@ public class EncounterGenerator : MonoBehaviour
         Instance = this;
     }
 
-    public void GenerateEncounters(Dungeon dungeon) {
+    public IEnumerator GenerateEncounters(Dungeon dungeon) {
         List<Room> freeRooms = dungeon.rooms;
 
         freeRooms.RemoveAt(0); // Remove the first room, that's where the heroes spawn
@@ -31,6 +31,7 @@ public class EncounterGenerator : MonoBehaviour
             Room room = freeRooms.RandomItem();
             GenerateSingleEncounter(room);
             freeRooms.Remove(room);
+            yield return null;
         }
     }
 

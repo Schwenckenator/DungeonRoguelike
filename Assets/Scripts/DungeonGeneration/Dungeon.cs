@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Dungeon : MonoBehaviour
 {
+    //public bool generateOnStart = false;
     public Area FilledArea { get; set; }
     public Area SpawnableArea { get; set; }
 
@@ -15,22 +16,23 @@ public class Dungeon : MonoBehaviour
 
     public List<Room> rooms;
 
+
+
     private IDungeonGenerator generator;
-
-    
-
     private bool showFilledArea = false;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         generator = GetComponent<IDungeonGenerator>();
         Debug.Log(generator.ToString());
+
+        //if (generateOnStart) {
+        //    generator.AttemptToGenerateDungeon(this);
+        //}
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if (Input.GetKeyDown(KeyCode.C)) { //sCan
             AstarPath.active.Scan();
         }
@@ -46,8 +48,6 @@ public class Dungeon : MonoBehaviour
             showFilledArea = true;
             Invoke("ResetShowFilledArea", 1.5f);
         }
-
-
     }
 
     public void Scan() {
@@ -72,6 +72,10 @@ public class Dungeon : MonoBehaviour
             }
         }
         return position;
+    }
+
+    public IEnumerator GenerateDungeon() {
+        yield return StartCoroutine(generator.GenerateDungeon(this));
     }
 
     private void OnDrawGizmos() {
