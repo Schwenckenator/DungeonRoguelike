@@ -42,14 +42,21 @@ public class Room
 
         
         while (!found && loopProtection-- > 0) {
-            int x = Random.Range(Bounds.xMin, Bounds.xMax);
-            int y = Random.Range(Bounds.yMin, Bounds.yMax);
+            bool obstructed = false;
 
+            Vector2Int newPoint = new Vector2Int(Random.Range(Bounds.xMin, Bounds.xMax), Random.Range(Bounds.yMin, Bounds.yMax));
             //Check for walls & obstacles HERE TODO make it check
+            var hit = Physics2D.OverlapCircle(newPoint, 0.45f, LayerMask.NameToLayer("Obstacle")); //Not quite a 1 unit diameter circle
+            if (hit != null) {
+                //There is an obstacle here
+                obstructed = true;
+                break;
+            }
+            if (!obstructed) {
+                position = newPoint;
+                found = true;
+            }
             //Found a free space
-            position = new Vector2Int(x, y);
-            found = true;
-            
         }
         return position;
 
