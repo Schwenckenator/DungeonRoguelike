@@ -9,6 +9,11 @@ public static class RandomExtension
         return input[index];
     }
 
+    public static T RandomItem<T>(this T[] input) {
+        int index = Random.Range(0, input.Length);
+        return input[index];
+    }
+
     public static Vector2Int CardinalDirection() {
         int index = Random.Range(0, 4);
         switch (index) {
