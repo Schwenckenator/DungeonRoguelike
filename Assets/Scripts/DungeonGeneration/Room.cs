@@ -43,6 +43,7 @@ public class Room
         
         while (!found && loopProtection-- > 0) {
             bool obstructed = false;
+            Debug.Log($"Random Spawn loop protection count {loopProtection}");
 
             Vector2Int newPoint = new Vector2Int(Random.Range(Bounds.xMin, Bounds.xMax), Random.Range(Bounds.yMin, Bounds.yMax));
             //Check for walls & obstacles HERE TODO make it check
@@ -50,14 +51,16 @@ public class Room
             if (hit != null) {
                 //There is an obstacle here
                 obstructed = true;
-                break;
+                continue;
             }
+            //Found a free space
             if (!obstructed) {
                 position = newPoint;
                 found = true;
             }
-            //Found a free space
+            
         }
+        Debug.Log($"Random spawn position {position}.");
         return position;
 
     }
