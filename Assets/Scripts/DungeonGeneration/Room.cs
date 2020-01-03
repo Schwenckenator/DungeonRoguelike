@@ -37,7 +37,7 @@ public class Room {
     }
 
     public void FindSpawnableSquares() {
-        Debug.LogWarning("Finding spawnable squares.");
+        Debug.Log("Finding spawnable squares.");
         for (int x = Bounds.xMin; x < Bounds.xMax; x++) {
             for(int y = Bounds.yMin; y < Bounds.yMax; y++) {
                 Vector2Int point = new Vector2Int(x, y);
@@ -50,36 +50,7 @@ public class Room {
     }
 
     public Vector2Int RandomSpawnablePoint() {
-
         return SpawnableSquares.RandomItem();
-        Vector2Int position = Vector2Int.zero;
-
-        //int loopProtection = 100;
-        //bool found = false;
-
-        
-        //while (!found && loopProtection-- > 0) {
-        //    bool obstructed = false;
-        //    Debug.Log($"Random Spawn loop protection count {loopProtection}");
-
-        //    Vector2Int newPoint = new Vector2Int(Random.Range(Bounds.xMin, Bounds.xMax), Random.Range(Bounds.yMin, Bounds.yMax));
-        //    //Check for walls & obstacles HERE TODO make it check
-        //    var hit = Physics2D.OverlapCircle(newPoint, 0.45f, LayerMask.GetMask("Obstacle")); //Not quite a 1 unit diameter circle
-        //    if (hit != null) {
-        //        //There is an obstacle here
-        //        obstructed = true;
-        //        continue;
-        //    }
-        //    //Found a free space
-        //    if (!obstructed) {
-        //        position = newPoint;
-        //        found = true;
-        //    }
-            
-        //}
-        Debug.Log($"Random spawn position {position}.");
-        return position;
-
     }
 
     public void Connect(Room other) {
