@@ -20,7 +20,7 @@ public class TestPathAgent : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
             Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             origin = point.RoundToInt();
-            
+            SetOrigin();
         }
         if (Input.GetMouseButtonDown(1)) {
             Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -30,10 +30,14 @@ public class TestPathAgent : MonoBehaviour
             }
         }
     }
+    void SetOrigin() {
+        FloodPathfinder.Instance.SetOrigin(origin);
+    }
 
     void PathFind() {
         //NodeMap.Instance.GetPath(origin, goal, out lastPath, out float distance);
-        NodeMap.Instance.StartCoroutine(NodeMap.Instance.GetPathAsync(origin, goal, FoundPath));
+        //AstarPathfinder.Instance.StartCoroutine(AstarPathfinder.Instance.GetPathAsync(origin, goal, FoundPath));
+
     }
 
     public void FoundPath(Vector2Int[] path) {
