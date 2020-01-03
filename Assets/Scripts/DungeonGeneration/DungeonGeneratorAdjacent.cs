@@ -63,6 +63,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         newDungeon.FilledArea = dungeonArea;
         newDungeon.rooms = rooms;
 
+        yield return StartCoroutine(FindSafeSquares());
         //EncounterGenerator.Instance.GenerateEncounters(newDungeon);
         //HeroSpawner.Instance.SpawnHeroes(rooms[0]); // Spawn heroes in first room
 
@@ -167,7 +168,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
 
             Vector2Int offset = newRoomCentre - newRoomSize.DivideByScalar(2);
             DrawRoomTiles(roomContainer.rooms[roomID], TileLayer.collision, offset, wallMap, tilePairs);
-
+            //newRoom.FindSpawnableSquares();
             yield return null;
         }
 
@@ -220,6 +221,15 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         }
         yield return null;
 
+    }
+
+    IEnumerator FindSafeSquares() {
+        foreach(Room room in rooms) {
+
+            room.FindSpawnableSquares();
+
+            yield return null;
+        }
     }
 
     void DrawRoomTiles(Texture2D image, TileLayer layer, Vector2Int offset, Tilemap tileMap, List<TileInfo> tiles) {
