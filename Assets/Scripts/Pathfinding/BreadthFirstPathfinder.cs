@@ -13,6 +13,8 @@ public class BreadthFirstPathfinder : MonoBehaviour
     private int maxScore;
     private int halfMax;
     public int size = 100;
+    public int stepCost = 10;
+    public float diagonalPenalty = 1.5f;
 
     private bool originSet = false;
     private int[,] scoreMap;
@@ -33,7 +35,7 @@ public class BreadthFirstPathfinder : MonoBehaviour
         //        scoreMap[x, y] = 10000;
         //    }
         //}
-        maxScore = maxDistance * 10;
+        maxScore = maxDistance * 10 + 5;
         halfMax = maxScore / 2;
 
     }
@@ -74,9 +76,9 @@ public class BreadthFirstPathfinder : MonoBehaviour
                 if (!map[x, y].IsPathable) continue;
 
                 Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
-                int stepCost = 10;
+                int stepCost = this.stepCost;
                 if(Mathf.Abs(next.x + next.y) != 1) {
-                    stepCost = 15; //Diagonals cost more
+                    stepCost = Mathf.RoundToInt(stepCost * diagonalPenalty); //Diagonals cost more
                 }
                 Debug.Log($"New neighbour's stepcost is {stepCost}.");
                 neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), stepCost));

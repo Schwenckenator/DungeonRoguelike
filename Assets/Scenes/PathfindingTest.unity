@@ -170,7 +170,7 @@ PrefabInstance:
     - target: {fileID: 1949173751215812946, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1949173751215812946, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
@@ -255,7 +255,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &108401341
 GameObject:
@@ -505,7 +505,7 @@ RectTransform:
   m_Children:
   - {fileID: 178961903}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -562,7 +562,7 @@ PrefabInstance:
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
@@ -685,3 +685,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDistance: 6
   size: 100
+  stepCost: 10
+  diagonalPenalty: 1.5
