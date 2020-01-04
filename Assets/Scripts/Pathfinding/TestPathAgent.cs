@@ -20,24 +20,25 @@ public class TestPathAgent : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
             Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             origin = point.RoundToInt();
+            goal = Vector2Int.zero;
             SetOrigin();
         }
         if (Input.GetMouseButtonDown(1)) {
             Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            goal = point.RoundToInt();
             if(origin != Vector2Int.zero) {
+                goal = point.RoundToInt();
                 PathFind();
             }
         }
     }
     void SetOrigin() {
-        FloodPathfinder.Instance.SetOrigin(origin);
+        BreadthFirstPathfinder.Instance.SetOrigin(origin);
     }
 
     void PathFind() {
         //NodeMap.Instance.GetPath(origin, goal, out lastPath, out float distance);
         //AstarPathfinder.Instance.StartCoroutine(AstarPathfinder.Instance.GetPathAsync(origin, goal, FoundPath));
-
+        lastPath = BreadthFirstPathfinder.Instance.GetPath(goal);
     }
 
     public void FoundPath(Vector2Int[] path) {

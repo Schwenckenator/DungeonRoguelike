@@ -3,21 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathNode: IComparable{
+public class PathNode{
     public int f;
     public int g;
     public int h;
+    public int score;
+    public int distance;
+    public int stepCost;
 
     public PathNode parent;
     public Vector2Int position;
 
-    public PathNode(PathNode parent, Vector2Int position) {
+    public PathNode(PathNode parent, Vector2Int position, int stepCost = 10) {
         this.parent = parent;
         this.position = position;
-    }
-
-    public int CompareTo(object obj) {
-        return f.CompareTo(obj);
+        this.stepCost = stepCost;
     }
 
     public override string ToString() {
