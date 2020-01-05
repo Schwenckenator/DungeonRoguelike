@@ -138,8 +138,9 @@ public class BreadthFirstPathfinder : MonoBehaviour
             
 
             foreach (var node in visited) {
-                Gizmos.color = Color.red;
+                Gizmos.color = new Color(1, 0, 0, 0.5f);
                 Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+                
             }
             foreach (var node in frontier) {
 
