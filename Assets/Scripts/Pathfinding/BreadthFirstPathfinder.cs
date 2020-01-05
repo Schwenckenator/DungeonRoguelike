@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -24,6 +25,8 @@ public class BreadthFirstPathfinder : MonoBehaviour
 
     PathNode currentNode;
 
+    private Thread pathThread; // Not sure what to do with this...
+
     private void Awake() {
         Instance = this;
         scoreMap = new int[size, size];
@@ -38,6 +41,7 @@ public class BreadthFirstPathfinder : MonoBehaviour
         maxScore = maxDistance * 10 + 5;
         halfMax = maxScore / 2;
 
+        
     }
     
 
