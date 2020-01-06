@@ -81,7 +81,7 @@ public class EntityInteraction : MonoBehaviour
         }
 
         //Check for correct target
-        if(!currentAbility.IsLegalTarget(myEntity, target)) {
+        if(!currentAbility.IsLegalTarget(myEntity, new Entity[] { target })) {
             Debug.Log("Not Legal Target!");
             return;
         }

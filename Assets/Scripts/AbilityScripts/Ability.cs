@@ -15,7 +15,7 @@ public abstract class Ability : ScriptableObject
     //I'll think of what all abilities share later.
     public new string name;
     public TargetType targetType;
-    public AbilityType abilityType;
+    public Effect[] effects;
     public int actionCost = 1;
     public bool endsTurn = false;
     public float range = 1f;
@@ -26,5 +26,5 @@ public abstract class Ability : ScriptableObject
 
     public abstract void TriggerAbility(Entity target);
 
-    public abstract bool IsLegalTarget(Entity me, Entity target);
+    public abstract bool IsLegalTarget(Entity me, Entity[] targets);
 }

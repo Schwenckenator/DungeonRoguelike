@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Ability", menuName = "Ability/Single Target Ability", order = 51)]
+[CreateAssetMenu(fileName = "New SingleTargetAbility", menuName = "Ability/Single Target Ability", order = 51)]
 public class SingleTargetAbility : Ability {
 
     public bool canTargetDead = false;
     public bool canTargetAlive = true;
 
     public override void TriggerAbility(Entity target) {
-        if(abilityType == AbilityType.damage) {
-            target.Stats.ModifyHealth((Random.Range(minValue, maxValue + 1)) * -1); //Add one because range excludes maximum value
-        }else if(abilityType == AbilityType.heal) {
-            target.Stats.ModifyHealth(Random.Range(minValue, maxValue + 1));
+        foreach(var effect in effects) {
+            effect.TriggerEffect(target, minValue, maxValue);
         }
     }
 
-    public override bool IsLegalTarget(Entity me, Entity target) {
+    public override bool IsLegalTarget(Entity me, Entity[] targets) {
+
+        Entity target = targets[0]; //Single target ability only takes 1 target
+
         if (!canTargetDead && target.Stats.isDead) return false;
         if (!canTargetAlive && !target.Stats.isDead) return false;
 
@@ -41,6 +42,9 @@ public class SingleTargetAbility : Ability {
         return false;
     }
 
+    public bool IsLegalTarget(Entity me, Entity target) {
+        return IsLegalTarget(me, new Entity[] { target });
+    }
     //public override void Initialise() {
     //    throw new System.NotImplementedException();
     //}
