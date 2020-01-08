@@ -26,5 +26,7 @@ public abstract class Ability : ScriptableObject
 
     public abstract void TriggerAbility(Entity target);
 
-    public abstract bool IsLegalTarget(Entity me, Entity[] targets);
+    public abstract void PrepareAbility();
+
+    //public abstract bool IsLegalTarget(Entity me, Entity[] targets);
 }

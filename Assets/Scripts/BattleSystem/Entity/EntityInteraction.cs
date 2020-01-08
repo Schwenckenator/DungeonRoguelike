@@ -81,10 +81,10 @@ public class EntityInteraction : MonoBehaviour
         }
 
         //Check for correct target
-        if(!currentAbility.IsLegalTarget(myEntity, new Entity[] { target })) {
-            Debug.Log("Not Legal Target!");
-            return;
-        }
+        //if(!currentAbility.IsLegalTarget(myEntity, new Entity[] { target })) {
+        //    Debug.Log("Not Legal Target!");
+        //    return;
+        //}
 
         //Check range to target
         if ((transform.position - target.transform.position).magnitude > currentAbility.range + 0.9f) { //Add a lot of grace

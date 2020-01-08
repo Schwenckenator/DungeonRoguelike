@@ -14,9 +14,7 @@ public class SingleTargetAbility : Ability {
         }
     }
 
-    public override bool IsLegalTarget(Entity me, Entity[] targets) {
-
-        Entity target = targets[0]; //Single target ability only takes 1 target
+    public bool IsLegalTarget(Entity me, Entity target) {
 
         if (!canTargetDead && target.Stats.isDead) return false;
         if (!canTargetAlive && !target.Stats.isDead) return false;
@@ -42,9 +40,6 @@ public class SingleTargetAbility : Ability {
         return false;
     }
 
-    public bool IsLegalTarget(Entity me, Entity target) {
-        return IsLegalTarget(me, new Entity[] { target });
-    }
     //public override void Initialise() {
     //    throw new System.NotImplementedException();
     //}
