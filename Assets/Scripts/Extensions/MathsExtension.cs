@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class MathsExtension {
-
+    #region Vector2
+    public static Vector2Int RoundToInt(this Vector2 input) {
+        return new Vector2Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
+    }
     public static Vector2 RotateDeg(this Vector2 input, float degrees) {
         Vector2 output = Vector2.zero;
 
@@ -22,30 +25,24 @@ public static class MathsExtension {
         return output;
     }
 
+    public static Vector3 ToVector3(this Vector2 input) {
+        return new Vector3(input.x, input.y, 0);
+    }
+    #endregion
+
+    #region Vector2Int
     public static Vector2Int Rotate90(this Vector2Int input, int times = 1) {
-        
-        
+
+
         Vector2Int output = input;
 
-        for(int i=0; i < times; i++) {
+        for (int i = 0; i < times; i++) {
 
             output = new Vector2Int(-output.y, output.x);
         }
         //Debug.Log($"Rotate 90! input was {input.ToString()}, output is {output.ToString()}!");
         return output;
     }
-    public static Vector2Int RoundToInt(this Vector2 input) {
-        return new Vector2Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
-    }
-
-    /// <summary>
-    /// Returns a Vector2Int, throwing away the z parameter.
-    /// </summary>
-    /// <returns>Returns a Vector2Int, throwing away the z parameter.</returns>
-    public static Vector2Int ToVector2Int(this Vector3Int input) {
-        return new Vector2Int(input.x, input.y);
-    }
-
     /// <summary>
     /// Returns a Vector3Int, with a zero z value.
     /// </summary>
@@ -54,6 +51,31 @@ public static class MathsExtension {
     public static Vector3Int ToVector3Int(this Vector2Int input) {
         return new Vector3Int(input.x, input.y, 0);
     }
+    public static Vector2Int DivideByScalar(this Vector2Int input, int scalar) {
+        return new Vector2Int(input.x / scalar, input.y / scalar);
+    }
+    #endregion
+
+    #region Vector3
+
+    #endregion
+
+    #region Vector3Int
+    /// <summary>
+    /// Returns a Vector2Int, throwing away the z parameter.
+    /// </summary>
+    /// <returns>Returns a Vector2Int, throwing away the z parameter.</returns>
+    public static Vector2Int ToVector2Int(this Vector3Int input) {
+        return new Vector2Int(input.x, input.y);
+    }
+    #endregion
+
+
+
+
+
+
+
 
     public static float RoundToValue(this float input, float fraction) {
         float output = input;
@@ -63,15 +85,8 @@ public static class MathsExtension {
 
         return output;
     }
-      
-    /// <summary>
-    /// Multiplies the terms of the vectors and returns the result.
-    /// </summary>
-    /// <returns></returns>
 
-    public static Vector2Int DivideByScalar(this Vector2Int input, int scalar) {
-        return new Vector2Int(input.x / scalar, input.y / scalar);
-    }
+
 
 
     public static bool IsWithin(this float value, float minimum, float maximum)

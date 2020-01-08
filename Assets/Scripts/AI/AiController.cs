@@ -49,7 +49,7 @@ public class AiController : MonoBehaviour
         } else {
             Debug.Log("Enemy close! Attacking!");
             //You're in range! Punch the sucker!
-            MyEntity.Interaction.Interact(nearestEntity);
+            MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
         }
 
         //If there are remaining actions

@@ -209,7 +209,7 @@ public class ClickToMove : MonoBehaviour
 
             //aiPath.isStopped = true;
             //aiPath.canSearch = false;
-            myEntity.TurnScheduler.ActonFinished();
+            myEntity.TurnScheduler.ActionFinished();
 
     }
 

@@ -17,11 +17,12 @@ public abstract class Ability : ScriptableObject
     public TargetType targetType;
     public bool canTargetDead = false;
     public bool canTargetAlive = true;
-    public GameObject selector;
+    public Sprite selectorSprite;
 
     public Effect[] effects;
     public int actionCost = 1;
     public bool endsTurn = false;
+    public bool requireValidTarget = true;
     public float range = 1f;
     public int minValue;
     public int maxValue;
@@ -34,7 +35,7 @@ public abstract class Ability : ScriptableObject
         }
     }
 
-    public abstract GameObject PrepareSelector();
+    public abstract void PrepareSelector(ref GameObject selector);
 
     public bool IsLegalTarget(Entity me, Entity target) {
         if (!canTargetDead && target.Stats.isDead) return false;

@@ -640,8 +640,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 4e0b513774d18ba49ac2d8c8910893c7, type: 2}
   - {fileID: 11400000, guid: d8047acf1e1f12240b52ccd373116bf5, type: 2}
-  targetingRing: {fileID: 7339988922619381412}
-  areaSelector: {fileID: 2676900880149205278}
+  selector: {fileID: 4381265714433563427}
 --- !u!50 &2414215985182535640
 Rigidbody2D:
   serializedVersion: 4
@@ -1466,15 +1465,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 4789979047459697208, guid: 14b71025ca042fa4fb6534390a07d6ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 14b71025ca042fa4fb6534390a07d6ab, type: 3}
---- !u!1 &7339988922619381412 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4789979047459697207, guid: 14b71025ca042fa4fb6534390a07d6ab,
-    type: 3}
-  m_PrefabInstance: {fileID: 2856845230955689107}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7339988922619381417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4789979047459697210, guid: 14b71025ca042fa4fb6534390a07d6ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 2856845230955689107}
+  m_PrefabAsset: {fileID: 0}
+--- !u!58 &4381265714433563427 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1975088392685809584, guid: 14b71025ca042fa4fb6534390a07d6ab,
     type: 3}
   m_PrefabInstance: {fileID: 2856845230955689107}
   m_PrefabAsset: {fileID: 0}
@@ -1547,12 +1546,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12b6ed11decc4174eb74390fe11cbba2, type: 3}
---- !u!1 &2676900880149205278 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4789979047459697207, guid: 12b6ed11decc4174eb74390fe11cbba2,
-    type: 3}
-  m_PrefabInstance: {fileID: 7448724786103935785}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2676900880149205267 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4789979047459697210, guid: 12b6ed11decc4174eb74390fe11cbba2,

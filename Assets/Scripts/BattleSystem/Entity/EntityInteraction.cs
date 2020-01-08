@@ -8,31 +8,8 @@ public class EntityInteraction : MonoBehaviour
 {
     
     public List<Ability> abilities; //Set this in inspector
-    public GameObject targetingRing;
-    public GameObject areaSelector;
 
-
-    private GameObject SelectorObj {
-        get
-        {
-            return selectorObj;
-        }
-        set
-        {
-            var oldObj = selectorObj;
-
-            selectorObj = value;
-
-            if (oldObj != null && oldObj.activeInHierarchy) {
-                oldObj.SetActive(false);
-                selectorObj.SetActive(true);
-            }
-
-            selector = value.GetComponent<Collider2D>();
-        }
-    }
-    private GameObject selectorObj;
-    private Collider2D selector;
+    public Collider2D selector;
     //public int raycount = 16;
     //public float rayDistance = 2f;
 
@@ -45,14 +22,14 @@ public class EntityInteraction : MonoBehaviour
         PlayerInput.Instance.onLeftMouseButtonPressed += SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed += CancelTargeting;
         //targetingRing.SetActive(true);
-        SelectorObj.SetActive(true);
+        selector.gameObject.SetActive(true);
     }
     private void OnDisable() {
         PlayerInput.Instance.onMouseHover -= HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed -= SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed -= CancelTargeting;
         //targetingRing.SetActive(false);
-        SelectorObj.SetActive(false);
+        selector.gameObject.SetActive(false);
     }
 
     public void Initialise() {
@@ -65,6 +42,7 @@ public class EntityInteraction : MonoBehaviour
         SetCurrentAbility(0);
         contactFilter = new ContactFilter2D();
         contactFilter.NoFilter();
+        
     }
 
     private void Update() {
@@ -88,49 +66,47 @@ public class EntityInteraction : MonoBehaviour
             }
         }
 
-        SelectorObj.transform.position = movePoint;
+        selector.transform.position = movePoint;
     }
-    private void SelectTarget(Vector2 worldPoint) {
+    public void SelectTarget(Vector2 worldPoint) {
 
-        var hits = Physics2D.OverlapCircleAll(worldPoint, 0.1f);
+        if (!IsValidInteraction(worldPoint)) {
+            return;
+        }
+        Debug.Log("Checking Collisions with targeting circle.");
         var hitsList = new List<Collider2D>();
+        var targetList = new List<Entity>();
 
         Physics2D.OverlapCollider(selector, contactFilter, hitsList);
-        //RaycastHit2D[] hits = Physics2D(worldPoint, Vector2.zero);
 
-        foreach (var hit in hits) {
+        foreach (var hit in hitsList) {
+            Debug.Log($"{hit.ToString()} hit");
             if (hit.CompareTag("Entity")) {
-                Interact(hit.GetComponent<Entity>());
+                targetList.Add(hit.GetComponent<Entity>());
             }
         }
-    }
 
+        int validTargets = 0;
+        foreach (var target in targetList) {
+            //Check for correct target
+            if (!currentAbility.IsLegalTarget(myEntity, target)) {
+                Debug.Log("Not Legal Target!");
+                continue;
+            }
+
+            //Do the ability
+            currentAbility.TriggerAbility(target);
+            validTargets++;
+        }
+        if(!currentAbility.requireValidTarget || validTargets > 0) {
+            SpendActions();
+        }
+    }
     private void CancelTargeting(Vector2 waste) {
         myEntity.State = EntityState.idle;
     }
 
-    public void Interact(Entity target) {
-        //Check if actions are available
-        if(myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
-            Debug.Log("Not enough Actions remaining!");
-            return;
-        }
-
-        //Check for correct target
-        if(!currentAbility.IsLegalTarget(myEntity, target)) {
-            Debug.Log("Not Legal Target!");
-            return;
-        }
-
-        //Check range to target
-        if ((transform.position - target.transform.position).magnitude > currentAbility.range + 0.9f) { //Add a lot of grace
-            Debug.Log("Out of range!");
-            return;
-        }
-
-        //Do the ability
-        currentAbility.TriggerAbility(target);
-
+    private void SpendActions() {
         int actionCost = currentAbility.actionCost;
 
         if (currentAbility.endsTurn) { // Spend all remaining actions
@@ -138,12 +114,33 @@ public class EntityInteraction : MonoBehaviour
         }
         //Spend the actions
         myEntity.TurnScheduler.SpendActions(actionCost);
+        Invoke("CheckForEndOfTurn", 1f);
+    }
+    private bool IsValidInteraction(Vector3 worldPoint) {
+        //First check action count
+        if (myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
+            Debug.Log("Not enough Actions remaining!");
+            return false;
+        }
+
+        //Check range to target
+        if ((transform.position - worldPoint).magnitude > currentAbility.range + 0.9f) { //Add a lot of grace
+            Debug.Log("Out of range!");
+            return false;
+        }
+        Debug.Log("No obvious impediment.");
+        return true;
+    }
+
+    private void CheckForEndOfTurn() {
+        myEntity.TurnScheduler.ActionFinished();
     }
 
     public void SetCurrentAbility(int index) {
         currentAbility = abilities[index];
-        SelectorObj = currentAbility.PrepareSelector();
-        Debug.Log($"Is selector null. {SelectorObj == null}");
+
+        GameObject obj = selector.gameObject;
+        currentAbility.PrepareSelector(ref obj);
         //if(currentAbility is SingleTargetAbility) {
         //    SelectorObj = targetingRing;
         //}else if(currentAbility as CircleAreaAbility) {
@@ -152,23 +149,6 @@ public class EntityInteraction : MonoBehaviour
         //}
     }
 
-    //private static Vector2 RotateVector(Vector2 input, float degrees) {
-    //    Vector2 output = Vector2.zero;
-
-    //    float theta = Mathf.Deg2Rad * degrees;
-
-    //    float cos = Mathf.Cos(theta);
-    //    float sin = Mathf.Sin(theta);
-
-    //    float xprime = input.x * cos - input.y * sin;
-    //    float yprime = input.x * sin + input.y * cos;
-
-    //    output = new Vector2(xprime, yprime);
-
-    //    Debug.Log($"Rotation! Input:{input.ToString()} is now {output.ToString()}");
-
-    //    return output;
-    //}
 }
 
 [CustomEditor(typeof(EntityInteraction))]

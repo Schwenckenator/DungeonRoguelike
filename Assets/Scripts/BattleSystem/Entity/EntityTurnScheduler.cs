@@ -108,7 +108,7 @@ public class EntityTurnScheduler : MonoBehaviour
     public void ActionStarted() {
         currentlyPerformingAction = true;
     }
-    public void ActonFinished() {
+    public void ActionFinished() {
         currentlyPerformingAction = false;
         CheckForEndOfTurn();
     }
