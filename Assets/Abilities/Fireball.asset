@@ -9,14 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14c1f7c97de7ac74d9ace9fa26cd667d, type: 3}
+  m_Script: {fileID: 11500000, guid: 52601151785650240b1bf7d7fbfffe4d, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  name: 
+  name: Fireball
   targetType: 0
-  effects: []
-  actionCost: 1
-  endsTurn: 0
-  range: 1
-  minValue: 0
-  maxValue: 0
+  canTargetDead: 0
+  canTargetAlive: 1
+  selector: {fileID: 4789979047459697207, guid: 12b6ed11decc4174eb74390fe11cbba2,
+    type: 3}
+  effects:
+  - {fileID: 11400000, guid: 4aae88667d3151744a2c78fdd024a931, type: 2}
+  actionCost: 2
+  endsTurn: 1
+  range: 15
+  minValue: 30
+  maxValue: 65
+  radius: 3

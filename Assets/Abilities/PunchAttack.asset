@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Punch
   targetType: 3
-  abilityType: 1
+  canTargetDead: 0
+  canTargetAlive: 1
+  selector: {fileID: 4789979047459697207, guid: 14b71025ca042fa4fb6534390a07d6ab,
+    type: 3}
+  effects:
+  - {fileID: 11400000, guid: 4aae88667d3151744a2c78fdd024a931, type: 2}
   actionCost: 1
   endsTurn: 1
   range: 1
-  minValue: 15
-  maxValue: 20
+  minValue: 5
+  maxValue: 15

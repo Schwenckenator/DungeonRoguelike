@@ -9,31 +9,62 @@ public class EntityInteraction : MonoBehaviour
     
     public List<Ability> abilities; //Set this in inspector
     public GameObject targetingRing;
+    public GameObject areaSelector;
+
+
+    private GameObject SelectorObj {
+        get
+        {
+            return selectorObj;
+        }
+        set
+        {
+            var oldObj = selectorObj;
+
+            selectorObj = value;
+
+            if (oldObj != null && oldObj.activeInHierarchy) {
+                oldObj.SetActive(false);
+                selectorObj.SetActive(true);
+            }
+
+            selector = value.GetComponent<Collider2D>();
+        }
+    }
+    private GameObject selectorObj;
+    private Collider2D selector;
     //public int raycount = 16;
     //public float rayDistance = 2f;
 
     private Entity myEntity;
     private Ability currentAbility;
+    private ContactFilter2D contactFilter;
     
     private void OnEnable() {
         PlayerInput.Instance.onMouseHover += HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed += SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed += CancelTargeting;
-        targetingRing.SetActive(true);
+        //targetingRing.SetActive(true);
+        SelectorObj.SetActive(true);
     }
     private void OnDisable() {
         PlayerInput.Instance.onMouseHover -= HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed -= SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed -= CancelTargeting;
-        targetingRing.SetActive(false);
+        //targetingRing.SetActive(false);
+        SelectorObj.SetActive(false);
     }
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        Debug.Log(myEntity.character.baseAbilities.Count.ToString());
+        //Debug.Log(myEntity.character.baseAbilities.Count.ToString());
         //Select first ability for safety
         abilities = myEntity.character.baseAbilities;
-        currentAbility = abilities[0];
+
+        //currentAbility = abilities[0];
+        SetCurrentAbility(0);
+        contactFilter = new ContactFilter2D();
+        contactFilter.NoFilter();
     }
 
     private void Update() {
@@ -57,14 +88,19 @@ public class EntityInteraction : MonoBehaviour
             }
         }
 
-        targetingRing.transform.position = movePoint;
+        SelectorObj.transform.position = movePoint;
     }
     private void SelectTarget(Vector2 worldPoint) {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
 
-        foreach (RaycastHit2D hit in hits) {
-            if (hit.collider.CompareTag("Entity")) {
-                Interact(hit.collider.GetComponent<Entity>());
+        var hits = Physics2D.OverlapCircleAll(worldPoint, 0.1f);
+        var hitsList = new List<Collider2D>();
+
+        Physics2D.OverlapCollider(selector, contactFilter, hitsList);
+        //RaycastHit2D[] hits = Physics2D(worldPoint, Vector2.zero);
+
+        foreach (var hit in hits) {
+            if (hit.CompareTag("Entity")) {
+                Interact(hit.GetComponent<Entity>());
             }
         }
     }
@@ -81,10 +117,10 @@ public class EntityInteraction : MonoBehaviour
         }
 
         //Check for correct target
-        //if(!currentAbility.IsLegalTarget(myEntity, new Entity[] { target })) {
-        //    Debug.Log("Not Legal Target!");
-        //    return;
-        //}
+        if(!currentAbility.IsLegalTarget(myEntity, target)) {
+            Debug.Log("Not Legal Target!");
+            return;
+        }
 
         //Check range to target
         if ((transform.position - target.transform.position).magnitude > currentAbility.range + 0.9f) { //Add a lot of grace
@@ -106,25 +142,33 @@ public class EntityInteraction : MonoBehaviour
 
     public void SetCurrentAbility(int index) {
         currentAbility = abilities[index];
+        SelectorObj = currentAbility.PrepareSelector();
+        Debug.Log($"Is selector null. {SelectorObj == null}");
+        //if(currentAbility is SingleTargetAbility) {
+        //    SelectorObj = targetingRing;
+        //}else if(currentAbility as CircleAreaAbility) {
+        //    SelectorObj = areaSelector;
+            
+        //}
     }
 
-    private static Vector2 RotateVector(Vector2 input, float degrees) {
-        Vector2 output = Vector2.zero;
+    //private static Vector2 RotateVector(Vector2 input, float degrees) {
+    //    Vector2 output = Vector2.zero;
 
-        float theta = Mathf.Deg2Rad * degrees;
+    //    float theta = Mathf.Deg2Rad * degrees;
 
-        float cos = Mathf.Cos(theta);
-        float sin = Mathf.Sin(theta);
+    //    float cos = Mathf.Cos(theta);
+    //    float sin = Mathf.Sin(theta);
 
-        float xprime = input.x * cos - input.y * sin;
-        float yprime = input.x * sin + input.y * cos;
+    //    float xprime = input.x * cos - input.y * sin;
+    //    float yprime = input.x * sin + input.y * cos;
 
-        output = new Vector2(xprime, yprime);
+    //    output = new Vector2(xprime, yprime);
 
-        Debug.Log($"Rotation! Input:{input.ToString()} is now {output.ToString()}");
+    //    Debug.Log($"Rotation! Input:{input.ToString()} is now {output.ToString()}");
 
-        return output;
-    }
+    //    return output;
+    //}
 }
 
 [CustomEditor(typeof(EntityInteraction))]
