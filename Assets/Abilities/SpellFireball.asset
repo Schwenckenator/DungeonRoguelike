@@ -9,19 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a94f24897887534caefdb493bb2ef45, type: 3}
-  m_Name: BowAttack
+  m_Script: {fileID: 11500000, guid: 52601151785650240b1bf7d7fbfffe4d, type: 3}
+  m_Name: SpellFireball
   m_EditorClassIdentifier: 
-  name: Bow
-  targetType: 3
+  name: Fireball
+  targetType: 0
   canTargetDead: 0
   canTargetAlive: 1
-  selector: {fileID: 4789979047459697207, guid: 14b71025ca042fa4fb6534390a07d6ab,
-    type: 3}
+  selectorSprite: {fileID: 21300000, guid: 81793a975cece7649bdd10d2987e8767, type: 3}
   effects:
   - {fileID: 11400000, guid: 4aae88667d3151744a2c78fdd024a931, type: 2}
-  actionCost: 1
+  actionCost: 2
   endsTurn: 1
-  range: 10
-  minValue: 20
-  maxValue: 30
+  requireValidTarget: 0
+  range: 15
+  minValue: 30
+  maxValue: 65
+  radius: 3

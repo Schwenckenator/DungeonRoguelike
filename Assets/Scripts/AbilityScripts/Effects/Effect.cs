@@ -9,12 +9,5 @@ using UnityEngine;
 /// 
 
 public abstract class Effect : ScriptableObject {
-    public new string name;
-
-    public abstract void TriggerEffect(Entity[] targets, int minValue, int maxValue);
-
-    public void TriggerEffect(Entity target, int minValue, int maxValue) {
-        TriggerEffect(new Entity[] { target }, minValue, maxValue );
-    }
-    
+    public abstract void TriggerEffect(Entity target, int minValue, int maxValue);
 }
