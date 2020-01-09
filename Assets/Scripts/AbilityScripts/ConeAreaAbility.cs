@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConeAreaAbility : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+[CreateAssetMenu(fileName = "New AreaAbility", menuName = "Ability/Cone Ability", order = 51)]
+public class ConeAreaAbility : Ability {
+
+    public float angle = 45;
+
+    public override void PrepareSelector(ref GameObject selector) {
+        selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
+        //selector.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
+        selector.GetComponent<PolygonCollider2D>().points = CalculatePoints();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private Vector2[] CalculatePoints() {
+
+        throw new System.NotImplementedException();
     }
 }
