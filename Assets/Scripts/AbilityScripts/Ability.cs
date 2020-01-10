@@ -18,6 +18,7 @@ public abstract class Ability : ScriptableObject
     public bool canTargetDead = false;
     public bool canTargetAlive = true;
     public Sprite selectorSprite;
+    public GameObject visual;
 
     public Effect[] effects;
     public int actionCost = 1;
@@ -34,6 +35,7 @@ public abstract class Ability : ScriptableObject
             effect.TriggerEffect(target, minValue, maxValue);
         }
     }
+    public abstract void DisplayVisual(Vector2 position);
 
     public abstract void PrepareSelector(ref GameObject selector);
 

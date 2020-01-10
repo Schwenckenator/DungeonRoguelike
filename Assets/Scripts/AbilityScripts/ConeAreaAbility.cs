@@ -7,6 +7,10 @@ public class ConeAreaAbility : Ability {
 
     public float angle = 45;
 
+    public override void DisplayVisual(Vector2 position) {
+        Instantiate(visual, position, Quaternion.identity);
+    }
+
     public override void PrepareSelector(ref GameObject selector) {
         selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
         //selector.transform.localScale = new Vector3(radius * 2, radius * 2, 1);

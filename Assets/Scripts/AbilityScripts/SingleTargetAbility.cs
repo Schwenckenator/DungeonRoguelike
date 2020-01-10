@@ -12,6 +12,10 @@ public class SingleTargetAbility : Ability {
         new Vector2(0f, -0.25f)
     };
 
+    public override void DisplayVisual(Vector2 position) {
+        Instantiate(visual, position, Quaternion.identity);
+    }
+
     public override void PrepareSelector(ref GameObject selector) {
         selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
         selector.transform.localScale = Vector3.one;

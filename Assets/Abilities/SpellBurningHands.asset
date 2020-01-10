@@ -17,10 +17,12 @@ MonoBehaviour:
   canTargetDead: 0
   canTargetAlive: 1
   selectorSprite: {fileID: 0}
+  visual: {fileID: 7977837134407638966, guid: cbcde11c61b3b5849afc4c2c6ddfb380, type: 3}
   effects: []
   actionCost: 1
   endsTurn: 0
   requireValidTarget: 1
-  range: 1
+  range: 3
   minValue: 0
   maxValue: 0
+  angle: 45

@@ -99,6 +99,7 @@ public class EntityInteraction : MonoBehaviour
             validTargets++;
         }
         if(!currentAbility.requireValidTarget || validTargets > 0) {
+            currentAbility.DisplayVisual(worldPoint);
             SpendActions();
         }
     }
@@ -115,6 +116,7 @@ public class EntityInteraction : MonoBehaviour
         //Spend the actions
         myEntity.TurnScheduler.SpendActions(actionCost);
         Invoke("CheckForEndOfTurn", 1f);
+        myEntity.State = EntityState.idle;
     }
     private bool IsValidInteraction(Vector3 worldPoint) {
         //First check action count

@@ -35,4 +35,9 @@ public class CircleAreaAbility : Ability {
         //selector.GetComponent<CircleCollider2D>().radius = 0.5f;
         selector.GetComponent<PolygonCollider2D>().points = points;
     }
+
+    public override void DisplayVisual(Vector2 position) {
+        var newObj = Instantiate(visual, position, Quaternion.identity);
+        newObj.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
+    }
 }
