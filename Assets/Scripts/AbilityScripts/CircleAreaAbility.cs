@@ -30,10 +30,11 @@ public class CircleAreaAbility : Ability {
     //};
 
     public override void PrepareSelector(ref GameObject selector) {
-        selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
+        
         selector.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
-        //selector.GetComponent<CircleCollider2D>().radius = 0.5f;
-        selector.GetComponent<PolygonCollider2D>().points = CalculateCirclePoints(32);
+        var points = CalculateCirclePoints(32);
+        selector.GetComponent<PolygonCollider2D>().points = points.ToVector2s();
+        selector.GetComponent<MeshFilter>().mesh = CalculateMesh(points);
     }
 
     public override void DisplayVisual(Vector2 position) {
@@ -48,26 +49,38 @@ public class CircleAreaAbility : Ability {
         vertexList.Add(Vector3.zero); // Add centre point
         vertexList.AddRange(circlePoints);
 
-        for(int i=2; i<circlePoints.Length; i++) {
+        for (int i = 2; i < circlePoints.Length + 1; i++) {
             triangleList.Add(0);
-            triangleList.Add(i-1);
             triangleList.Add(i);
+            triangleList.Add(i - 1);
+        }
+        triangleList.Add(0);
+        triangleList.Add(1);
+        triangleList.Add(circlePoints.Length);
+
+        Vector2[] uvs = new Vector2[vertexList.Count];
+
+        for (int i = 1; i < uvs.Length; i++) {
+            uvs[i] = new Vector2(vertexList[i].x, vertexList[i].y);
         }
 
+
         Mesh mesh = new Mesh {
+            name = "Circle",
             vertices = vertexList.ToArray(),
-            triangles = triangleList.ToArray()
+            triangles = triangleList.ToArray(),
+            uv = uvs
         };
 
         return mesh;
     }
 
-    private Vector2[] CalculateCirclePoints(int totalPoints) {
+    private Vector3[] CalculateCirclePoints(int totalPoints) {
         float theta = 0;
-        Vector2[] points = new Vector2[totalPoints];
+        Vector3[] points = new Vector3[totalPoints];
         for (int i=0; i<totalPoints; i++) {
             theta = i * (2 * Mathf.PI) / totalPoints;
-            points[i] = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta)) / 2;
+            points[i] = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0) / 2;
         }
         return points;
     }
