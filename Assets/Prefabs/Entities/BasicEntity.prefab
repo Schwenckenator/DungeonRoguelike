@@ -639,7 +639,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 4e0b513774d18ba49ac2d8c8910893c7, type: 2}
   - {fileID: 11400000, guid: d8047acf1e1f12240b52ccd373116bf5, type: 2}
-  selector: {fileID: 4381265714433563427}
+  selector: {fileID: 8889438344277222521}
 --- !u!50 &2414215985182535640
 Rigidbody2D:
   serializedVersion: 4
@@ -1451,11 +1451,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1975088392685809584, guid: 14b71025ca042fa4fb6534390a07d6ab,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7594690134423827813, guid: 14b71025ca042fa4fb6534390a07d6ab,
         type: 3}
       propertyPath: m_Enabled
@@ -1481,6 +1476,11 @@ PrefabInstance:
       propertyPath: m_Offset.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1975088392685809584, guid: 14b71025ca042fa4fb6534390a07d6ab,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7594690134423827813, guid: 14b71025ca042fa4fb6534390a07d6ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 14b71025ca042fa4fb6534390a07d6ab, type: 3}
@@ -1490,9 +1490,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2856845230955689107}
   m_PrefabAsset: {fileID: 0}
---- !u!58 &4381265714433563427 stripped
-CircleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 1975088392685809584, guid: 14b71025ca042fa4fb6534390a07d6ab,
+--- !u!60 &8889438344277222521 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 6699153419514450154, guid: 14b71025ca042fa4fb6534390a07d6ab,
     type: 3}
   m_PrefabInstance: {fileID: 2856845230955689107}
   m_PrefabAsset: {fileID: 0}
