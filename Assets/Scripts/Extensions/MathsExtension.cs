@@ -57,7 +57,13 @@ public static class MathsExtension {
     #endregion
 
     #region Vector3
-
+    public static Vector2[] ToVector2s(this Vector3[] input) {
+        var vector2s = new List<Vector2>();
+        foreach(Vector3 v3 in input) {
+            vector2s.Add(new Vector2(v3.x, v3.y));
+        }
+        return vector2s.ToArray();
+    }
     #endregion
 
     #region Vector3Int
