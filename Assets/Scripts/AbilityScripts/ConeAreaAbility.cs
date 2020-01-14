@@ -17,7 +17,7 @@ public class ConeAreaAbility : Ability {
         selector.transform.localScale = new Vector3(range, range, 1);
         var points = CalculateArcPoints(16);
         selector.GetComponent<PolygonCollider2D>().points = points.ToVector2s();
-        selector.GetComponent<MeshFilter>().mesh = CalculateMesh(points);
+        selector.GetComponent<MeshFilter>().mesh = CreateMesh(points, "Cone");
     }
 
     private Vector3[] CalculateArcPoints(int arcPoints) {
@@ -31,35 +31,35 @@ public class ConeAreaAbility : Ability {
         return points;
     }
 
-    private Mesh CalculateMesh(Vector3[] points) {
-        List<Vector3> vertexList = new List<Vector3>();
-        List<int> triangleList = new List<int>();
+    //private Mesh CalculateMesh(Vector3[] points) {
+    //    List<Vector3> vertexList = new List<Vector3>();
+    //    List<int> triangleList = new List<int>();
 
-        vertexList.AddRange(points);
+    //    vertexList.AddRange(points);
 
-        for (int i = 2; i < points.Length; i++) {
-            triangleList.Add(0);
-            triangleList.Add(i);
-            triangleList.Add(i - 1);
-        }
-        //triangleList.Add(0);
-        //triangleList.Add(1);
-        //triangleList.Add(circlePoints.Length);
+    //    for (int i = 2; i < points.Length; i++) {
+    //        triangleList.Add(0);
+    //        triangleList.Add(i);
+    //        triangleList.Add(i - 1);
+    //    }
+    //    //triangleList.Add(0);
+    //    //triangleList.Add(1);
+    //    //triangleList.Add(circlePoints.Length);
 
-        Vector2[] uvs = new Vector2[vertexList.Count];
+    //    Vector2[] uvs = new Vector2[vertexList.Count];
 
-        for (int i = 1; i < uvs.Length; i++) {
-            uvs[i] = new Vector2(vertexList[i].x, vertexList[i].y);
-        }
+    //    for (int i = 1; i < uvs.Length; i++) {
+    //        uvs[i] = new Vector2(vertexList[i].x, vertexList[i].y);
+    //    }
 
 
-        Mesh mesh = new Mesh {
-            name = "Cone",
-            vertices = vertexList.ToArray(),
-            triangles = triangleList.ToArray(),
-            uv = uvs
-        };
+    //    Mesh mesh = new Mesh {
+    //        name = "Cone",
+    //        vertices = vertexList.ToArray(),
+    //        triangles = triangleList.ToArray(),
+    //        uv = uvs
+    //    };
 
-        return mesh;
-    }
+    //    return mesh;
+    //}
 }

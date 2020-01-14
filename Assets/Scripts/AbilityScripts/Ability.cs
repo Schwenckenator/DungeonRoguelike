@@ -63,4 +63,37 @@ public abstract class Ability : ScriptableObject
         }
         return false;
     }
+
+    protected Mesh CreateMesh(Vector3[] points, string meshName = "") {
+        List<Vector3> vertexList = new List<Vector3>();
+        List<int> triangleList = new List<int>();
+
+        vertexList.Add(Vector3.zero); // Add centre point
+        vertexList.AddRange(points);
+
+        for (int i = 2; i < points.Length + 1; i++) {
+            triangleList.Add(0);
+            triangleList.Add(i);
+            triangleList.Add(i - 1);
+        }
+        triangleList.Add(0);
+        triangleList.Add(1);
+        triangleList.Add(points.Length);
+
+        Vector2[] uvs = new Vector2[vertexList.Count];
+
+        for (int i = 1; i < uvs.Length; i++) {
+            uvs[i] = new Vector2(vertexList[i].x, vertexList[i].y);
+        }
+
+
+        Mesh mesh = new Mesh {
+            name = meshName,
+            vertices = vertexList.ToArray(),
+            triangles = triangleList.ToArray(),
+            uv = uvs
+        };
+
+        return mesh;
+    }
 }
