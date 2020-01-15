@@ -13,6 +13,7 @@ public class ConeAreaAbility : Ability {
     }
 
     public override void PrepareSelector(ref GameObject selector) {
+        PositionLocked = true;
         //selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
         selector.transform.localScale = new Vector3(range, range, 1);
         var points = CalculateArcPoints(16);

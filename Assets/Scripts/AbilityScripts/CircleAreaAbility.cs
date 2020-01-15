@@ -30,7 +30,7 @@ public class CircleAreaAbility : Ability {
     //};
 
     public override void PrepareSelector(ref GameObject selector) {
-        
+        PositionLocked = false;
         selector.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
         var points = CalculateCirclePoints(32);
         selector.GetComponent<PolygonCollider2D>().points = points.ToVector2s();

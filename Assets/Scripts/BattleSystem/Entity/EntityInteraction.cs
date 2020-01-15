@@ -54,8 +54,28 @@ public class EntityInteraction : MonoBehaviour
     }
 
     private void HoverOverTarget(Vector2 worldPoint) {
+        //Vector2 movePoint = worldPoint;
+
+        ////Raycast at position
+        //RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
+
+        //foreach (var hit in hits) {
+
+        //    if (hit.collider.CompareTag("Entity")) {
+        //        movePoint = hit.collider.transform.position;
+        //    }
+        //}
+
+        //selector.transform.position = movePoint;
+        if (currentAbility.PositionLocked) {
+            RotateSelector(worldPoint);
+        } else {
+            MoveSelector(worldPoint);
+        }
+    }
+    private void MoveSelector(Vector2 worldPoint) {
         Vector2 movePoint = worldPoint;
-        
+
         //Raycast at position
         RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
 
@@ -67,6 +87,11 @@ public class EntityInteraction : MonoBehaviour
         }
 
         selector.transform.position = movePoint;
+    }
+    private void RotateSelector(Vector2 worldPoint) {
+        //Vector2 movePoint = worldPoint;
+
+        //TODO: Make rotation?
     }
     public void SelectTarget(Vector2 worldPoint) {
 

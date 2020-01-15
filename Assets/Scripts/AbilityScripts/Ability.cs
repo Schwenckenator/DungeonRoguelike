@@ -28,6 +28,9 @@ public abstract class Ability : ScriptableObject
     public int minValue;
     public int maxValue;
 
+    public bool snapToGrid = true;
+    public bool PositionLocked { get; protected set; }
+
     //public abstract void Initialise();
 
     public void TriggerAbility(Entity target) {

@@ -18,6 +18,7 @@ public class SingleTargetAbility : Ability {
 
     public override void PrepareSelector(ref GameObject selector) {
         //selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
+        PositionLocked = false;
         selector.transform.localScale = Vector3.one;
         var points = CalculateCirclePoints(16);
         selector.GetComponent<PolygonCollider2D>().points = points.ToVector2s();
