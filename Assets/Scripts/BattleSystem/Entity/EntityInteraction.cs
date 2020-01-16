@@ -69,6 +69,7 @@ public class EntityInteraction : MonoBehaviour
         //selector.transform.position = movePoint;
         if (currentAbility.PositionLocked) {
             RotateSelector(worldPoint);
+            MoveSelector(this.transform.position);
         } else {
             MoveSelector(worldPoint);
         }
@@ -89,7 +90,15 @@ public class EntityInteraction : MonoBehaviour
         selector.transform.position = movePoint;
     }
     private void RotateSelector(Vector2 worldPoint) {
-        //Vector2 movePoint = worldPoint;
+        //Find angle between Vector.Right and mouse point
+        Vector2 relativePosition = worldPoint.ToVector3() - transform.position;
+        float angle = Vector2.SignedAngle(Vector2.right, relativePosition);
+        
+
+        selector.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        //Debug.Log($"Rotation! WP: {worldPoint}, RP: {relativePosition}, Ang: {angle}.");
+        
 
         //TODO: Make rotation?
     }

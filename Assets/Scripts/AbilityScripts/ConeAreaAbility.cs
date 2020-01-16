@@ -26,7 +26,7 @@ public class ConeAreaAbility : Ability {
         Vector3[] points = new Vector3[arcPoints+2];
         points[0] = new Vector3(0, 0, 0); // First point is the origin
         for(int i = 0; i <= arcPoints; i++) {
-            theta = (i) * (angle * Mathf.Deg2Rad) / (arcPoints);
+            theta = (i - arcPoints/2) * (angle * Mathf.Deg2Rad) / (arcPoints);
             points[i+1] = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta));
         }
         return points;
