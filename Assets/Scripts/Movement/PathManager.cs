@@ -50,7 +50,7 @@ public class PathManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("PATH MANAGER OnEnable");
+        //Debug.Log("PATH MANAGER OnEnable");
 
         PlayerInput.Instance.onMouseHover += HighlightPath;
 
@@ -64,7 +64,7 @@ public class PathManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("PATH MANAGER Start");
+        //Debug.Log("PATH MANAGER Start");
         highlightGroundGO = Instantiate(highlightGroundGO);
         highlightGroundGO.transform.position = transform.position;
 

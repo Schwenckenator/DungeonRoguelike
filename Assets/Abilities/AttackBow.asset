@@ -10,13 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a94f24897887534caefdb493bb2ef45, type: 3}
-  m_Name: PunchAttack
+  m_Name: AttackBow
   m_EditorClassIdentifier: 
-  name: Punch
+  name: Bow
   targetType: 3
-  abilityType: 1
+  canTargetDead: 0
+  canTargetAlive: 1
+  selectorSprite: {fileID: 21300000, guid: 81793a975cece7649bdd10d2987e8767, type: 3}
+  visual: {fileID: 7977837134407638966, guid: cbcde11c61b3b5849afc4c2c6ddfb380, type: 3}
+  effects:
+  - {fileID: 11400000, guid: 4aae88667d3151744a2c78fdd024a931, type: 2}
   actionCost: 1
   endsTurn: 1
-  range: 1
-  minValue: 15
-  maxValue: 20
+  requireValidTarget: 1
+  range: 10
+  minValue: 20
+  maxValue: 30
