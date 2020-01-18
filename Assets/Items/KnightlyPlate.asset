@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03fa7fc614bd4444088ce39995440a84, type: 3}
-  m_Name: RustyDagger
+  m_Name: KnightlyPlate
   m_EditorClassIdentifier: 
-  name: Rusty Dagger
-  abilities:
-  - {fileID: 11400000, guid: e303eda1d2e22c347a92ae724f095ef6, type: 2}
+  name: Knightly Plate
+  abilities: []
   passives: []
   sprite: {fileID: 0}

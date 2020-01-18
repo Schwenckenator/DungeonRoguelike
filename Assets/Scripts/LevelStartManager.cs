@@ -38,6 +38,8 @@ public class LevelStartManager : MonoBehaviour
         yield return StartCoroutine(encounterGenerator.GenerateEncounters(dungeon));
         //Generate Heroes
         heroSpawner.SpawnHeroes(dungeon.rooms[0]); // first room
+        //Generate Items
+        ItemGenerator.Instance.GenerateItems(dungeon);
         //Start Battle
         BattleController.Instance.StartBattle();
     }

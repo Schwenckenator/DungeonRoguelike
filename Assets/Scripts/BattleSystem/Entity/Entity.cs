@@ -11,6 +11,7 @@ public class Entity : MonoBehaviour
     public Character character;
 
     public EntityInteraction Interaction { get; private set; }
+    public EntityInventory Inventory { get; private set; }
     public EntityStats Stats { get; private set; }
     public EntityTurnScheduler TurnScheduler { get; private set; }
     public ClickToMove ClickToMove { get; private set; }
@@ -61,6 +62,7 @@ public class Entity : MonoBehaviour
             return;
         }
         Interaction = GetComponent<EntityInteraction>();
+        Inventory = GetComponent<EntityInventory>();
         Stats = GetComponent<EntityStats>();
         TurnScheduler = GetComponent<EntityTurnScheduler>();
         ClickToMove = GetComponent<ClickToMove>();
@@ -68,6 +70,7 @@ public class Entity : MonoBehaviour
         State = EntityState.inactive;
 
         Interaction.Initialise();
+        Inventory.Initialise();
         Stats.Initialise();
         TurnScheduler.Initialise();
         ClickToMove.Initialise();

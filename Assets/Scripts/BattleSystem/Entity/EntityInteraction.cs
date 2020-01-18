@@ -184,7 +184,14 @@ public class EntityInteraction : MonoBehaviour
             
         //}
     }
-
+    public void AddAbility(Ability ability) {
+        abilities.Add(ability);
+    }
+    public void RemoveAbility(Ability ability) {
+        if (abilities.Contains(ability)) {
+            abilities.Remove(ability);
+        }
+    }
 }
 
 [CustomEditor(typeof(EntityInteraction))]

@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03fa7fc614bd4444088ce39995440a84, type: 3}
-  m_Name: Bow
+  m_Name: OldBow
   m_EditorClassIdentifier: 
-  name: 
-  abilities: []
+  name: Old Bow
+  abilities:
+  - {fileID: 11400000, guid: 7a31fc8e41947ed49ba0435aa77cd9ea, type: 2}
+  passives: []
+  sprite: {fileID: 0}
