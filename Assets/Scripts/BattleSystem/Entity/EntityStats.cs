@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using System;
+using TMPro;
 
 public class EntityStats : MonoBehaviour
 {
@@ -16,13 +17,22 @@ public class EntityStats : MonoBehaviour
     //public float TestHealing;
 
     public Image healthBar;
+    public TextMeshProUGUI healthText;
 
     private Entity myEntity;
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
+        SetHealth(maxHealth);
     }
-
+    public void SetMaxHealth(float newMaxHealth) {
+        if(newMaxHealth < 0) {
+            newMaxHealth = 0;
+        }
+        float healthLost = maxHealth - health;
+        maxHealth = newMaxHealth;
+        SetHealth(maxHealth - healthLost);
+    }
     public void SetHealth(float newHealth) {
         //Set Health
         health = newHealth;
@@ -39,6 +49,7 @@ public class EntityStats : MonoBehaviour
         //Update health bar image
 
         healthBar.fillAmount = (health / maxHealth);
+        healthText.text = $"{health} / {maxHealth}";
     }
 
     private void Die() {
