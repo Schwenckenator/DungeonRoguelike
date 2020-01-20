@@ -8,8 +8,12 @@ using TMPro;
 
 public class EntityStats : MonoBehaviour
 {
-    public float health;
-    public float maxHealth;
+    private static readonly float vitalityToHealthMultiplier = 10;
+
+    //public float health;
+    //private float maxHealth;
+
+    private Dictionary<string, int> attributes;
 
     public bool isDead = false;
 
@@ -23,33 +27,34 @@ public class EntityStats : MonoBehaviour
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        SetHealth(maxHealth);
+        attributes = myEntity.character.GetAttributes();
+        SetHealth(attributes["hp_max"]);
     }
-    public void SetMaxHealth(float newMaxHealth) {
-        if(newMaxHealth < 0) {
-            newMaxHealth = 0;
-        }
-        float healthLost = maxHealth - health;
-        maxHealth = newMaxHealth;
-        SetHealth(maxHealth - healthLost);
-    }
-    public void SetHealth(float newHealth) {
+    //public void SetMaxHealth(float newMaxHealth) {
+    //    if(newMaxHealth < 0) {
+    //        newMaxHealth = 0;
+    //    }
+    //    float healthLost = maxHealth - health;
+    //    maxHealth = newMaxHealth;
+    //    SetHealth(maxHealth - healthLost);
+    //}
+    public void SetHealth(int newHealth) {
         //Set Health
-        health = newHealth;
+        attributes["hp_now"] = newHealth;
 
         //Check for over/ underflow
 
-        if(health < 0) {
-            health = 0;
+        if(attributes["hp_now"] < 0) {
+            attributes["hp_now"] = 0;
             Die();
-        }else if (health > maxHealth) {
-            health = maxHealth;
+        }else if (attributes["hp_now"] > attributes["hp_max"]) {
+            attributes["hp_now"] = attributes["hp_max"];
         }
 
         //Update health bar image
 
-        healthBar.fillAmount = (health / maxHealth);
-        healthText.text = $"{health} / {maxHealth}";
+        healthBar.fillAmount = (attributes["hp_now"] / attributes["hp_max"]);
+        healthText.text = $"{attributes["hp_now"]} / {attributes["hp_max"]}";
     }
 
     private void Die() {
@@ -57,8 +62,8 @@ public class EntityStats : MonoBehaviour
         myEntity.Die();
     }
 
-    public void ModifyHealth(float value) {
-        float newHealth = health + value;
+    public void ModifyHealth(int value) {
+        int newHealth = attributes["hp_now"] + value;
         SetHealth(newHealth);
     }
 }
