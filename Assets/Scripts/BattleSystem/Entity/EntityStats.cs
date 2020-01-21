@@ -13,7 +13,7 @@ public class EntityStats : MonoBehaviour
     //public float health;
     //private float maxHealth;
 
-    private Dictionary<string, int> attributes;
+    private Attributes attributes;
 
     public bool isDead = false;
 
@@ -27,8 +27,8 @@ public class EntityStats : MonoBehaviour
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        attributes = myEntity.character.GetAttributes();
-        SetHealth(attributes["hp_max"]);
+        attributes = myEntity.character.attributes;
+        SetHealth(attributes.HealthMax);
     }
     //public void SetMaxHealth(float newMaxHealth) {
     //    if(newMaxHealth < 0) {
@@ -40,21 +40,22 @@ public class EntityStats : MonoBehaviour
     //}
     public void SetHealth(int newHealth) {
         //Set Health
-        attributes["hp_now"] = newHealth;
+        attributes.HealthNow = newHealth;
 
         //Check for over/ underflow
 
-        if(attributes["hp_now"] < 0) {
-            attributes["hp_now"] = 0;
+        if(attributes.HealthNow < 0) {
+            attributes.HealthNow = 0;
             Die();
-        }else if (attributes["hp_now"] > attributes["hp_max"]) {
-            attributes["hp_now"] = attributes["hp_max"];
+        }else if (attributes.HealthNow > attributes.HealthMax) {
+            attributes.HealthNow = attributes.HealthMax;
         }
 
         //Update health bar image
-
-        healthBar.fillAmount = (attributes["hp_now"] / attributes["hp_max"]);
-        healthText.text = $"{attributes["hp_now"]} / {attributes["hp_max"]}";
+        //Use float for float division
+        float hpMax = attributes.HealthMax;
+        healthBar.fillAmount = (attributes.HealthNow / hpMax);
+        healthText.text = $"{attributes.HealthNow} / {attributes.HealthMax}";
     }
 
     private void Die() {
@@ -63,7 +64,7 @@ public class EntityStats : MonoBehaviour
     }
 
     public void ModifyHealth(int value) {
-        int newHealth = attributes["hp_now"] + value;
+        int newHealth = attributes.HealthNow + value;
         SetHealth(newHealth);
     }
 }

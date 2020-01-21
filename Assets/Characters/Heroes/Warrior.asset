@@ -17,3 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 21300000, guid: 38894b122e501c842b735d4a3dd16e36, type: 3}
   baseAbilities:
   - {fileID: 11400000, guid: bcfc6b61f433b044aae49192689ce550, type: 2}
+  - {fileID: 11400000, guid: bcfc6b61f433b044aae49192689ce550, type: 2}
+  - {fileID: 11400000, guid: bcfc6b61f433b044aae49192689ce550, type: 2}
+  - {fileID: 11400000, guid: bcfc6b61f433b044aae49192689ce550, type: 2}
+  attributes:
+    vitalityBase: 12
+    mightBase: 14
+    graceBase: 8
