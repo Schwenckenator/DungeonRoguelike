@@ -6,6 +6,8 @@ using UnityEditor;
 using System;
 using TMPro;
 
+public enum Attribute { vitality, might, grace, healthMax, healthNow }
+
 public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
@@ -13,7 +15,9 @@ public class EntityStats : MonoBehaviour
     //public float health;
     //private float maxHealth;
 
-    private Attributes attributes;
+    //private CharacterAttributes attributes;
+    private Dictionary<Attribute, int> attributes;
+    private List<AttributeModifier> modifiers;
 
     public bool isDead = false;
 
@@ -27,35 +31,41 @@ public class EntityStats : MonoBehaviour
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        attributes = myEntity.character.attributes;
-        SetHealth(attributes.HealthMax);
+        //attributes = myEntity.character.attributes;
+        //attributes.Initialise();
+        GetAttributes();
+        modifiers = new List<AttributeModifier>();
+        SetHealth(attributes[Attribute.healthMax]);
     }
-    //public void SetMaxHealth(float newMaxHealth) {
-    //    if(newMaxHealth < 0) {
-    //        newMaxHealth = 0;
-    //    }
-    //    float healthLost = maxHealth - health;
-    //    maxHealth = newMaxHealth;
-    //    SetHealth(maxHealth - healthLost);
-    //}
+    private void GetAttributes() {
+        attributes = new Dictionary<Attribute, int> {
+            { Attribute.grace, myEntity.character.grace },
+            { Attribute.might, myEntity.character.might },
+            { Attribute.vitality, myEntity.character.vitality }
+        };
+    }
+    public void CalculateMaxHealth() {
+        attributes[Attribute.healthMax] = attributes[Attribute.vitality] * 10;
+
+    }
     public void SetHealth(int newHealth) {
         //Set Health
-        attributes.HealthNow = newHealth;
+        attributes[Attribute.healthNow] = newHealth;
 
         //Check for over/ underflow
 
-        if(attributes.HealthNow < 0) {
-            attributes.HealthNow = 0;
+        if(attributes[Attribute.healthNow] < 0) {
+            attributes[Attribute.healthNow] = 0;
             Die();
-        }else if (attributes.HealthNow > attributes.HealthMax) {
-            attributes.HealthNow = attributes.HealthMax;
+        }else if (attributes[Attribute.healthNow] > attributes[Attribute.healthMax]) {
+            attributes[Attribute.healthNow] = attributes[Attribute.healthMax];
         }
 
         //Update health bar image
         //Use float for float division
-        float hpMax = attributes.HealthMax;
-        healthBar.fillAmount = (attributes.HealthNow / hpMax);
-        healthText.text = $"{attributes.HealthNow} / {attributes.HealthMax}";
+        float hpMax = attributes[Attribute.healthMax];
+        healthBar.fillAmount = (attributes[Attribute.healthNow] / hpMax);
+        healthText.text = $"{attributes[Attribute.healthNow]} / {attributes[Attribute.healthMax]}";
     }
 
     private void Die() {
@@ -64,8 +74,18 @@ public class EntityStats : MonoBehaviour
     }
 
     public void ModifyHealth(int value) {
-        int newHealth = attributes.HealthNow + value;
+        int newHealth = attributes[Attribute.healthNow] + value;
         SetHealth(newHealth);
+    }
+
+    public void AddModifier(AttributeModifier modifier) {
+
+    }
+
+    private void CalculateAttributes() {
+        foreach(var modifier in modifiers) {
+            
+        }
     }
 }
 
