@@ -343,6 +343,7 @@ MonoBehaviour:
     Max: 60
   itemList:
   - {fileID: 11400000, guid: 4089c34da80b08347b9feb92928d4fdc, type: 2}
+  - {fileID: 11400000, guid: dd9e699671d27f846a62b9b2d46df5fa, type: 2}
 --- !u!1001 &1296798397
 PrefabInstance:
   m_ObjectHideFlags: 0

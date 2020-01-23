@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum Operation { add, mult}
 
+[System.Serializable]
 public struct AttributeModifier
 {
     public Attribute attribute;
@@ -15,4 +16,5 @@ public struct AttributeModifier
         this.operation = operation;
         this.value = value;
     }
+
 }

@@ -18,7 +18,6 @@ MonoBehaviour:
   baseAbilities:
   - {fileID: 11400000, guid: e303eda1d2e22c347a92ae724f095ef6, type: 2}
   - {fileID: 11400000, guid: 7a31fc8e41947ed49ba0435aa77cd9ea, type: 2}
-  attributes:
-    vitalityBase: 8
-    mightBase: 10
-    graceBase: 14
+  vitality: 10
+  might: 8
+  grace: 12

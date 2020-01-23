@@ -33,18 +33,20 @@ public class EntityStats : MonoBehaviour
         myEntity = GetComponent<Entity>();
         //attributes = myEntity.character.attributes;
         //attributes.Initialise();
-        GetAttributes();
+        InitialiseAttributes();
+        CalculateSecondaryStats();
         modifiers = new List<AttributeModifier>();
         SetHealth(attributes[Attribute.healthMax]);
+        
     }
-    private void GetAttributes() {
+    private void InitialiseAttributes() {
         attributes = new Dictionary<Attribute, int> {
             { Attribute.grace, myEntity.character.grace },
             { Attribute.might, myEntity.character.might },
             { Attribute.vitality, myEntity.character.vitality }
         };
     }
-    public void CalculateMaxHealth() {
+    private void CalculateSecondaryStats() {
         attributes[Attribute.healthMax] = attributes[Attribute.vitality] * 10;
 
     }
@@ -79,14 +81,36 @@ public class EntityStats : MonoBehaviour
     }
 
     public void AddModifier(AttributeModifier modifier) {
-
+        modifiers.Add(modifier);
+        CalculateSecondaryStats();
+    }
+    public void RemoveModifier(AttributeModifier modifier) {
+        modifiers.Remove(modifier);
+        CalculateSecondaryStats();
     }
 
-    private void CalculateAttributes() {
+    public int GetAttribute(Attribute attribute) {
+        float total = attributes[attribute];
+        float multiplier = 1;
+
         foreach(var modifier in modifiers) {
-            
+            if (modifier.attribute != attribute) continue;
+
+            if (modifier.operation == Operation.add) {
+                total += modifier.value;
+            }
+            else if (modifier.operation == Operation.mult) {
+                multiplier += modifier.value;
+            }
         }
+        total *= multiplier;
+
+        return Mathf.RoundToInt(total);
     }
+    public int GetBaseAttribute(Attribute attribute) {
+        return attributes[attribute];
+    }
+
 }
 
 [CustomEditor(typeof(EntityStats))]
