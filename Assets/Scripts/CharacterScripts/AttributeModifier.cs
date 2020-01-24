@@ -7,11 +7,13 @@ public enum Operation { add, mult}
 [System.Serializable]
 public struct AttributeModifier
 {
+    public string id;
     public Attribute attribute;
     public Operation operation;
     public float value;
 
-    public AttributeModifier(Attribute attribute, Operation operation, float value) {
+    public AttributeModifier(string id, Attribute attribute, Operation operation, float value) {
+        this.id = id;
         this.attribute = attribute;
         this.operation = operation;
         this.value = value;
