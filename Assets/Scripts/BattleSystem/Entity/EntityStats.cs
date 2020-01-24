@@ -17,7 +17,9 @@ public class EntityStats : MonoBehaviour
 
     //private CharacterAttributes attributes;
     private Dictionary<Attribute, int> attributes;
-    private List<AttributeModifier> modifiers;
+    //private Dictionary<Attribute, int> modifiedAttributes;
+    private Dictionary<Attribute, List<AttributeModifier>> modifiers;
+    
 
     public bool isDead = false;
 
@@ -29,26 +31,38 @@ public class EntityStats : MonoBehaviour
 
     private Entity myEntity;
 
+    public int TestVitality;
+
+    private void Update() {
+        //TestVitality = GetAttribute(Attribute.vitality);
+    }
+
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        //attributes = myEntity.character.attributes;
-        //attributes.Initialise();
-        InitialiseAttributes();
+        modifiers = new Dictionary<Attribute, List<AttributeModifier>>();
+
+        InitialiseCollections();
         CalculateSecondaryStats();
-        modifiers = new List<AttributeModifier>();
+        
         SetHealth(attributes[Attribute.healthMax]);
         
     }
-    private void InitialiseAttributes() {
+    private void InitialiseCollections() {
         attributes = new Dictionary<Attribute, int> {
             { Attribute.grace, myEntity.character.grace },
             { Attribute.might, myEntity.character.might },
-            { Attribute.vitality, myEntity.character.vitality }
+            { Attribute.vitality, myEntity.character.vitality },
+            { Attribute.healthMax, 1 },//Just to Initialise
+            { Attribute.healthNow, 1 }
         };
+        modifiers.Add(Attribute.grace, new List<AttributeModifier>());
+        modifiers.Add(Attribute.might, new List<AttributeModifier>());
+        modifiers.Add(Attribute.vitality, new List<AttributeModifier>());
+        modifiers.Add(Attribute.healthMax, new List<AttributeModifier>());
     }
     private void CalculateSecondaryStats() {
-        attributes[Attribute.healthMax] = attributes[Attribute.vitality] * 10;
-
+        attributes[Attribute.healthMax] = GetAttribute(Attribute.vitality) * 10;
+        UpdateHealthBar();
     }
     public void SetHealth(int newHealth) {
         //Set Health
@@ -62,17 +76,22 @@ public class EntityStats : MonoBehaviour
         }else if (attributes[Attribute.healthNow] > attributes[Attribute.healthMax]) {
             attributes[Attribute.healthNow] = attributes[Attribute.healthMax];
         }
+        UpdateHealthBar();
 
-        //Update health bar image
-        //Use float for float division
-        float hpMax = attributes[Attribute.healthMax];
-        healthBar.fillAmount = (attributes[Attribute.healthNow] / hpMax);
-        healthText.text = $"{attributes[Attribute.healthNow]} / {attributes[Attribute.healthMax]}";
+
     }
 
     private void Die() {
         isDead = true;
         myEntity.Die();
+    }
+
+    private void UpdateHealthBar() {
+        //Update health bar image
+        //Use float for float division
+        float hpMax = attributes[Attribute.healthMax];
+        healthBar.fillAmount = (attributes[Attribute.healthNow] / hpMax);
+        healthText.text = $"{attributes[Attribute.healthNow]} / {attributes[Attribute.healthMax]}";
     }
 
     public void ModifyHealth(int value) {
@@ -81,11 +100,11 @@ public class EntityStats : MonoBehaviour
     }
 
     public void AddModifier(AttributeModifier modifier) {
-        modifiers.Add(modifier);
+        modifiers[modifier.attribute].Add(modifier);
         CalculateSecondaryStats();
     }
     public void RemoveModifier(AttributeModifier modifier) {
-        modifiers.Remove(modifier);
+        modifiers[modifier.attribute].Remove(modifier);
         CalculateSecondaryStats();
     }
 
@@ -93,8 +112,7 @@ public class EntityStats : MonoBehaviour
         float total = attributes[attribute];
         float multiplier = 1;
 
-        foreach(var modifier in modifiers) {
-            if (modifier.attribute != attribute) continue;
+        foreach(var modifier in modifiers[attribute]) {
 
             if (modifier.operation == Operation.add) {
                 total += modifier.value;
@@ -110,7 +128,6 @@ public class EntityStats : MonoBehaviour
     public int GetBaseAttribute(Attribute attribute) {
         return attributes[attribute];
     }
-
 }
 
 [CustomEditor(typeof(EntityStats))]
