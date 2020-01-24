@@ -6,19 +6,19 @@ using UnityEditor;
 using System;
 using TMPro;
 
-public enum Attribute { vitality, might, grace, healthMax, healthNow }
+public enum Attribute { vitality, might, grace, healthMax }
 
 public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
 
-    //public float health;
+    public int health;
     //private float maxHealth;
 
     //private CharacterAttributes attributes;
-    private Dictionary<Attribute, int> attributes;
-    //private Dictionary<Attribute, int> modifiedAttributes;
-    private Dictionary<Attribute, List<AttributeModifier>> modifiers;
+    private Dictionary<Attribute, int> baseAttributes;
+    private Dictionary<Attribute, int> modifiedAttributes;
+    //private Dictionary<Attribute, List<AttributeModifier>> modifiers;
     
 
     public bool isDead = false;
@@ -39,42 +39,48 @@ public class EntityStats : MonoBehaviour
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        modifiers = new Dictionary<Attribute, List<AttributeModifier>>();
+        //modifiers = new Dictionary<Attribute, List<AttributeModifier>>();
 
         InitialiseCollections();
         CalculateSecondaryStats();
         
-        SetHealth(attributes[Attribute.healthMax]);
+        SetHealth(baseAttributes[Attribute.healthMax]);
         
     }
     private void InitialiseCollections() {
-        attributes = new Dictionary<Attribute, int> {
+        baseAttributes = new Dictionary<Attribute, int> {
             { Attribute.grace, myEntity.character.grace },
             { Attribute.might, myEntity.character.might },
             { Attribute.vitality, myEntity.character.vitality },
-            { Attribute.healthMax, 1 },//Just to Initialise
-            { Attribute.healthNow, 1 }
+            { Attribute.healthMax, 1 }//Just to Initialise
         };
-        modifiers.Add(Attribute.grace, new List<AttributeModifier>());
-        modifiers.Add(Attribute.might, new List<AttributeModifier>());
-        modifiers.Add(Attribute.vitality, new List<AttributeModifier>());
-        modifiers.Add(Attribute.healthMax, new List<AttributeModifier>());
+        modifiedAttributes = new Dictionary<Attribute, int> {
+            { Attribute.grace, myEntity.character.grace },
+            { Attribute.might, myEntity.character.might },
+            { Attribute.vitality, myEntity.character.vitality },
+            { Attribute.healthMax, 1 }//Just to Initialise
+        };
+        //modifiers.Add(Attribute.grace, new List<AttributeModifier>());
+        //modifiers.Add(Attribute.might, new List<AttributeModifier>());
+        //modifiers.Add(Attribute.vitality, new List<AttributeModifier>());
+        //modifiers.Add(Attribute.healthMax, new List<AttributeModifier>());
     }
     private void CalculateSecondaryStats() {
-        attributes[Attribute.healthMax] = GetAttribute(Attribute.vitality) * 10;
+        int hpLost = 
+        baseAttributes[Attribute.healthMax] = GetAttribute(Attribute.vitality) * 10;
         UpdateHealthBar();
     }
     public void SetHealth(int newHealth) {
         //Set Health
-        attributes[Attribute.healthNow] = newHealth;
+        health = newHealth;
 
         //Check for over/ underflow
 
-        if(attributes[Attribute.healthNow] < 0) {
-            attributes[Attribute.healthNow] = 0;
+        if(health < 0) {
+            health = 0;
             Die();
-        }else if (attributes[Attribute.healthNow] > attributes[Attribute.healthMax]) {
-            attributes[Attribute.healthNow] = attributes[Attribute.healthMax];
+        }else if (health > baseAttributes[Attribute.healthMax]) {
+            health = baseAttributes[Attribute.healthMax];
         }
         UpdateHealthBar();
 
@@ -89,44 +95,49 @@ public class EntityStats : MonoBehaviour
     private void UpdateHealthBar() {
         //Update health bar image
         //Use float for float division
-        float hpMax = attributes[Attribute.healthMax];
-        healthBar.fillAmount = (attributes[Attribute.healthNow] / hpMax);
-        healthText.text = $"{attributes[Attribute.healthNow]} / {attributes[Attribute.healthMax]}";
+        float hpMax = baseAttributes[Attribute.healthMax];
+        healthBar.fillAmount = (health / hpMax);
+        healthText.text = $"{health} / {baseAttributes[Attribute.healthMax]}";
     }
 
     public void ModifyHealth(int value) {
-        int newHealth = attributes[Attribute.healthNow] + value;
+        int newHealth = health + value;
         SetHealth(newHealth);
     }
 
     public void AddModifier(AttributeModifier modifier) {
-        modifiers[modifier.attribute].Add(modifier);
+        //modifiers[modifier.attribute].Add(modifier);
+        //
+
+        modifiedAttributes[modifier.attribute] += modifier.Operate(baseAttributes[modifier.attribute]);
         CalculateSecondaryStats();
     }
     public void RemoveModifier(AttributeModifier modifier) {
-        modifiers[modifier.attribute].Remove(modifier);
+        //modifiers[modifier.attribute].Remove(modifier);
+        modifiedAttributes[modifier.attribute] -= modifier.Operate(baseAttributes[modifier.attribute]);
         CalculateSecondaryStats();
     }
 
     public int GetAttribute(Attribute attribute) {
-        float total = attributes[attribute];
-        float multiplier = 1;
+        //float total = attributes[attribute];
+        //float multiplier = 1;
 
-        foreach(var modifier in modifiers[attribute]) {
+        //foreach(var modifier in modifiers[attribute]) {
 
-            if (modifier.operation == Operation.add) {
-                total += modifier.value;
-            }
-            else if (modifier.operation == Operation.mult) {
-                multiplier += modifier.value;
-            }
-        }
-        total *= multiplier;
+        //    if (modifier.operation == Operation.add) {
+        //        total += modifier.value;
+        //    }
+        //    else if (modifier.operation == Operation.mult) {
+        //        multiplier += modifier.value;
+        //    }
+        //}
+        //total *= multiplier;
 
-        return Mathf.RoundToInt(total);
+        //return Mathf.RoundToInt(total);
+        return modifiedAttributes[attribute];
     }
     public int GetBaseAttribute(Attribute attribute) {
-        return attributes[attribute];
+        return baseAttributes[attribute];
     }
 }
 
