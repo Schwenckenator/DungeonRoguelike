@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +7,17 @@ public enum Attribute { vitality, might, grace, healthMax, health }
 
 public class CharacterAttributes
 {
-    private static readonly float vitalityToHealthMult = 10;
+    #region Secondary Attribute Formulas
+    private int HealthFormula() {
+        return Mathf.RoundToInt(Get(Attribute.vitality) * 10);
+    }
+    #endregion
 
     protected Character character;
     readonly Dictionary<Attribute, int> baseAttributes;
     readonly Dictionary<Attribute, List<AttributeModifier>> modifiers;
+    public Action onAttributeUpdate;
+    public Action<float, float> onHealthUpdate;
 
     public CharacterAttributes(Character character) {
         this.character = character;
@@ -28,8 +35,10 @@ public class CharacterAttributes
             { Attribute.healthMax, new List<AttributeModifier>() },
             { Attribute.health, new List<AttributeModifier>() }
         };
-
-        CalculateAllSecondaryAttributes();
+        
+    }
+    public void Initialise() {
+        CalculateSecondaryAttributes();
     }
 
     #region public methods
@@ -49,43 +58,51 @@ public class CharacterAttributes
 
         return Mathf.RoundToInt(total);
     }
+
     public int GetBase(Attribute attr) {
         return baseAttributes[attr];
     }
+
     public void SetBase(Attribute attr, int newBase) {
         baseAttributes[attr] = newBase;
-        CalculateSecondaryAttributes(attr);
+
+        if (attr != Attribute.health) { // Don't waste time calculating for health
+            CalculateSecondaryAttributes();
+        } else {
+            onHealthUpdate?.Invoke(Get(Attribute.health), Get(Attribute.healthMax));
+        }
     }
+
     public void AddModifier(AttributeModifier mod) {
         if(modifiers[mod.attribute].Exists(x => x.id == mod.id)){
             Debug.LogWarning($"{mod.id} already exists!");
             return;
         }
         modifiers[mod.attribute].Add(mod);
-        CalculateSecondaryAttributes(mod.attribute);
+        CalculateSecondaryAttributes();
     }
+
     public void RemoveModifier(AttributeModifier mod) {
         modifiers[mod.attribute].Remove(mod);
-        CalculateSecondaryAttributes(mod.attribute);
+        CalculateSecondaryAttributes();
     }
+    
     #endregion
 
     #region private methods
-    private void CalculateSecondaryAttributes(Attribute primary) {
-        if(primary == Attribute.vitality) {
-            // Preserve lost hp when changing maximum
-            int hpLost = Get(Attribute.healthMax) - Get(Attribute.health);
-            baseAttributes[Attribute.healthMax] = HealthFormula();
-            baseAttributes[Attribute.health] = Get(Attribute.healthMax) - hpLost;
-        }
+    private void CalculateSecondaryAttributes() {
+
+        //Vitality
+        // Preserve lost hp when changing maximum
+        int hpLost = Get(Attribute.healthMax) - Get(Attribute.health);
+        baseAttributes[Attribute.healthMax] = HealthFormula();
+        baseAttributes[Attribute.health] = Get(Attribute.healthMax) - hpLost;
+
+        //Debug.Log($"Base Max HP is {baseAttributes[Attribute.healthMax]}");
+
+        onAttributeUpdate?.Invoke();
+        onHealthUpdate?.Invoke(Get(Attribute.health), Get(Attribute.healthMax));
     }
-    private void CalculateAllSecondaryAttributes() {
-        CalculateSecondaryAttributes(Attribute.vitality);
-        CalculateSecondaryAttributes(Attribute.might);
-        CalculateSecondaryAttributes(Attribute.grace);
-    }
-    private int HealthFormula() {
-        return Mathf.RoundToInt(Get(Attribute.vitality) * vitalityToHealthMult);
-    }
+
     #endregion
 }
