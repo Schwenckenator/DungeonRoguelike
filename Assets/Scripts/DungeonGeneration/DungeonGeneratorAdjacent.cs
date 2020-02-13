@@ -68,7 +68,7 @@ public class DungeonGeneratorAdjacent : MonoBehaviour, IDungeonGenerator {
         //HeroSpawner.Instance.SpawnHeroes(rooms[0]); // Spawn heroes in first room
 
         isDungeonGeneratorRunning = false;
-        GetComponent<NodeMap>().Initialise(newDungeon);
+        GetComponent<GridPathfinding.NodeMap>().Initialise(newDungeon);
         newDungeon.Invoke("Scan", 0.2f);
     }
 

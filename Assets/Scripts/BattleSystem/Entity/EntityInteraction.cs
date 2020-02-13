@@ -30,7 +30,7 @@ public class EntityInteraction : MonoBehaviour
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        Debug.Log(myEntity.character.baseAbilities.Count.ToString());
+        //Debug.Log(myEntity.character.baseAbilities.Count.ToString());
         //Select first ability for safety
         abilities = myEntity.character.baseAbilities;
         currentAbility = abilities[0];

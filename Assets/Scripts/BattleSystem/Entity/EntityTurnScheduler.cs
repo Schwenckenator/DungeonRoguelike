@@ -56,7 +56,7 @@ public class EntityTurnScheduler : MonoBehaviour
         actionsRemaining = actionsPerTurn;
         selectionRingObj.SetActive(true);
         myEntity.State = EntityState.idle;
-        myEntity.ClickToMove.UpdateMaxDistance();
+        //myEntity.ClickToMove.UpdateMaxDistance();
 
         // Show actions in UI
         SetActionArrowsVisibility(actionsRemaining);
@@ -108,7 +108,7 @@ public class EntityTurnScheduler : MonoBehaviour
     public void ActionStarted() {
         currentlyPerformingAction = true;
     }
-    public void ActonFinished() {
+    public void ActionFinished() {
         currentlyPerformingAction = false;
         CheckForEndOfTurn();
     }

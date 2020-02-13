@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GridPathfinding {
-    public class TestPathMovingAgent : MonoBehaviour {
+    [RequireComponent(typeof(Entity))]
+    public class PathAgent : MonoBehaviour {
         public float walkSpeed;
         public int maxDistance;
 
@@ -15,12 +16,14 @@ namespace GridPathfinding {
         bool isMoving = false;
         int pathIndex = 0;
 
+        private Entity myEntity;
+
+        public void Initialise() {
+            myEntity = GetComponent<Entity>();
+        }
         // Update is called once per frame
         void Update() {
-            if (Input.GetMouseButtonDown(0)) {
-                Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                SetOrigin(point);
-            }
+
             if (Input.GetMouseButtonDown(1)) {
                 Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 if (origin != Vector2Int.zero) {
@@ -32,10 +35,13 @@ namespace GridPathfinding {
                 Walk();
             }
         }
+        private void OnEnable() {
+            //I have been enabled, it must be my turn!
+            SetOrigin(transform.position);
+        }
         void SetOrigin(Vector2 point) {
 
             origin = point.RoundToInt();
-            transform.position = point.RoundToInt().ToVector3Int();
             goal = Vector2Int.zero;
             BreadthFirstPathfinder.Instance.SetOrigin(origin, maxDistance);
         }
@@ -46,6 +52,15 @@ namespace GridPathfinding {
             lastPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
             pathIndex = 0;
             isMoving = true;
+            myEntity.TurnScheduler.ActionStarted();
+            if (length < maxDistance * 10 / 2) { // Half max distance
+                myEntity.TurnScheduler.SpendActions(1);
+            }else if(length < maxDistance * 10) {
+                myEntity.TurnScheduler.SpendActions(2);
+            } else {
+                myEntity.TurnScheduler.SpendActions(100);
+                Debug.Log("Spent 100 actions, this is dumb code.");
+            }
         }
 
         void Walk() {
@@ -54,6 +69,7 @@ namespace GridPathfinding {
                 transform.position = goal.ToVector3Int();
                 isMoving = false;
                 SetOrigin(goal);
+                myEntity.TurnScheduler.ActionFinished();
                 return;
             }
             if ((transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
@@ -62,23 +78,6 @@ namespace GridPathfinding {
             }
             transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
         }
-
-        //private void OnDrawGizmos() {
-        //    if (origin != Vector2Int.zero) {
-        //        Gizmos.color = Color.yellow;
-        //        Gizmos.DrawWireSphere(origin.ToVector3Int(), 0.5f);
-        //    }
-        //    if (goal != Vector2Int.zero) {
-        //        Gizmos.color = Color.blue;
-        //        Gizmos.DrawWireSphere(goal.ToVector3Int(), 0.5f);
-        //    }
-        //    if (lastPath != null) {
-        //        Gizmos.color = Color.magenta;
-
-        //        for (int i = 0; i < lastPath.Length - 1; i++) {
-        //            Gizmos.DrawLine(lastPath[i].ToVector3Int(), lastPath[i + 1].ToVector3Int());
-        //        }
-        //    }
-        //}
     }
 }
+
