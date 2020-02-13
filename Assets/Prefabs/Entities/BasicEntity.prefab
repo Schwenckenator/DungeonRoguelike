@@ -475,10 +475,6 @@ MonoBehaviour:
   maxDistance1: 1.5
   maxDistance2: 3
   maxDistanceForOneAction: 3
-  highlightGroundGO: {fileID: 6965303329720741291, guid: 69b26cec52b6d4820af1a3ad90f6d554,
-    type: 3}
-  pathValidColor: {r: 0.19127488, g: 1, b: 0, a: 0.53333336}
-  pathInvalidColor: {r: 1, g: 0, b: 0, a: 0.5176471}
   pathManager: {fileID: 477038049162429210}
 --- !u!114 &5688986332972663739
 MonoBehaviour:
@@ -588,6 +584,7 @@ MonoBehaviour:
     type: 3}
   pathValidColor: {r: 0.19215687, g: 1, b: 0, a: 0.53333336}
   pathInvalidColor: {r: 1, g: 0, b: 0, a: 0.5176471}
+  highlightGroundActive: 0
   foundPathCoords: []
 --- !u!114 &4061216150727006508
 MonoBehaviour:
@@ -605,7 +602,7 @@ MonoBehaviour:
   myTurn: 0
   myTickDelay: 10
   selectionRingObj: {fileID: 4367331689997767131}
-  actionsPerGo: 2
+  actionsPerTurn: 2
   actionsRemaining: 0
   actionArrows:
   - {fileID: 330012583058138647}

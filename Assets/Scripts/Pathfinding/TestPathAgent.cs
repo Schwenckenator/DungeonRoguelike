@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestPathAgent : MonoBehaviour
 {
-
+    public int maxDistance;
     Vector2Int[] lastPath;
 
     Vector2Int origin;
@@ -32,7 +32,7 @@ public class TestPathAgent : MonoBehaviour
         }
     }
     void SetOrigin() {
-        BreadthFirstPathfinder.Instance.SetOrigin(origin);
+        BreadthFirstPathfinder.Instance.SetOrigin(origin, maxDistance);
     }
 
     void PathFind() {

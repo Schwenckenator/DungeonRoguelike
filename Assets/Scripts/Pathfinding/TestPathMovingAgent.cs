@@ -5,6 +5,7 @@ using UnityEngine;
 public class TestPathMovingAgent : MonoBehaviour
 {
     public float walkSpeed;
+    public int maxDistance;
 
     Vector2Int[] lastPath;
 
@@ -36,7 +37,7 @@ public class TestPathMovingAgent : MonoBehaviour
         origin = point.RoundToInt();
         transform.position = point.RoundToInt().ToVector3Int();
         goal = Vector2Int.zero;
-        BreadthFirstPathfinder.Instance.SetOrigin(origin);
+        BreadthFirstPathfinder.Instance.SetOrigin(origin, maxDistance);
     }
 
     void PathFind() {

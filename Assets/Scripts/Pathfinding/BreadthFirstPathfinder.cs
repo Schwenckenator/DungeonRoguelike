@@ -9,10 +9,11 @@ using UnityEngine;
 /// </summary>
 public class BreadthFirstPathfinder : MonoBehaviour
 {
+    public static bool readyToGetPath = true;
     public static BreadthFirstPathfinder Instance { get; private set; }
-    public int maxDistance;
-    private int maxScore;
-    private int halfMax;
+    //public int maxDistance;
+    //private int maxScore;
+    //private int halfMax;
     public int size = 100;
     public int stepCost = 10;
     public float diagonalPenalty = 1.5f;
@@ -33,24 +34,19 @@ public class BreadthFirstPathfinder : MonoBehaviour
         frontier = new List<PathNode>();
         visited = new List<PathNode>();
 
-        //for(int x = 0; x < size; x++) {
-        //    for(int y = 0; y < size; y++) {
-        //        scoreMap[x, y] = 10000;
-        //    }
-        //}
-        maxScore = maxDistance * 10 + 5;
-        halfMax = maxScore / 2;
-
-        
+        //maxScore = maxDistance * 10 + 5;
+        //halfMax = maxScore / 2;
     }
     
 
-    public void SetOrigin(Vector2Int origin) {
-        StartCoroutine(SetOriginAsync(origin));
+    public void SetOrigin(Vector2Int origin, int maxDistance) {
+        
+        StartCoroutine(SetOriginCoroutine(origin, maxDistance));
     }
 
-    public IEnumerator SetOriginAsync(Vector2Int origin) {
+    public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxDistance) {
         Debug.Log("Flood fill pathing started.");
+        readyToGetPath = false;
         originSet = true;
 
         MapNode[,] map = NodeMap.GetMap();
@@ -58,6 +54,8 @@ public class BreadthFirstPathfinder : MonoBehaviour
         frontier.Clear();
         visited.Clear();
         frontier.Add(new PathNode(null, origin));
+
+        int maxScore = maxDistance * 10 + 5;
         
 
         while(frontier.Count > 0) {
@@ -112,11 +110,16 @@ public class BreadthFirstPathfinder : MonoBehaviour
         
         
         Debug.Log("Flood fill pathing complete.");
+        readyToGetPath = true;
     }
 
     public Vector2Int[] GetPath(Vector2Int goal) {
         if(originSet == false) {
             Debug.Log("Origin not yet set. Aborting.");
+            return null;
+        }
+        if(readyToGetPath == false) {
+            Debug.LogWarning("Not yet ready to get path! Aborting...");
             return null;
         }
         if (!visited.Exists(x => x.position == goal)) {
