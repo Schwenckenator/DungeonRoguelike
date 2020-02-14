@@ -4,19 +4,23 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+
+
 namespace GridPathfinding {
+
+    
+
     /// <summary>
     /// This is a pathfinder that floods the grid from a start point and finds the best paths
     /// </summary>
+    /// 
     public class BreadthFirstPathfinder : MonoBehaviour
     {
         public static bool readyToGetPath = true;
         public static BreadthFirstPathfinder Instance { get; private set; }
-        //public int maxDistance;
-        //private int maxScore;
-        //private int halfMax;
+
         public int size = 100;
-        public int stepCost = 10;
+        public static readonly int stepCost = 10;
         public float diagonalPenalty = 1.5f;
 
         private bool originSet = false;
@@ -60,8 +64,8 @@ namespace GridPathfinding {
         
 
             while(frontier.Count > 0) {
-                yield return null;
                 currentNode = frontier[0];
+                yield return null;
                 //Debug.Log($"Current node is {currentNode}.");
                 frontier.Remove(currentNode);
                 visited.Add(currentNode);
@@ -79,12 +83,12 @@ namespace GridPathfinding {
                     if (!map[x, y].IsPathable) continue;
 
                     //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
-                    int stepCost = this.stepCost;
+                    int newStepCost = stepCost;
                     if(Mathf.Abs(next.x + next.y) != 1) {
-                        stepCost = Mathf.RoundToInt(stepCost * diagonalPenalty); //Diagonals cost more
+                        newStepCost = Mathf.RoundToInt(newStepCost * diagonalPenalty); //Diagonals cost more
                     }
                     //Debug.Log($"New neighbour's stepcost is {stepCost}.");
-                    neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), stepCost));
+                    neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), newStepCost));
                 }
                 foreach(var neighbour in neighbours) {
                     if (frontier.Contains(neighbour)) {
@@ -125,7 +129,7 @@ namespace GridPathfinding {
                 return null;
             }
             if (!visited.Exists(x => x.position == goal)) {
-                Debug.Log("Goal is out of range.");
+                Debug.Log("Goal is out of range. Aborting...");
                 return null;
             }
 
@@ -133,7 +137,8 @@ namespace GridPathfinding {
             PathNode currentNode = firstNode;
             List<Vector2Int> path = new List<Vector2Int>();
             Debug.Log($"First Node's distance score is {firstNode.distance}");
-            while(currentNode != null) {
+            length = firstNode.distance;
+            while (currentNode != null) {
                 path.Add(currentNode.position);
                 currentNode = currentNode.parent;
             }
@@ -141,6 +146,9 @@ namespace GridPathfinding {
             return path.ToArray();
         }
 
+        public static int StepsToDistance(int stepCount) {
+            return stepCount * stepCost;
+        }
 
         private void OnDrawGizmos() {
             if (originSet) {

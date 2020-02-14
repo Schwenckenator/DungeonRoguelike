@@ -6,11 +6,11 @@ namespace GridPathfinding {
     [RequireComponent(typeof(Entity))]
     public class PathAgent : MonoBehaviour {
         public float walkSpeed;
-        public int maxDistance;
+        public int stepsFor1Action;
 
         Vector2Int[] lastPath;
 
-        Vector2Int origin;
+        Vector2Int? origin;
         Vector2Int goal;
 
         bool isMoving = false;
@@ -21,15 +21,14 @@ namespace GridPathfinding {
         public void Initialise() {
             myEntity = GetComponent<Entity>();
         }
+
+        #region Unity Callbacks
         // Update is called once per frame
         void Update() {
 
             if (Input.GetMouseButtonDown(1)) {
                 Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                if (origin != Vector2Int.zero) {
-                    goal = point.RoundToInt();
-                    PathFind();
-                }
+                SetGoalAndFindPath(point);
             }
             if (isMoving) {
                 Walk();
@@ -39,28 +38,43 @@ namespace GridPathfinding {
             //I have been enabled, it must be my turn!
             SetOrigin(transform.position);
         }
+        #endregion
+
+        public void SetGoalAndFindPath(Vector2 point) {
+            if (origin != null) {
+                goal = point.RoundToInt();
+                PathFind();
+            }
+        }
+
+        #region private methods
+
         void SetOrigin(Vector2 point) {
 
             origin = point.RoundToInt();
             goal = Vector2Int.zero;
-            BreadthFirstPathfinder.Instance.SetOrigin(origin, maxDistance);
+            int maxDistance = stepsFor1Action * myEntity.TurnScheduler.actionsRemaining;
+            BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxDistance);
         }
 
         void PathFind() {
             //NodeMap.Instance.GetPath(origin, goal, out lastPath, out float distance);
             //AstarPathfinder.Instance.StartCoroutine(AstarPathfinder.Instance.GetPathAsync(origin, goal, FoundPath));
             lastPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
+            if(lastPath == null) {
+                Debug.Log("Path not found!");
+                return;
+            }
             pathIndex = 0;
             isMoving = true;
+            
+
+            int actionCost = 1 + length / BreadthFirstPathfinder.StepsToDistance(stepsFor1Action);
+
+            Debug.Log($"Length is {length}. Divided by {BreadthFirstPathfinder.StepsToDistance(stepsFor1Action)}. ActionCost is {actionCost}");
+
             myEntity.TurnScheduler.ActionStarted();
-            if (length < maxDistance * 10 / 2) { // Half max distance
-                myEntity.TurnScheduler.SpendActions(1);
-            }else if(length < maxDistance * 10) {
-                myEntity.TurnScheduler.SpendActions(2);
-            } else {
-                myEntity.TurnScheduler.SpendActions(100);
-                Debug.Log("Spent 100 actions, this is dumb code.");
-            }
+            myEntity.TurnScheduler.SpendActions(actionCost);
         }
 
         void Walk() {
@@ -78,6 +92,7 @@ namespace GridPathfinding {
             }
             transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
         }
+        #endregion
     }
 }
 
