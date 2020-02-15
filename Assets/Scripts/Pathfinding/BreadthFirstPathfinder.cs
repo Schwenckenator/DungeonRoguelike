@@ -44,12 +44,12 @@ namespace GridPathfinding {
         }
     
 
-        public void SetOrigin(Vector2Int origin, int maxDistance) {
+        public void SetOrigin(Vector2Int origin, int maxSteps) {
         
-            StartCoroutine(SetOriginCoroutine(origin, maxDistance));
+            StartCoroutine(SetOriginCoroutine(origin, maxSteps));
         }
 
-        public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxDistance) {
+        public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxSteps) {
             Debug.Log("Flood fill pathing started.");
             readyToGetPath = false;
             originSet = true;
@@ -60,7 +60,7 @@ namespace GridPathfinding {
             visited.Clear();
             frontier.Add(new PathNode(null, origin));
 
-            int maxScore = maxDistance * 10 + 5;
+            int maxDistance = (maxSteps * stepCost) + Mathf.RoundToInt(stepCost * (diagonalPenalty - 1)); // Pathfinder is allowed to overflow by 1 diagonal penalty
         
 
             while(frontier.Count > 0) {
@@ -83,12 +83,12 @@ namespace GridPathfinding {
                     if (!map[x, y].IsPathable) continue;
 
                     //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
-                    int newStepCost = stepCost;
+                    int thisStepCost = stepCost;
                     if(Mathf.Abs(next.x + next.y) != 1) {
-                        newStepCost = Mathf.RoundToInt(newStepCost * diagonalPenalty); //Diagonals cost more
+                        thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
                     }
                     //Debug.Log($"New neighbour's stepcost is {stepCost}.");
-                    neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), newStepCost));
+                    neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
                 }
                 foreach(var neighbour in neighbours) {
                     if (frontier.Contains(neighbour)) {
@@ -103,7 +103,7 @@ namespace GridPathfinding {
                     neighbour.score = currentNode.score + map[neighbour.position.x, neighbour.position.y].Cost;
                     neighbour.distance = currentNode.distance + neighbour.stepCost;
                     scoreMap[neighbour.position.x, neighbour.position.y] = neighbour.score;
-                    if(neighbour.distance > maxScore) {
+                    if(neighbour.distance > maxDistance) {
                         //Debug.Log($"Node {neighbour} is over max score");
                     } else {
                         frontier.Add(neighbour);

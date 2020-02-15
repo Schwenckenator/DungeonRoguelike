@@ -53,8 +53,8 @@ namespace GridPathfinding {
 
             origin = point.RoundToInt();
             goal = Vector2Int.zero;
-            int maxDistance = stepsFor1Action * myEntity.TurnScheduler.actionsRemaining;
-            BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxDistance);
+            int maxSteps = stepsFor1Action * myEntity.TurnScheduler.actionsRemaining;
+            BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxSteps);
         }
 
         void PathFind() {
@@ -68,8 +68,8 @@ namespace GridPathfinding {
             pathIndex = 0;
             isMoving = true;
             
-
-            int actionCost = 1 + length / BreadthFirstPathfinder.StepsToDistance(stepsFor1Action);
+            // ActionCost is: length, remove possible diagonal penalty, float divide by distance per action, and round up
+            int actionCost = Mathf.CeilToInt((float)(length - 5) / BreadthFirstPathfinder.StepsToDistance(stepsFor1Action));
 
             Debug.Log($"Length is {length}. Divided by {BreadthFirstPathfinder.StepsToDistance(stepsFor1Action)}. ActionCost is {actionCost}");
 
