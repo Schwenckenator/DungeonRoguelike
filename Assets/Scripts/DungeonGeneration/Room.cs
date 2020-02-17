@@ -29,7 +29,7 @@ public class Room {
     public Room(Vector2Int centre, Vector2Int size) {
         Centre = centre;
 
-        Vector2Int min = new Vector2Int(centre.x - size.x / 2 + 1, centre.y - size.y / 2 + 1);
+        Vector2Int min = new Vector2Int(centre.x - size.x / 2, centre.y - size.y / 2);
         Bounds = new BoundsInt((Vector3Int)min, new Vector3Int(size.x, size.y, 1)); // Zed is 1 for bound checking
         Neighbours = new List<Room>();
         Children = new List<Room>();

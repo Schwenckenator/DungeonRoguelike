@@ -51,7 +51,7 @@ public class Dungeon : MonoBehaviour
     }
 
     public void Scan() {
-        AstarPath.active.Scan();
+        //AstarPath.active.Scan();
     }
 
     public Vector2Int RandomSpawnablePosition() {
