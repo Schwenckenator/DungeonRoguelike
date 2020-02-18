@@ -33,6 +33,7 @@ namespace GridPathfinding {
 
         private Thread pathThread; // Not sure what to do with this...
 
+        #region UnityCallbacks
         private void Awake() {
             Instance = this;
             scoreMap = new int[size, size];
@@ -42,8 +43,10 @@ namespace GridPathfinding {
             //maxScore = maxDistance * 10 + 5;
             //halfMax = maxScore / 2;
         }
-    
 
+        #endregion
+
+        #region Public Methods 
         public void SetOrigin(Vector2Int origin, int maxSteps) {
         
             StartCoroutine(SetOriginCoroutine(origin, maxSteps));
@@ -66,7 +69,7 @@ namespace GridPathfinding {
             while(frontier.Count > 0) {
                 currentNode = frontier[0];
                 yield return null;
-                //Debug.Log($"Current node is {currentNode}.");
+                
                 frontier.Remove(currentNode);
                 visited.Add(currentNode);
 
@@ -79,24 +82,26 @@ namespace GridPathfinding {
                 foreach (var next in directions) {
                     int x = next.x + currentNode.position.x;
                     int y = next.y + currentNode.position.y;
+                    bool isDiagonal = Mathf.Abs(next.x + next.y) != 1;
+
 
                     if (!map[x, y].IsPathable) continue;
+                    if (isDiagonal && (!map[x - next.x, y].IsPathable || !map[x, y - next.y].IsPathable)) continue;
 
-                    //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
                     int thisStepCost = stepCost;
-                    if(Mathf.Abs(next.x + next.y) != 1) {
+                    if(isDiagonal) {
                         thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
                     }
                     //Debug.Log($"New neighbour's stepcost is {stepCost}.");
                     neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
                 }
                 foreach(var neighbour in neighbours) {
+
+                    //Don't re-add nodes that will be or have been visited
                     if (frontier.Contains(neighbour)) {
-                        //Debug.Log($"Node {neighbour} already in frontier.");
                         continue;
                     }
                     if (visited.Contains(neighbour)) {
-                        //Debug.Log($"Node {neighbour} has been visited!");
                         continue;
                     }
 
@@ -110,9 +115,7 @@ namespace GridPathfinding {
                     }
                 
                 }
-
             }
-        
         
             Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
@@ -150,6 +153,10 @@ namespace GridPathfinding {
             return stepCount * stepCost;
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void OnDrawGizmos() {
             if (originSet) {
             
@@ -170,5 +177,7 @@ namespace GridPathfinding {
                 }
             }
         }
+
+        #endregion
     }
 }
