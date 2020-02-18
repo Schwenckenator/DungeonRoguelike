@@ -44,10 +44,6 @@ public static class MathsExtension {
         return output;
     }
 
-
-    public static Vector2Int RoundToInt(this Vector2 input) {
-        return new Vector2Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
-    }
     /// <summary>
     /// Returns a Vector3Int, with a zero z value.
     /// </summary>
