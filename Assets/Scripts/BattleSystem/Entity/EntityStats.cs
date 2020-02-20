@@ -12,7 +12,7 @@ public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
 
-    public CharacterAttributes attributes;
+    public AttributeCollection attributes;
 
     public bool isDead = false;
 
@@ -24,14 +24,14 @@ public class EntityStats : MonoBehaviour
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        attributes = new CharacterAttributes(myEntity.character);
+        attributes = new AttributeCollection(myEntity.character);
         attributes.onHealthUpdate += UpdateHealthBar;
         attributes.Initialise();
     }
 
     public void SetHealth(int newHealth) {
         //Set Health
-        int maxHealth = attributes.Get(Attribute.healthMax);
+        int maxHealth = attributes.Get(AttributeType.healthMax);
 
         //Check for over/ underflow
 
@@ -41,13 +41,13 @@ public class EntityStats : MonoBehaviour
         }else if (newHealth > maxHealth) {
             newHealth = maxHealth;
         }
-        attributes.SetBase(Attribute.health, newHealth);
+        attributes.SetBase(AttributeType.health, newHealth);
         //UpdateHealthBar();
 
 
     }
     public void ModifyHealth(int value) {
-        int newHealth = attributes.Get(Attribute.health) + value;
+        int newHealth = attributes.Get(AttributeType.health) + value;
         SetHealth(newHealth);
     }
     #endregion

@@ -8,11 +8,11 @@ public enum Operation { add, mult}
 public struct AttributeModifier
 {
     public string id;
-    public Attribute attribute;
+    public AttributeType attribute;
     public Operation operation;
     public float value;
 
-    public AttributeModifier(string id, Attribute attribute, Operation operation, float value) {
+    public AttributeModifier(string id, AttributeType attribute, Operation operation, float value) {
         this.id = id;
         this.attribute = attribute;
         this.operation = operation;

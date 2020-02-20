@@ -3,37 +3,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Attribute { vitality, might, grace, healthMax, health }
+public enum AttributeType { health, healthMax, mana, vitality, might, grace, }
 
-public class CharacterAttributes
+public class AttributeCollection
 {
     #region Secondary Attribute Formulas
     private int HealthFormula() {
-        return Mathf.RoundToInt(Get(Attribute.vitality) * 10);
+        return Mathf.RoundToInt(Get(AttributeType.vitality) * 10);
     }
     #endregion
 
     protected Character character;
-    readonly Dictionary<Attribute, int> baseAttributes;
-    readonly Dictionary<Attribute, List<AttributeModifier>> modifiers;
+    readonly Dictionary<AttributeType, int> baseAttributes;
+    readonly Dictionary<AttributeType, List<AttributeModifier>> modifiers;
     public Action onAttributeUpdate;
     public Action<float, float> onHealthUpdate;
 
-    public CharacterAttributes(Character character) {
+    public AttributeCollection(Character character) {
         this.character = character;
-        baseAttributes = new Dictionary<Attribute, int>() {
-            { Attribute.grace, character.grace },
-            { Attribute.might, character.might },
-            { Attribute.vitality, character.vitality },
-            { Attribute.healthMax, 1 },
-            { Attribute.health, 1 }
+        baseAttributes = new Dictionary<AttributeType, int>() {
+            { AttributeType.grace, character.grace },
+            { AttributeType.might, character.might },
+            { AttributeType.vitality, character.vitality },
+            { AttributeType.healthMax, 1 },
+            { AttributeType.health, 1 }
         };
-        modifiers = new Dictionary<Attribute, List<AttributeModifier>>() {
-            { Attribute.grace, new List<AttributeModifier>() },
-            { Attribute.might, new List<AttributeModifier>() },
-            { Attribute.vitality, new List<AttributeModifier>() },
-            { Attribute.healthMax, new List<AttributeModifier>() },
-            { Attribute.health, new List<AttributeModifier>() }
+        modifiers = new Dictionary<AttributeType, List<AttributeModifier>>() {
+            { AttributeType.grace, new List<AttributeModifier>() },
+            { AttributeType.might, new List<AttributeModifier>() },
+            { AttributeType.vitality, new List<AttributeModifier>() },
+            { AttributeType.healthMax, new List<AttributeModifier>() },
+            { AttributeType.health, new List<AttributeModifier>() }
         };
         
     }
@@ -42,7 +42,7 @@ public class CharacterAttributes
     }
 
     #region public methods
-    public int Get(Attribute attr) {
+    public int Get(AttributeType attr) {
         float total = baseAttributes[attr];
         float multiplier = 1;
 
@@ -59,17 +59,17 @@ public class CharacterAttributes
         return Mathf.RoundToInt(total);
     }
 
-    public int GetBase(Attribute attr) {
+    public int GetBase(AttributeType attr) {
         return baseAttributes[attr];
     }
 
-    public void SetBase(Attribute attr, int newBase) {
+    public void SetBase(AttributeType attr, int newBase) {
         baseAttributes[attr] = newBase;
 
-        if (attr != Attribute.health) { // Don't waste time calculating for health
+        if (attr != AttributeType.health) { // Don't waste time calculating for health
             CalculateSecondaryAttributes();
         } else {
-            onHealthUpdate?.Invoke(Get(Attribute.health), Get(Attribute.healthMax));
+            onHealthUpdate?.Invoke(Get(AttributeType.health), Get(AttributeType.healthMax));
         }
     }
 
@@ -94,14 +94,14 @@ public class CharacterAttributes
 
         //Vitality
         // Preserve lost hp when changing maximum
-        int hpLost = Get(Attribute.healthMax) - Get(Attribute.health);
-        baseAttributes[Attribute.healthMax] = HealthFormula();
-        baseAttributes[Attribute.health] = Get(Attribute.healthMax) - hpLost;
+        int hpLost = Get(AttributeType.healthMax) - Get(AttributeType.health);
+        baseAttributes[AttributeType.healthMax] = HealthFormula();
+        baseAttributes[AttributeType.health] = Get(AttributeType.healthMax) - hpLost;
 
         //Debug.Log($"Base Max HP is {baseAttributes[Attribute.healthMax]}");
 
         onAttributeUpdate?.Invoke();
-        onHealthUpdate?.Invoke(Get(Attribute.health), Get(Attribute.healthMax));
+        onHealthUpdate?.Invoke(Get(AttributeType.health), Get(AttributeType.healthMax));
     }
 
     #endregion
