@@ -8,13 +8,13 @@ public enum Operation { add, mult}
 public struct StatModifier
 {
     public string id;
-    public StatType attribute;
+    public StatType statType;
     public Operation operation;
     public float value;
 
-    public StatModifier(string id, StatType attribute, Operation operation, float value) {
+    public StatModifier(string id, StatType statType, Operation operation, float value) {
         this.id = id;
-        this.attribute = attribute;
+        this.statType = statType;
         this.operation = operation;
         this.value = value;
     }

@@ -27,32 +27,31 @@ public class EntityStats : MonoBehaviour
         stats = new StatCollection(myEntity.character);
         //stats.onHealthUpdate += UpdateHealthBar;
         stats.onStatUpdate[StatType.health] += UpdateHealthBar;
+        stats.onStatUpdate[StatType.health] += CheckForDeath;
         stats.Initialise();
     }
 
-    public void SetHealth(int newHealth) {
-        stats.Set(StatType.health, newHealth);
+    public void SetStat(StatType attr, int newValue) {
+        stats.Set(attr, newValue);
     }
-    public void ModifyHealth(int value) {
-        int newHealth = stats.Get(StatType.health) + value;
-        SetHealth(newHealth);
+    public void ModifyStatByValue(StatType attr, int value) {
+        int newValue = stats.Get(attr) + value;
+        SetStat(attr, newValue);
     }
     #endregion
 
     #region private methods
-    private void Die() {
-        isDead = true;
-        myEntity.Die();
+    private void CheckForDeath(Stat health) {
+        if(health.ValueNow <= 0) {
+            isDead = true;
+            myEntity.Die();
+        }
     }
-
-    //private void UpdateHealthBar(float hp, float hpMax) {
-    //    healthBar.fillAmount = (hp / hpMax);
-    //    healthText.text = $"{hp} / {hpMax}";
-    //}
 
     private void UpdateHealthBar(Stat health) {
         healthBar.fillAmount = (float)health.ValueNow / health.Max;
         healthText.text = $"{health.ValueNow} / {health.Max}";
+        Debug.Log($"New health is {healthText.text}");
     }
 
     #endregion

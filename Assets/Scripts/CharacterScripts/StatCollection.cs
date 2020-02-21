@@ -7,11 +7,6 @@ public enum StatType { health, mana, grace, intellect, might, vitality }
 
 public class StatCollection
 {
-    #region Secondary Attribute Formulas
-    private int HealthFormula() {
-        return Mathf.RoundToInt(Get(StatType.vitality) * 10);
-    }
-    #endregion
 
     protected Character character;
     readonly Dictionary<StatType, Stat> baseStats;
@@ -48,10 +43,23 @@ public class StatCollection
             { StatType.health, new List<StatModifier>() },
             { StatType.mana, new List<StatModifier>() }
         };
-        onStatUpdate = new Dictionary<StatType, Action<Stat>>();
+        onStatUpdate = new Dictionary<StatType, Action<Stat>>() {
+            { StatType.grace, null },
+            { StatType.intellect, null },
+            { StatType.might, null },
+            { StatType.vitality, null },
+            { StatType.health, null },
+            { StatType.mana, null }
+        };
+
+        onStatUpdate[StatType.vitality] += CalculateMaxHealth;
+
+        foreach(var statActionPair in onStatUpdate) {
+            statActionPair.Value?.Invoke(baseStats[statActionPair.Key]);
+        }
     }
     public void Initialise() {
-        CalculateSecondaryAttributes();
+        //CalculateSecondaryAttributes();
     }
 
     #region public methods
@@ -91,12 +99,12 @@ public class StatCollection
     /// </summary>
     public void SetBase(StatType attr, int newBase) {
         baseStats[attr].Value = newBase;
-
-        if (attr != StatType.health) { // Don't waste time calculating for health
-            CalculateSecondaryAttributes();
-        } else {
-            onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
-        }
+        onStatUpdate[attr]?.Invoke(baseStats[attr]);
+        //if (attr != StatType.health) { // Don't waste time calculating for health
+        //    CalculateSecondaryAttributes();
+        //} else {
+        //    onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
+        //}
     }
 
     /// <summary>
@@ -111,12 +119,13 @@ public class StatCollection
     /// Adds a unique modifier to a stat.
     /// </summary>
     public void AddModifier(StatModifier mod) {
-        if(modifiers[mod.attribute].Exists(x => x.id == mod.id)){
+        if(modifiers[mod.statType].Exists(x => x.id == mod.id)){
             Debug.LogWarning($"{mod.id} already exists!");
             return;
         }
-        modifiers[mod.attribute].Add(mod);
-        CalculateSecondaryAttributes();
+        modifiers[mod.statType].Add(mod);
+        onStatUpdate[mod.statType]?.Invoke(baseStats[mod.statType]);
+        //CalculateSecondaryAttributes();
     }
 
     /// <summary>
@@ -124,26 +133,35 @@ public class StatCollection
     /// </summary>
     /// <param name="mod"></param>
     public void RemoveModifier(StatModifier mod) {
-        modifiers[mod.attribute].Remove(mod);
-        CalculateSecondaryAttributes();
+        modifiers[mod.statType].Remove(mod);
+        onStatUpdate[mod.statType]?.Invoke(baseStats[mod.statType]);
+        //CalculateSecondaryAttributes();
     }
     
     #endregion
 
     #region private methods
-    private void CalculateSecondaryAttributes() {
+    //private void CalculateSecondaryAttributes() {
 
-        //Vitality
-        // Preserve lost hp when changing maximum
+    //    //Vitality
+    //    // Preserve lost hp when changing maximum
+    //    int hpLost = GetMax(StatType.health) - Get(StatType.health);
+    //    baseStats[StatType.health].Max = HealthFormula();
+    //    baseStats[StatType.health].ValueNow = GetMax(StatType.health) - hpLost;
+
+    //    //Debug.Log($"Base Max HP is {baseAttributes[Attribute.healthMax]}");
+
+    //    onAttributeUpdate?.Invoke();
+    //    onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
+    //}
+
+    private void CalculateMaxHealth(Stat vitality) {
+
         int hpLost = GetMax(StatType.health) - Get(StatType.health);
-        baseStats[StatType.health].Max = HealthFormula();
+        baseStats[StatType.health].Max = Mathf.RoundToInt(Get(StatType.vitality) * 10);
         baseStats[StatType.health].ValueNow = GetMax(StatType.health) - hpLost;
 
-        //Debug.Log($"Base Max HP is {baseAttributes[Attribute.healthMax]}");
-
-        onAttributeUpdate?.Invoke();
-        onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
+        onStatUpdate[StatType.health]?.Invoke(baseStats[StatType.health]);
     }
-
     #endregion
 }
