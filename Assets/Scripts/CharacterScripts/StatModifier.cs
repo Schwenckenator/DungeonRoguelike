@@ -5,14 +5,14 @@ using UnityEngine;
 public enum Operation { add, mult}
 
 [System.Serializable]
-public struct AttributeModifier
+public struct StatModifier
 {
     public string id;
-    public AttributeType attribute;
+    public StatType attribute;
     public Operation operation;
     public float value;
 
-    public AttributeModifier(string id, AttributeType attribute, Operation operation, float value) {
+    public StatModifier(string id, StatType attribute, Operation operation, float value) {
         this.id = id;
         this.attribute = attribute;
         this.operation = operation;

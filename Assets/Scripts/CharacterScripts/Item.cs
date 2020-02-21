@@ -7,7 +7,7 @@ public class Item : ScriptableObject
 {
     public new string name;
     public Ability[] abilities;
-    public AttributeModifier[] passives; // TODO: change to proper class
+    public StatModifier[] passives; // TODO: change to proper class
 
     public Sprite sprite;
 }

@@ -16,7 +16,7 @@ public class EntityInventory : MonoBehaviour
         foreach(Ability ability in item.abilities) {
             myEntity.Interaction.AddAbility(ability);
         }
-        foreach(AttributeModifier mod in item.passives) {
+        foreach(StatModifier mod in item.passives) {
             myEntity.Stats.attributes.AddModifier(mod);
         }
     }
@@ -25,7 +25,7 @@ public class EntityInventory : MonoBehaviour
         foreach(Ability ability in item.abilities) {
             myEntity.Interaction.RemoveAbility(ability);
         }
-        foreach (AttributeModifier mod in item.passives) {
+        foreach (StatModifier mod in item.passives) {
             myEntity.Stats.attributes.RemoveModifier(mod);
         }
     }
