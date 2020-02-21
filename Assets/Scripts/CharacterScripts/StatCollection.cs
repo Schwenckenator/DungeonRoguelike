@@ -54,12 +54,11 @@ public class StatCollection
 
         onStatUpdate[StatType.vitality] += CalculateMaxHealth;
 
-        foreach(var statActionPair in onStatUpdate) {
-            statActionPair.Value?.Invoke(baseStats[statActionPair.Key]);
-        }
     }
     public void Initialise() {
-        //CalculateSecondaryAttributes();
+        foreach (var statActionPair in onStatUpdate) {
+            statActionPair.Value?.Invoke(baseStats[statActionPair.Key]);
+        }
     }
 
     #region public methods
