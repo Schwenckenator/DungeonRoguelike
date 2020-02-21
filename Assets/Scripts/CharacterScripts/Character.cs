@@ -11,8 +11,9 @@ public class Character : ScriptableObject
     public List<Ability> baseAbilities;
 
 //    public CharacterAttributes attributes;
-    public int vitality;
-    public int might;
     public int grace;
+    public int intellect;
+    public int might;
+    public int vitality;
 
 }

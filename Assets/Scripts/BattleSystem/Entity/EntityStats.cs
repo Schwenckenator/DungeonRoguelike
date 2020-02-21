@@ -12,7 +12,7 @@ public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
 
-    public StatCollection attributes;
+    public StatCollection stats;
 
     public bool isDead = false;
 
@@ -24,30 +24,17 @@ public class EntityStats : MonoBehaviour
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        attributes = new StatCollection(myEntity.character);
-        attributes.onHealthUpdate += UpdateHealthBar;
-        attributes.Initialise();
+        stats = new StatCollection(myEntity.character);
+        //stats.onHealthUpdate += UpdateHealthBar;
+        stats.onStatUpdate[StatType.health] += UpdateHealthBar;
+        stats.Initialise();
     }
 
     public void SetHealth(int newHealth) {
-        //Set Health
-        int maxHealth = attributes.GetMax(StatType.health);
-
-        //Check for over/ underflow
-
-        if (newHealth < 0) {
-            newHealth = 0;
-            Die();
-        }else if (newHealth > maxHealth) {
-            newHealth = maxHealth;
-        }
-        attributes.Set(StatType.health, newHealth);
-        //UpdateHealthBar();
-
-
+        stats.Set(StatType.health, newHealth);
     }
     public void ModifyHealth(int value) {
-        int newHealth = attributes.Get(StatType.health) + value;
+        int newHealth = stats.Get(StatType.health) + value;
         SetHealth(newHealth);
     }
     #endregion
@@ -58,9 +45,14 @@ public class EntityStats : MonoBehaviour
         myEntity.Die();
     }
 
-    private void UpdateHealthBar(float hp, float hpMax) {
-        healthBar.fillAmount = (hp / hpMax);
-        healthText.text = $"{hp} / {hpMax}";
+    //private void UpdateHealthBar(float hp, float hpMax) {
+    //    healthBar.fillAmount = (hp / hpMax);
+    //    healthText.text = $"{hp} / {hpMax}";
+    //}
+
+    private void UpdateHealthBar(Stat health) {
+        healthBar.fillAmount = (float)health.ValueNow / health.Max;
+        healthText.text = $"{health.ValueNow} / {health.Max}";
     }
 
     #endregion

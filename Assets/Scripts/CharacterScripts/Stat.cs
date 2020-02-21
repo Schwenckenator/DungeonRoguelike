@@ -8,6 +8,9 @@ public class Stat
     [SerializeField] private string name;
     [SerializeField] private int valueNow;
     [SerializeField] private int maxValue;
+
+    private Stat parent;
+    private string formula;
  
     public string Name {
         get{ return name;}
@@ -53,9 +56,10 @@ public class Stat
         set { maxValue = value; }
     }
 
-    public Stat(string name, int value) {
+    public Stat(string name, int value, Stat parent = null) {
         this.name = name;
         this.maxValue = value;
         this.valueNow = value;
+        this.parent = parent;
     }
 }
