@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class LevelStartManager : MonoBehaviour
 {
-    public bool generateOnStart = true;
+    public bool generateDungeon = true;
+    public bool spawnEncounters = true;
+    public bool spawnHeroes = true;
+    public bool startBattle = true;
 
     private bool isGenerating = false;
 
@@ -15,7 +18,7 @@ public class LevelStartManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (generateOnStart) {
+        if (generateDungeon) {
             AttemptToGenerateLevel();
         }
     }
@@ -35,13 +38,21 @@ public class LevelStartManager : MonoBehaviour
         //Generate Dungeon
         yield return StartCoroutine(dungeon.GenerateDungeon());
         //Generate Encounters
-        yield return StartCoroutine(encounterGenerator.GenerateEncounters(dungeon));
+        if (spawnEncounters) {
+            yield return StartCoroutine(encounterGenerator.GenerateEncounters(dungeon));
+        }
+
         //Generate Heroes
-        heroSpawner.SpawnHeroes(dungeon.rooms[0]); // first room
+        if (spawnHeroes) {
+            heroSpawner.SpawnHeroes(dungeon.rooms[0]); // first room
+        }
         //Generate Items
         ItemGenerator.Instance.GenerateItems(dungeon);
+
         //Start Battle
-        BattleController.Instance.StartBattle();
+        if (startBattle) {
+            BattleController.Instance.StartBattle();
+        }
     }
 
 }

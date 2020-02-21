@@ -43,6 +43,7 @@ public static class MathsExtension {
         //Debug.Log($"Rotate 90! input was {input.ToString()}, output is {output.ToString()}!");
         return output;
     }
+
     /// <summary>
     /// Returns a Vector3Int, with a zero z value.
     /// </summary>
@@ -76,13 +77,6 @@ public static class MathsExtension {
     }
     #endregion
 
-
-
-
-
-
-
-
     public static float RoundToValue(this float input, float fraction) {
         float output = input;
         output -= fraction;
@@ -91,9 +85,6 @@ public static class MathsExtension {
 
         return output;
     }
-
-
-
 
     public static bool IsWithin(this float value, float minimum, float maximum)
     {

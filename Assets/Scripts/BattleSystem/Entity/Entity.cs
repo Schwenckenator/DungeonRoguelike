@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GridPathfinding;
 
 public enum EntityState { inactive, targeting, moving, idle}
 public enum EntityAllegiance { player, monster}
@@ -14,7 +15,8 @@ public class Entity : MonoBehaviour
     public EntityInventory Inventory { get; private set; }
     public EntityStats Stats { get; private set; }
     public EntityTurnScheduler TurnScheduler { get; private set; }
-    public ClickToMove ClickToMove { get; private set; }
+    public PathAgent PathAgent { get; private set; }
+    //public ClickToMove ClickToMove { get; private set; }
     public EntityAllegiance allegiance;
 
     private EntityState state;
@@ -28,24 +30,24 @@ public class Entity : MonoBehaviour
         {
             state = value;
             if(state == EntityState.moving) {
-                ClickToMove.enabled = true;
+                PathAgent.enabled = true;
                 Interaction.enabled = false;
                 
 
             } else if(state == EntityState.idle) {
 
                 //Debug.Log("SET IDLE");
-                ClickToMove.enabled = true;
+                PathAgent.enabled = true;
                 Interaction.enabled = false;
                 
 
             } else if(state == EntityState.targeting) {
-                ClickToMove.enabled = false;
+                PathAgent.enabled = false;
                 Interaction.enabled = true;
                 
 
             } else if(state == EntityState.inactive) {
-                ClickToMove.enabled = false;
+                PathAgent.enabled = false;
                 Interaction.enabled = false;
                 
             }
@@ -65,7 +67,7 @@ public class Entity : MonoBehaviour
         Inventory = GetComponent<EntityInventory>();
         Stats = GetComponent<EntityStats>();
         TurnScheduler = GetComponent<EntityTurnScheduler>();
-        ClickToMove = GetComponent<ClickToMove>();
+        PathAgent = GetComponent<PathAgent>();
 
         State = EntityState.inactive;
 
@@ -73,7 +75,7 @@ public class Entity : MonoBehaviour
         Inventory.Initialise();
         Stats.Initialise();
         TurnScheduler.Initialise();
-        ClickToMove.Initialise();
+        PathAgent.Initialise();
 
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = character.sprite;
