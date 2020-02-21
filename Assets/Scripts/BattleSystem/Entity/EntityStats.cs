@@ -31,7 +31,7 @@ public class EntityStats : MonoBehaviour
 
     public void SetHealth(int newHealth) {
         //Set Health
-        int maxHealth = attributes.Get(StatType.healthMax);
+        int maxHealth = attributes.GetMax(StatType.health);
 
         //Check for over/ underflow
 
@@ -41,7 +41,7 @@ public class EntityStats : MonoBehaviour
         }else if (newHealth > maxHealth) {
             newHealth = maxHealth;
         }
-        attributes.SetBase(StatType.health, newHealth);
+        attributes.Set(StatType.health, newHealth);
         //UpdateHealthBar();
 
 
