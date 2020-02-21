@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GridPathfinding {
+    /// <summary>
+    /// This connects a GameObject to the Pathfinding System, and allows them to find paths.
+    /// </summary>
     [RequireComponent(typeof(Entity))]
     public class PathAgent : MonoBehaviour {
+        
+        #region Public Fields
+
         public float walkSpeed;
         public int stepsFor1Action;
 
+        #endregion
+
+        #region Private Fields
         Vector2Int[] lastPath;
 
         Vector2Int? origin;
@@ -18,9 +27,7 @@ namespace GridPathfinding {
 
         private Entity myEntity;
 
-        public void Initialise() {
-            myEntity = GetComponent<Entity>();
-        }
+        #endregion
 
         #region Unity Callbacks
         // Update is called once per frame
@@ -40,6 +47,12 @@ namespace GridPathfinding {
         }
         #endregion
 
+        #region Public Methods
+
+        public void Initialise() {
+            myEntity = GetComponent<Entity>();
+        }
+
         public void SetGoalAndFindPath(Vector2 point) {
             if (origin != null) {
                 goal = point.RoundToInt();
@@ -47,7 +60,9 @@ namespace GridPathfinding {
             }
         }
 
-        #region private methods
+        #endregion
+
+        #region Private Methods
 
         void SetOrigin(Vector2 point) {
 
