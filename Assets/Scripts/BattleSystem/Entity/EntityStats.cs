@@ -51,7 +51,6 @@ public class EntityStats : MonoBehaviour
     private void UpdateHealthBar(Stat health) {
         healthBar.fillAmount = (float)health.ValueNow / health.Max;
         healthText.text = $"{health.ValueNow} / {health.Max}";
-        Debug.Log($"New health is {healthText.text}");
     }
 
     #endregion

@@ -168,6 +168,7 @@ public class EntityInteraction : MonoBehaviour
         return true;
     }
 
+    //This may become "play animation" method
     private void CheckForEndOfTurn() {
         myEntity.TurnScheduler.ActionFinished();
     }

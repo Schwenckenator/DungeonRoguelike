@@ -17,9 +17,15 @@ public class WorldItem : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void OnTriggerEnter2D(Collider2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Entity")){
-            PickUp(collision.GetComponent<Entity>());
+            collision.GetComponent<Entity>().Inventory.OnItemCollisionEnter(this);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.CompareTag("Entity")) {
+            collision.GetComponent<Entity>().Inventory.OnItemCollisionExit(this);
         }
     }
 }

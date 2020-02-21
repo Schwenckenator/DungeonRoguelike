@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7e3ce46ba7d6444a83d75cd967e78e0, type: 2}
   - {fileID: 11400000, guid: fb48410bc761a9c41a847bf37a5f0553, type: 2}
   - {fileID: 11400000, guid: 5998a2119498372468e7e41741d6f357, type: 2}
-  vitality: 6
-  might: 8
-  grace: 10
+  grace: 9
+  intellect: 9
+  might: 9
+  vitality: 9
