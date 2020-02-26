@@ -101,7 +101,7 @@ namespace GridPathfinding {
                 myEntity.TurnScheduler.ActionFinished();
                 return;
             }
-            if ((transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
+            if (lastPath!=null && (transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
                 //Reached a sub-goal
                 pathIndex++;
             }

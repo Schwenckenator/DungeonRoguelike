@@ -6,6 +6,8 @@ public class AiController : MonoBehaviour
 {
     public Entity MyEntity { get; private set; }
 
+    public GameObject debugCircle;
+
     private int turnAttemptCount = 0;
     //Basic AI
 
@@ -21,6 +23,9 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
+
+        debugCircle = Instantiate(debugCircle);
+
     }
 
     // Update is called once per frame
@@ -45,6 +50,8 @@ public class AiController : MonoBehaviour
 
         //If out of punching range
         if (distanceToEntity > 1.9f) {
+            //TODO Check for 
+
             MoveToNearestPlayer(nearestEntity);
             //Moving broken, just skip turn
             MyEntity.TurnScheduler.actionsRemaining = 0;
@@ -65,15 +72,37 @@ public class AiController : MonoBehaviour
     }
 
     private void MoveToNearestPlayer(Entity nearestEntity) {
+        Debug.Log("MoveToNearestPlayer Called");
+
         //Debug.Log("Enemy far away!");
-        ////Move towards target
-        ////Find position one square away from target
+        //Move towards target
+        //Find position one square away from target
         //Vector3 adjacentVector = nearestEntity.transform.position - transform.position - Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f);
         
-        //Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
-        //Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
-        //Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
+        Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
+        Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
+        Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
         //Debug.Log($"The adjacent square vector is {adjacentVector}.");
+
+
+
+
+        Vector3 adjacentVector = nearestEntity.transform.position - transform.position;
+
+        Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
+
+        debugCircle.gameObject.transform.position = nearestEntity.transform.position;
+
+         //Clamp to max range
+        //Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining - turnAttemptCount);
+
+        //Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
+
+
+        MyEntity.PathAgent.SetGoalAndFindPath(nearestEntity.transform.position);
+
+
+
 
         //Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
         ////Clamp to max range
@@ -81,12 +110,11 @@ public class AiController : MonoBehaviour
 
         //Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
 
-        //Debug.DrawLine(transform.position, targetPosition, Color.red, 3f);
-
+        Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
         //Debug.Log($"Adding Move order to {targetPosition.ToString()}!");
 
         //MyEntity.ClickToMove.MoveOrder(targetPosition);
-        
+
     }
 
     private static List<Entity> FindTargets() {
