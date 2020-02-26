@@ -9,6 +9,8 @@ public class AiController : MonoBehaviour
     public GameObject debugCircle;
 
     private int turnAttemptCount = 0;
+
+    public float minDistance = 1;
     //Basic AI
 
     //Checks all enemies
@@ -74,48 +76,37 @@ public class AiController : MonoBehaviour
     private void MoveToNearestPlayer(Entity nearestEntity) {
         Debug.Log("MoveToNearestPlayer Called");
 
+
+        Vector3 adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
+        Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
         //Debug.Log("Enemy far away!");
         //Move towards target
         //Find position one square away from target
-        //Vector3 adjacentVector = nearestEntity.transform.position - transform.position - Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f);
-        
-        Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
-        Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
-        Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
+  
+        //Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
+        //Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
+        //Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
         //Debug.Log($"The adjacent square vector is {adjacentVector}.");
 
 
 
-
-        Vector3 adjacentVector = nearestEntity.transform.position - transform.position;
-
-        Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
-
-        debugCircle.gameObject.transform.position = nearestEntity.transform.position;
-
-         //Clamp to max range
-        //Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining - turnAttemptCount);
-
-        //Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
+        debugCircle.gameObject.transform.position = adjacentVector;
 
 
-        MyEntity.PathAgent.SetGoalAndFindPath(nearestEntity.transform.position);
+        MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D);
 
 
-
-
-        //Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
-        ////Clamp to max range
-        //Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining - turnAttemptCount);
-
-        //Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
-
-        Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
-        //Debug.Log($"Adding Move order to {targetPosition.ToString()}!");
-
-        //MyEntity.ClickToMove.MoveOrder(targetPosition);
+        //Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
 
     }
+
+
+    public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
+    {
+        Vector3 P = x * Vector3.Normalize(B - A) + A;
+        return P;
+    }
+
 
     private static List<Entity> FindTargets() {
         GameObject[] entities = GameObject.FindGameObjectsWithTag("Entity");
