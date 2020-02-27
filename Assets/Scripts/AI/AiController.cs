@@ -48,6 +48,13 @@ public class AiController : MonoBehaviour
             //Do Nothing
             MyEntity.TurnScheduler.actionsRemaining = 0; // Naughty Matt!
         }
+
+        if (!MyEntity.PathAgent.PathCheck(transform.position, nearestEntity.transform.position))
+        {
+            //Do Nothing
+            MyEntity.TurnScheduler.actionsRemaining = 0; // Naughty Matt!
+        }
+
         float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
         //If out of punching range
@@ -70,6 +77,8 @@ public class AiController : MonoBehaviour
             Invoke("DoTurn", 1f);
         } else {
             turnAttemptCount = 0;
+            Debug.Log("I have no actions left.");
+            return;
         }
     }
 
@@ -91,10 +100,16 @@ public class AiController : MonoBehaviour
 
 
         debugCircle.gameObject.transform.position = adjacentVector;
-
-
-        MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D);
-
+        //TODO need to add a guard to stop going into the negative
+        float distanceFromGoal = minDistance;
+        //while (!MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D))
+        if (!MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D))
+        {
+             distanceFromGoal += 0.1f;
+             adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
+             adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
+        }
+        Debug.Log("Finished set goal and find path.");
 
         //Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
 
