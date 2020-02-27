@@ -127,12 +127,12 @@ namespace GridPathfinding {
             }
 
             //Checked lastPath exists to stop null exception errors
-            if (lastPath!=null && (transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
+            if (lastPath!=null && lastPath.Length-1> pathIndex && (transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
                 //Reached a sub-goal
                 pathIndex++;
 
             }
-            if (lastPath != null) {
+            if (lastPath != null && lastPath.Length - 1 > pathIndex) {
                 transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
             }
 
