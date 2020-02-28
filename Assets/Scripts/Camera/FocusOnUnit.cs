@@ -16,9 +16,20 @@ public class FocusOnUnit : MonoBehaviour
     new Camera camera;
     Transform target;
 
+
+    private void OnDestroy()
+    {
+        //Unsubscribe from game events
+        PlayerInput.Instance.onSpaceButtonPressed -= MoveCameraToUnit;
+    }
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        PlayerInput.Instance.onSpaceButtonPressed += MoveCameraToUnit;
+
         panCamera = GetComponent<PanCamera>();
         camera = Camera.main;
         Instance = this;

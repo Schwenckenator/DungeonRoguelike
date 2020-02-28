@@ -105,6 +105,12 @@ public class BattleController : MonoBehaviour {
         currentEntity.TurnScheduler.StartTurn();
     }
 
+    public Entity getCurrentEntity()
+    {
+        Turn currentTurn = turnQueue[0];
+
+        return currentTurn.Entity;
+    }
 
 
     public void DebugPrintTurnQueue() {

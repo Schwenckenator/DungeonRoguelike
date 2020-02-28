@@ -18,6 +18,9 @@ public class PanCamera : MonoBehaviour
 
     private new Camera camera;
 
+
+  
+
     // Start is called before the first frame update
     void Start()
     {
