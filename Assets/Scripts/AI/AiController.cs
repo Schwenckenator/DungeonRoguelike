@@ -55,7 +55,8 @@ public class AiController : MonoBehaviour
 
         float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
-        if (distanceToEntity < 1.9f) {
+        //if (distanceToEntity < 1.9f)
+            if (distanceToEntity < 1.5f) {
             //You're in range! Punch the sucker!
             if (debug) Debug.Log("Enemy close! Attacking!");
             MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
