@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GridPathfinding {
-    /// <summary>
-    /// A node of the Pathfinding System. Can be used by A* and Breadth First Pathfinding.
-    /// </summary>
     public class PathNode {
         public int f;
         public int g;
@@ -28,9 +25,6 @@ namespace GridPathfinding {
             return $"Pathnode {position.ToString()}";
         }
 
-        /// <summary>
-        /// If positions are equal, PathNodes are fuctionally equal.
-        /// </summary>
         public override bool Equals(object obj) {
 
             if (obj == null || !this.GetType().Equals(obj.GetType())) {

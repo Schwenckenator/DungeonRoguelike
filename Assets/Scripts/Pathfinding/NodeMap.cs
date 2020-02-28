@@ -4,9 +4,6 @@ using System;
 using UnityEngine;
 
 namespace GridPathfinding {
-    /// <summary>
-    /// The 2-dimensional "Map" of Nodes for pathfinding. Singleton class. 
-    /// </summary>
     public class NodeMap : MonoBehaviour {
 
         private MapNode[,] Map { get; set; }
@@ -14,7 +11,7 @@ namespace GridPathfinding {
         private static NodeMap instance;
         private bool displayGizmos = false;
 
-        #region Public Methods
+        #region public methods
 
         public static MapNode[,] GetMap() {
             return instance.Map;
@@ -50,7 +47,6 @@ namespace GridPathfinding {
 
         #endregion
 
-        #region Unity Callbacks
         private void Awake() {
             instance = this;
         }
@@ -61,7 +57,15 @@ namespace GridPathfinding {
                 displayGizmos = !displayGizmos;
             }
         }
-
+        private void DebugDump() {
+            Debug.Log("Logging all map data...");
+            for (int x = 0; x < Map.GetUpperBound(0); x++) {
+                for (int y = 0; y < Map.GetUpperBound(1); y++) {
+                    Debug.Log($"Node {x},{y}. {Map[x, y].ToString()}");
+                }
+            }
+            Debug.Log("Log dump complete.");
+        }
         private void OnDrawGizmos() {
             if (!displayGizmos) return;
 
@@ -77,18 +81,5 @@ namespace GridPathfinding {
             }
 
         }
-        #endregion
-
-        #region Private Methods
-        private void DebugDump() {
-            Debug.Log("Logging all map data...");
-            for (int x = 0; x < Map.GetUpperBound(0); x++) {
-                for (int y = 0; y < Map.GetUpperBound(1); y++) {
-                    Debug.Log($"Node {x},{y}. {Map[x, y].ToString()}");
-                }
-            }
-            Debug.Log("Log dump complete.");
-        }
-        #endregion
     }
 }
