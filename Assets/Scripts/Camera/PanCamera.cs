@@ -29,7 +29,20 @@ public class PanCamera : MonoBehaviour
     void Update() {
 
         Translate();
-        AdjustZoom();
+        //AdjustZoom();
+
+        // Scroll forward
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            ZoomOrthoCamera(Camera.main.ScreenToWorldPoint(Input.mousePosition), 1);
+        }
+
+        // Scoll back
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            ZoomOrthoCamera(Camera.main.ScreenToWorldPoint(Input.mousePosition), -1);
+        }
+
     }
 
     private void AdjustZoom() {
@@ -48,6 +61,25 @@ public class PanCamera : MonoBehaviour
             camera.orthographicSize = newSize;
         }
     }
+
+
+    // Ortographic camera zoom towards a point (in world coordinates). Negative amount zooms in, positive zooms out
+    // TODO: when reaching zoom limits, stop camera movement as well
+    void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
+    {
+        // Calculate how much we will have to move towards the zoomTowards position
+        float multiplier = (1.0f / this.camera.orthographicSize * amount);
+
+        // Move camera
+        transform.position += (zoomTowards - transform.position) * multiplier;
+
+        // Zoom camera
+        this.camera.orthographicSize -= amount;
+
+        // Limit zoom
+        this.camera.orthographicSize = Mathf.Clamp(this.camera.orthographicSize, minZoomLevel, maxZoomLevel);
+    }
+
 
     private void Translate() {
         Vector2 move = GetInputVector();
