@@ -12,6 +12,9 @@ public class PanCamera : MonoBehaviour
     public float maxZoomLevel = 60f;
 
     public bool startAtMaxZoom = false;
+    //Added this because its really been bugging me
+    public bool panOnZoom = false;
+
 
     private new Camera camera;
 
@@ -45,33 +48,35 @@ public class PanCamera : MonoBehaviour
 
     }
 
-    private void AdjustZoom() {
-        if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-            float newSize = camera.orthographicSize + zoomSpeed;
-            if (newSize > maxZoomLevel) {
-                newSize = maxZoomLevel;
-            }
-            camera.orthographicSize = newSize;
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-            float newSize = camera.orthographicSize - zoomSpeed;
-            if (newSize < minZoomLevel) {
-                newSize = minZoomLevel;
-            }
-            camera.orthographicSize = newSize;
-        }
-    }
+    //private void AdjustZoom() {
+    //    if (Input.GetAxis("Mouse ScrollWheel") < 0) {
+    //        float newSize = camera.orthographicSize + zoomSpeed;
+    //        if (newSize > maxZoomLevel) {
+    //            newSize = maxZoomLevel;
+    //        }
+    //        camera.orthographicSize = newSize;
+    //    }
+    //    if (Input.GetAxis("Mouse ScrollWheel") > 0) {
+    //        float newSize = camera.orthographicSize - zoomSpeed;
+    //        if (newSize < minZoomLevel) {
+    //            newSize = minZoomLevel;
+    //        }
+    //        camera.orthographicSize = newSize;
+    //    }
+    //}
 
 
     // Ortographic camera zoom towards a point (in world coordinates). Negative amount zooms in, positive zooms out
-    // TODO: when reaching zoom limits, stop camera movement as well
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
     {
         // Calculate how much we will have to move towards the zoomTowards position
         float multiplier = (1.0f / this.camera.orthographicSize * amount);
 
         // Move camera
-        transform.position += (zoomTowards - transform.position) * multiplier;
+        if(panOnZoom && this.camera.orthographicSize>minZoomLevel && this.camera.orthographicSize< maxZoomLevel)
+        {
+            transform.position += (zoomTowards - transform.position) * multiplier;
+        }
 
         // Zoom camera
         this.camera.orthographicSize -= amount;
