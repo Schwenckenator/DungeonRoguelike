@@ -71,7 +71,7 @@ public class AiController : MonoBehaviour
         else {
             //Valid path found and move to nearest entity.
             MoveToNearestPlayer(nearestEntity);
-            MyEntity.TurnScheduler.actionsRemaining = 0;
+            //MyEntity.TurnScheduler.actionsRemaining = 0;
         }
 
         //If there are remaining actions
@@ -103,15 +103,10 @@ public class AiController : MonoBehaviour
 
 
         if (debug) debugCircle.gameObject.transform.position = adjacentVector;
-        //TODO need to add a guard to stop going into the negative
+
         float distanceFromGoal = minDistance;
-        //while (!MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D))
-        if (!MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D))
-        {
-             distanceFromGoal += 0.1f;
-             adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
-             adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
-        }
+        MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D);
+
         if (debug) Debug.Log("Finished set goal and find path.");
 
         //Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
