@@ -6,7 +6,13 @@ public class AiController : MonoBehaviour
 {
     public Entity MyEntity { get; private set; }
 
+    public GameObject debugCircle;
+
     private int turnAttemptCount = 0;
+
+    public float minDistance = 1;
+    public bool debug = true;
+
     //Basic AI
 
     //Checks all enemies
@@ -21,6 +27,9 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
+
+        if (debug) debugCircle = Instantiate(debugCircle);
+
     }
 
     // Update is called once per frame
@@ -28,66 +37,94 @@ public class AiController : MonoBehaviour
     {
         
     }
-    public void StartTurn() {
-        Debug.Log("AI TURN! Adding delay...");
+    public void StartTurn() 
+    {
+        if(debug)Debug.Log("AI TURN! Adding delay...");
         Invoke("DoTurn", 2f);
     }
 
     private void DoTurn() {
-        Debug.Log("Do my turn!");
+        if (debug) Debug.Log("Do my turn!");
 
         Entity nearestEntity = GetNearestEntity(FindTargets());
         if(nearestEntity == null) {
             //Do Nothing
             MyEntity.TurnScheduler.actionsRemaining = 0; // Naughty Matt!
         }
+
+
         float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
-        //If out of punching range
-        if (distanceToEntity > 1.9f) {
-            MoveToNearestPlayer(nearestEntity);
-            //Moving broken, just skip turn
-            MyEntity.TurnScheduler.actionsRemaining = 0;
-        } else {
-            Debug.Log("Enemy close! Attacking!");
+        if (distanceToEntity < 1.9f) {
             //You're in range! Punch the sucker!
+            if (debug) Debug.Log("Enemy close! Attacking!");
             MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
+           
+        } 
+        else if (!MyEntity.PathAgent.PathCheck(transform.position, nearestEntity.transform.position))
+        {
+            //Cannot find a path to the player
+            //TODO For now it just skips the turn after the delay.
+
+            MyEntity.TurnScheduler.actionsRemaining = 0;
+        }
+        else {
+            //Valid path found and move to nearest entity.
+            MoveToNearestPlayer(nearestEntity);
+            MyEntity.TurnScheduler.actionsRemaining = 0;
         }
 
         //If there are remaining actions
         if(MyEntity.TurnScheduler.actionsRemaining > 0) {
-            Debug.Log("I still have actions, doing turn again.");
+            if (debug) Debug.Log("I still have actions, doing turn again.");
             turnAttemptCount++;
             Invoke("DoTurn", 1f);
         } else {
             turnAttemptCount = 0;
+            MyEntity.TurnScheduler.ActionFinished();
+            if (debug) Debug.Log("I have no actions left. Finished Turn.");
+
         }
     }
 
     private void MoveToNearestPlayer(Entity nearestEntity) {
-        //Debug.Log("Enemy far away!");
-        ////Move towards target
-        ////Find position one square away from target
-        //Vector3 adjacentVector = nearestEntity.transform.position - transform.position - Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f);
-        
+        if (debug) Debug.Log("MoveToNearestPlayer Called");
+
+        Vector3 adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
+        Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
+        //Move towards target
+        //Find position one square away from target
+
         //Debug.Log($"My position is {transform.position}, nearest target's position is {nearestEntity.transform.position}.");
         //Debug.Log($"The vector between them is {nearestEntity.transform.position - transform.position}.");
         //Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
         //Debug.Log($"The adjacent square vector is {adjacentVector}.");
 
-        //Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
-        ////Clamp to max range
-        //Vector2 bestAttemptVector = Vector2.ClampMagnitude(adjacentVector2D, MyEntity.ClickToMove.maxDistanceForOneAction * MyEntity.TurnScheduler.actionsRemaining - turnAttemptCount);
 
-        //Vector2 targetPosition = new Vector2(transform.position.x, transform.position.y) + bestAttemptVector;
 
-        //Debug.DrawLine(transform.position, targetPosition, Color.red, 3f);
+        if (debug) debugCircle.gameObject.transform.position = adjacentVector;
+        //TODO need to add a guard to stop going into the negative
+        float distanceFromGoal = minDistance;
+        //while (!MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D))
+        if (!MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D))
+        {
+             distanceFromGoal += 0.1f;
+             adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
+             adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
+        }
+        if (debug) Debug.Log("Finished set goal and find path.");
 
-        //Debug.Log($"Adding Move order to {targetPosition.ToString()}!");
+        //Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
 
-        //MyEntity.ClickToMove.MoveOrder(targetPosition);
-        
     }
+
+
+    public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
+    {
+        Vector3 P = x * Vector3.Normalize(B - A) + A;
+        return P;
+    }
+
 
     private static List<Entity> FindTargets() {
         GameObject[] entities = GameObject.FindGameObjectsWithTag("Entity");

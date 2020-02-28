@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GridPathfinding {
+    /// <summary>
+    /// This connects a GameObject to the Pathfinding System, and allows them to find paths.
+    /// </summary>
     [RequireComponent(typeof(Entity))]
     public class PathAgent : MonoBehaviour {
+        
+        #region Public Fields
+
         public float walkSpeed;
         public int stepsFor1Action;
 
+        #endregion
+
+        #region Private Fields
         Vector2Int[] lastPath;
 
         Vector2Int? origin;
@@ -18,9 +27,7 @@ namespace GridPathfinding {
 
         private Entity myEntity;
 
-        public void Initialise() {
-            myEntity = GetComponent<Entity>();
-        }
+        #endregion
 
         #region Unity Callbacks
         // Update is called once per frame
@@ -40,14 +47,45 @@ namespace GridPathfinding {
         }
         #endregion
 
-        public void SetGoalAndFindPath(Vector2 point) {
-            if (origin != null) {
-                goal = point.RoundToInt();
-                PathFind();
-            }
+        #region Public Methods
+
+        public void Initialise() {
+            myEntity = GetComponent<Entity>();
         }
 
-        #region private methods
+        public bool SetGoalAndFindPath(Vector2 point) {
+            if (origin != null) {
+                goal = point.RoundToInt();
+               return PathFind();
+            }
+            return false;
+        }
+
+
+
+
+        public bool PathCheck(Vector2 start, Vector2 finish)
+        {
+            if (origin != null)
+            {
+                goal = finish.RoundToInt();
+
+                var checkPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
+                if (checkPath != null)
+                {
+                    return true;
+                }
+
+            }
+                return false;
+        }
+
+
+
+
+        #endregion
+
+        #region Private Methods
 
         void SetOrigin(Vector2 point) {
 
@@ -57,17 +95,17 @@ namespace GridPathfinding {
             BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxSteps);
         }
 
-        void PathFind() {
+        bool PathFind() {
             //NodeMap.Instance.GetPath(origin, goal, out lastPath, out float distance);
             //AstarPathfinder.Instance.StartCoroutine(AstarPathfinder.Instance.GetPathAsync(origin, goal, FoundPath));
             lastPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
             if(lastPath == null) {
                 Debug.Log("Path not found!");
-                return;
+                return false;
             }
             pathIndex = 0;
             isMoving = true;
-            
+
             // ActionCost is: length, remove possible diagonal penalty, float divide by distance per action, and round up
             int actionCost = Mathf.CeilToInt((float)(length - 5) / BreadthFirstPathfinder.StepsToDistance(stepsFor1Action));
 
@@ -75,6 +113,7 @@ namespace GridPathfinding {
 
             myEntity.TurnScheduler.ActionStarted();
             myEntity.TurnScheduler.SpendActions(actionCost);
+            return true;
         }
 
         void Walk() {
@@ -86,11 +125,20 @@ namespace GridPathfinding {
                 myEntity.TurnScheduler.ActionFinished();
                 return;
             }
-            if ((transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
+
+            //Checked lastPath exists to stop null exception errors
+            if ((lastPath!=null || pathIndex <= lastPath.Length) && (transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
                 //Reached a sub-goal
                 pathIndex++;
+
             }
-            transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
+            if (lastPath != null || pathIndex <= lastPath.Length) {
+                transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
+            }
+
+
+            return;
+
         }
         #endregion
     }

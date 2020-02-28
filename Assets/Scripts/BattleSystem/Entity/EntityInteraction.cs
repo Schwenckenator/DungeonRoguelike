@@ -148,6 +148,7 @@ public class EntityInteraction : MonoBehaviour
             actionCost = myEntity.TurnScheduler.actionsRemaining;
         }
         //Spend the actions
+
         myEntity.TurnScheduler.SpendActions(actionCost);
         Invoke("CheckForEndOfTurn", 1f);
         myEntity.State = EntityState.idle;
