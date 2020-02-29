@@ -55,6 +55,9 @@ public class StatCollection
         onStatUpdate[StatType.vitality] += CalculateMaxHealth;
 
     }
+
+
+
     public void Initialise() {
         foreach (var statActionPair in onStatUpdate) {
             statActionPair.Value?.Invoke(baseStats[statActionPair.Key]);
@@ -136,7 +139,17 @@ public class StatCollection
         onStatUpdate[mod.statType]?.Invoke(baseStats[mod.statType]);
         //CalculateSecondaryAttributes();
     }
-    
+
+    internal void DebugLogStats(Entity entity) {
+        Debug.Log($"Logging Stats for {entity}");
+        Debug.Log($"Health: base {GetBase(StatType.health)}, current {Get(StatType.health)}");
+        Debug.Log($"Mana: base {GetBase(StatType.mana)}, current {Get(StatType.mana)}");
+        Debug.Log($"Grace: base {GetBase(StatType.grace)}, current {Get(StatType.grace)}");
+        Debug.Log($"Intellect: base {GetBase(StatType.intellect)}, current {Get(StatType.intellect)}");
+        Debug.Log($"Might: base {GetBase(StatType.might)}, current {Get(StatType.might)}");
+        Debug.Log($"Vitality: base {GetBase(StatType.vitality)}, current {Get(StatType.vitality)}");
+    }
+
     #endregion
 
     #region private methods

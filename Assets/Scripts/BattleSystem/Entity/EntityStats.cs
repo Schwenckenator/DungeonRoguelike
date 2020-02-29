@@ -38,6 +38,10 @@ public class EntityStats : MonoBehaviour
         int newValue = stats.Get(attr) + value;
         SetStat(attr, newValue);
     }
+
+    internal void DebugLogStats() {
+        stats.DebugLogStats(myEntity);
+    }
     #endregion
 
     #region private methods
@@ -53,6 +57,8 @@ public class EntityStats : MonoBehaviour
         healthText.text = $"{health.ValueNow} / {health.Max}";
     }
 
+    
+
     #endregion
 
 }
@@ -62,7 +68,11 @@ public class EntityStatsEditor : Editor {
     public override void OnInspectorGUI() {
         DrawDefaultInspector();
 
-        //EntityStats myScript = (EntityStats)target;
+        EntityStats myScript = (EntityStats)target;
+
+        if(GUILayout.Button("Print Stats")) {
+            myScript.DebugLogStats();
+        }
         //if (GUILayout.Button("Set Health")) {
         //    myScript.SetHealth(myScript.health);
         //}
