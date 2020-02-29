@@ -13,14 +13,16 @@ public class FogOfWar : MonoBehaviour
     public Tilemap fogTiles;
     public Tile undiscoveredTile;
     public Tile discoveredTile;
-    bool[,] fogMap;
     private int size;
 
     private Dictionary<FogState, Tile> fogDict;
+    private List<Entity> heroes;
+    private Dungeon dungeon;
     
     // Start is called before the first frame update
     public void Initialise(Dungeon dungeon) {
         Instance = this;
+        this.dungeon = dungeon;
         size = dungeon.FilledArea.size;
 
         fogDict = new Dictionary<FogState, Tile> {
@@ -29,9 +31,14 @@ public class FogOfWar : MonoBehaviour
             { FogState.undiscovered, undiscoveredTile }
         };
 
+        heroes = new List<Entity>();
+
         SetFog(FogState.undiscovered);
     }
 
+    public void OnFogClearerMove() {
+
+    }
 
     public void SetFog(FogState state) {
         BoundsInt bounds = new BoundsInt(Vector3Int.zero, new Vector3Int(size, size, 1));
@@ -42,15 +49,5 @@ public class FogOfWar : MonoBehaviour
         TileBase[] tiles = new TileBase[size * size].Populate(fogDict[state]);
         fogTiles.SetTilesBlock(bounds, tiles);
     }
-
-
-    //private void OnTriggerEnter2D(Collider2D collision) {
-    //    if (!collision.CompareTag("Entity")) return;
-    //    Entity entity = collision.GetComponent<Entity>();
-    //    if(entity.allegiance == EntityAllegiance.player) {
-    //        BoundsInt collisionArea = new BoundsInt(entity.transform.position.RoundToInt(), Vector3Int.one);
-    //        SetFog(collisionArea, FogState.visible);
-    //    }
-    //}
 
 }
