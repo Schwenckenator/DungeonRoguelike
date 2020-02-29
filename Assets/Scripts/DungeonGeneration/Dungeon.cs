@@ -16,7 +16,7 @@ public class Dungeon : MonoBehaviour
 
     public List<Room> rooms;
 
-
+    public FogOfWar fog;
 
     private IDungeonGenerator generator;
     private bool showFilledArea = false;
@@ -76,6 +76,8 @@ public class Dungeon : MonoBehaviour
 
     public IEnumerator GenerateDungeon() {
         yield return StartCoroutine(generator.GenerateDungeon(this));
+        fog.Initialise(this);
+        
     }
 
     private void OnDrawGizmos() {
