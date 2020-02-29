@@ -40,11 +40,11 @@ namespace GridPathfinding {
             Debug.Log($"Map generated, with size {Map.GetUpperBound(0)}, {Map.GetUpperBound(1)}");
         }
 
-        public void SetPathable(Vector2Int coords, bool isPathable) {
-            Map[coords.x, coords.y].IsPathable = isPathable;
+        public static void SetPathable(Vector2Int coords, bool isPathable) {
+            instance.Map[coords.x, coords.y].IsPathable = isPathable;
         }
 
-        public void SetCost(Vector2Int coords, int cost) {
+        public static void SetCost(Vector2Int coords, int cost) {
 
         }
 

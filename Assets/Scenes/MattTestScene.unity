@@ -120,124 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &64361434
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 64361436}
-  - component: {fileID: 64361435}
-  m_Layer: 0
-  m_Name: '*'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &64361435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 64361434}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78396926cbbfc4ac3b48fc5fc34a87d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  data:
-    dataString: UEsDBBQAAAgIAABIIeyaxo9cYQIAAAkFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VMuS2jAQ/BVK50DZPOJ1bolh2RxYqCWpvfgi5DFWIUsuSV4eW/x7RrLBDqmcGGZ6Rt2tkT8Jl6YCZpVeap6tVAbk24C4mHwZdMUXONG9klt+gRvmnWe2cCDqMW/UcoX50LUZVYLVnH2Xe+HAASZryXOly0W2h0QZazCdU2EAS1pZ1y0x9TkgJ/wZxq7ljNE4ctEFozgYXDFkIC3oDjqNR7MW24YO3GBryQQtK8gc8a4lDG7TMfJAiaJajBPAlBDctIyIPVde8bYqQIOTnHGKAj2LYBRjogC+L6yj2+9e57kB2+rX9DznGp1qxpIfqrGvpObQUPugonYHjWdfPalm6Oqf+jD05Vyr8uV2biPJFpwd3uiZUWN7/vbT84566B06UnGgOwHvBchXtdSqlhkWra5da21gPO/+3qUlBbBDl2+oPiTrqrP8bvgoenoKJ3EULYZB1F6WE3T1VpwSwcudt3XaJLZCeff9QoDGe/qJ7P26mHYuZh2l3wZ+0X1/r9rCM9fGYqmVLB3Xnaq1g5KFN9BJq22itATdn1CBpMKeNzjHPl7oQ+3/Xc/UPaH29LZ2exkPLT7d4YPgobRRx/vVmUIdV2CKdW0Fl9D57gqvaFSipGz2rS/p1ratdU5Zr21f8+zvRSMhnbLJlAZxyFieT2E4C9ksj1i4iyYTymJG/CZyiTqp2DREW3vw2mQ3XOLW3b4sg6Wmld/9TNPjkl9KZTokl7naMg0g182EO3HQeAg+0myRcTRoC9Zy6S+cfKZEKHaALL0PSr3SxclqmnZTUlLxD2VdJiWJ/5Sk5EqufwBQSwMEFAAACAgAAEgh7DweP6ZsAAAAeAAAAAkAJABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGrVipLLSrOzM9TslIw0TPSMzTUUVBKL0osyCgGioA5pZkpIHa0kmGiSbKxSaKBpWFyclqaSaquqWGyaZp5smGSubFxYrJlslIsUH1JZUGqX2JuKkRPQGJJRlpmXkpmXrqee1FmijvIaKXYWgBQSwECLQAUAAAICAAASCHsmsaPXGECAAAJBQAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAASCHsPB4/pmwAAAB4AAAACQAkAAAAAAAAAAAAAACuAgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAACAAIAuAAAAGUDAAAAAA==
-    upgradeData: 
-    file_cachedStartup: {fileID: 0}
-    data_cachedStartup: 
-    cacheStartup: 0
-  showNavGraphs: 0
-  showUnwalkableNodes: 1
-  debugMode: 0
-  debugFloor: 0
-  debugRoof: 1
-  manualDebugFloorRoof: 0
-  showSearchTree: 0
-  unwalkableNodeDebugSize: 0.3
-  logPathResults: 0
-  maxNearestNodeDistance: 100
-  scanOnStartup: 1
-  fullGetNearestSearch: 0
-  prioritizeGraphs: 0
-  prioritizeGraphsLimit: 1
-  colorSettings:
-    _SolidColor: {r: 0.11764706, g: 0.4, b: 0.7882353, a: 0.9}
-    _UnwalkableNode: {r: 1, g: 0, b: 0, a: 0.5}
-    _BoundsHandles: {r: 0.29, g: 0.454, b: 0.741, a: 0.9}
-    _ConnectionLowLerp: {r: 0, g: 1, b: 0, a: 0.5}
-    _ConnectionHighLerp: {r: 1, g: 0, b: 0, a: 0.5}
-    _MeshEdgeColor: {r: 0, g: 0, b: 0, a: 0.5}
-    _AreaColors:
-    - {r: 0, g: 0, b: 0, a: 0}
-  tagNames:
-  - Basic Ground
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  - 7
-  - 8
-  - 9
-  - 10
-  - 11
-  - 12
-  - 13
-  - 14
-  - 15
-  - 16
-  - 17
-  - 18
-  - 19
-  - 20
-  - 21
-  - 22
-  - 23
-  - 24
-  - 25
-  - 26
-  - 27
-  - 28
-  - 29
-  - 30
-  - 31
-  heuristic: 2
-  heuristicScale: 1
-  threadCount: 1
-  maxFrameTime: 10
-  batchGraphUpdates: 0
-  graphUpdateBatchingInterval: 0.2
-  euclideanEmbedding:
-    mode: 0
-    seed: 0
-    pivotPointRoot: {fileID: 0}
-    spreadOutCount: 1
-  showGraphs: 0
---- !u!4 &64361436
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 64361434}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &705473897
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -288,7 +170,7 @@ PrefabInstance:
     - target: {fileID: 1949173751215812946, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1949173751215812946, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
@@ -368,7 +250,7 @@ PrefabInstance:
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7418172547215330599, guid: 5d91b9e6c43782a4687b331a8114d195,
         type: 3}
@@ -517,7 +399,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1115927483046538932
 PrefabInstance:
@@ -569,7 +451,7 @@ PrefabInstance:
     - target: {fileID: 7436340121691099250, guid: ee782d9a9748e1d48aed6045b0c80335,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7436340121691099250, guid: ee782d9a9748e1d48aed6045b0c80335,
         type: 3}
@@ -863,7 +745,7 @@ PrefabInstance:
     - target: {fileID: 1762532984396018185, guid: ead60623d12a9468eb7ae6ad00f8f253,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1762532984396018185, guid: ead60623d12a9468eb7ae6ad00f8f253,
         type: 3}
@@ -937,7 +819,7 @@ PrefabInstance:
     - target: {fileID: 4026325960884987268, guid: f1683147ae039c64cab3213ca0647be4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4026325960884987268, guid: f1683147ae039c64cab3213ca0647be4,
         type: 3}
