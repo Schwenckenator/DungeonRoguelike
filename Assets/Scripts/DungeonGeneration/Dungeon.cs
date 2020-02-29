@@ -76,7 +76,7 @@ public class Dungeon : MonoBehaviour
 
     public IEnumerator GenerateDungeon() {
         yield return StartCoroutine(generator.GenerateDungeon(this));
-        fog.Initialise(this);
+        
         
     }
 
@@ -87,14 +87,6 @@ public class Dungeon : MonoBehaviour
         return GetRoomOfPosition(position.ToVector3Int());
     }
     public Room GetRoomOfPosition(Vector3Int position) {
-        foreach (Room room in rooms) {
-            if (room.Contains(position)) {
-                return room;
-            }
-        }
-        return null;
-    }
-    public Room GetRoomOfPosition(Vector3 position) {
         foreach (Room room in rooms) {
             if (room.Contains(position)) {
                 return room;

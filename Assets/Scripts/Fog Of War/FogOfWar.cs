@@ -18,10 +18,12 @@ public class FogOfWar : MonoBehaviour
     private Dictionary<FogState, Tile> fogDict;
     private List<FogClearer> clearers;
     private Dungeon dungeon;
-    
+
+    private void Awake() {
+        Instance = this;
+    }
     // Start is called before the first frame update
     public void Initialise(Dungeon dungeon) {
-        Instance = this;
         this.dungeon = dungeon;
         size = dungeon.FilledArea.size;
 

@@ -1,49 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FogClearer : MonoBehaviour
 {
     private Dungeon dungeon;
     private Room currentRoom;
+    private bool roomFound = false;
 
     // Start is called before the first frame update
     private void Start()
     {
         dungeon = GameObject.FindGameObjectWithTag("Dungeon").GetComponent<Dungeon>();
-        currentRoom = dungeon.GetRoomOfPosition(transform.position);
+        currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
         Debug.Log(currentRoom);
         FogOfWar.Instance.AddClearer(this);
-        FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
+        if(currentRoom != null) {
+            FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
+            roomFound = true;
+        }
+        
     }
 
     private void Update() {
         // Is current room null? Search for your room
         if (currentRoom == null) {
-            FindRoom();
-            if (currentRoom != null) {
-                FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
-            }
-            return;
+            currentRoom = FindCurrentRoom();
+        }
+
+        if(!roomFound && currentRoom != null) {
+            FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
+            roomFound = true;
         }
 
         // Are you no longer in the current room?
-        if (!currentRoom.Contains(transform.position)){
+        if (!currentRoom.Contains(transform.position.RoundToInt())){
 
             FogOfWar.Instance.OnFogClearerLeaveRoom(currentRoom);
+            roomFound = false;
 
-            currentRoom = dungeon.GetRoomOfPosition(transform.position);
+            currentRoom = FindCurrentRoom();
             Debug.Log(currentRoom);
-            FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
         } 
     }
 
     public bool IsInRoom(Room room) {
-        return room.Contains(transform.position);
+        return room.Contains(transform.position.RoundToInt());
     }
 
-    private void FindRoom() {
-        currentRoom = dungeon.GetRoomOfPosition(transform.position);
+    private Room FindCurrentRoom() {
+        return dungeon.GetRoomOfPosition(transform.position.RoundToInt());
     }
     //public void ClearFog(Room room) {
     //    //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());

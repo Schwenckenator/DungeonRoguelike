@@ -9,6 +9,7 @@ public class LevelStartManager : MonoBehaviour
     public bool spawnHeroes = true;
     public bool spawnItems = false;
     public bool startBattle = true;
+    public bool fogOfWar = true;
 
 
     private bool isGenerating = false;
@@ -40,24 +41,39 @@ public class LevelStartManager : MonoBehaviour
 
         //Generate Dungeon
         yield return StartCoroutine(dungeon.GenerateDungeon());
-        //Generate Encounters
-        if (spawnEncounters) {
-            yield return StartCoroutine(encounterGenerator.GenerateEncounters(dungeon));
+
+        if (fogOfWar) {
+            FogOfWar.Instance.Initialise(dungeon);
         }
+
+        yield return null;
 
         //Generate Heroes
         if (spawnHeroes) {
             heroSpawner.SpawnHeroes(dungeon.rooms[0]); // first room
         }
+
+        yield return null;
+
+        //Generate Encounters
+        if (spawnEncounters) {
+            yield return StartCoroutine(encounterGenerator.GenerateEncounters(dungeon));
+        }
+
+        yield return null;
+
         //Generate Items
         if (spawnItems) {
             itemGenerator.GenerateItems(dungeon);
         }
 
+        yield return null;
+
         //Start Battle
         if (startBattle) {
             BattleController.Instance.StartBattle();
         }
+
     }
 
 }

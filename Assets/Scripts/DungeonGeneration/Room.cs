@@ -49,10 +49,6 @@ public class Room {
         }
     }
 
-    public bool Contains(Vector3 point) {
-        Bounds bounds = new Bounds(Bounds.center, Bounds.size);
-        return bounds.Contains(point);
-    }
     public bool Contains(Vector3Int point) {
         return Bounds.Contains(point);
     }
