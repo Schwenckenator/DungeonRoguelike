@@ -86,8 +86,8 @@ namespace GridPathfinding {
         {
             //Action<Vector2Int> aStarPath = new Action<Vector2Int> ;
 
-            Action<Vector2Int[]> pathCallBack = null;
-            AstarPathfinder.Instance.GetPathAsync(origin, goal, pathCallBack);
+            //Action<Vector2Int[]> pathCallBack = null;
+            Vector2Int[] path = AstarPathfinder.Instance.GetPath(origin, goal);
 
             //public IEnumerator GetPathAsync(Vector2Int origin, Vector2Int goal, Action<Vector2Int[]> callback)
 
