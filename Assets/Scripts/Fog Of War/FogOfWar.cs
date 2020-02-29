@@ -16,7 +16,7 @@ public class FogOfWar : MonoBehaviour
     private int size;
 
     private Dictionary<FogState, Tile> fogDict;
-    private List<Entity> heroes;
+    private List<FogClearer> clearers;
     private Dungeon dungeon;
     
     // Start is called before the first frame update
@@ -31,23 +31,40 @@ public class FogOfWar : MonoBehaviour
             { FogState.undiscovered, undiscoveredTile }
         };
 
-        heroes = new List<Entity>();
+        clearers = new List<FogClearer>();
 
         SetFog(FogState.undiscovered);
     }
 
-    public void OnFogClearerMove() {
+    public void OnFogClearerEnterRoom(Room room) {
+        SetFog(FogState.visible, room.Bounds);
+    }
 
+    public void OnFogClearerLeaveRoom(Room room) {
+        bool roomOccupied = false;
+        foreach (var clearer in clearers) {
+            if (clearer.IsInRoom(room)) {
+                roomOccupied = true;
+                break;
+            }
+        }
+        if (!roomOccupied) {
+            SetFog(FogState.discovered, room.Bounds);
+        }
     }
 
     public void SetFog(FogState state) {
         BoundsInt bounds = new BoundsInt(Vector3Int.zero, new Vector3Int(size, size, 1));
-        SetFog(bounds, state);
+        SetFog(state, bounds);
     }
 
-    public void SetFog(BoundsInt bounds, FogState state) {
+    public void SetFog(FogState state, BoundsInt bounds) {
         TileBase[] tiles = new TileBase[size * size].Populate(fogDict[state]);
         fogTiles.SetTilesBlock(bounds, tiles);
+    }
+
+    public void AddClearer(FogClearer value) {
+        clearers.Add(value);
     }
 
 }

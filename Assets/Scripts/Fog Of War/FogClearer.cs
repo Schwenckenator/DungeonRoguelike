@@ -12,32 +12,43 @@ public class FogClearer : MonoBehaviour
     {
         dungeon = GameObject.FindGameObjectWithTag("Dungeon").GetComponent<Dungeon>();
         currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-        ClearFog(currentRoom);
+        Debug.Log(currentRoom);
+        FogOfWar.Instance.AddClearer(this);
+        FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
     }
 
     private void Update() {
         // Is current room null? Search for your room
         if(currentRoom == null) {
             currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
+            if(currentRoom != null) {
+                FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
+            }
             return;
         }
 
         // Are you no longer in the current room?
         if (!currentRoom.Bounds.Contains(transform.position.RoundToInt())){
-            //ReturnFog(currentRoom);
+
+            FogOfWar.Instance.OnFogClearerLeaveRoom(currentRoom);
+
             currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-            Debug.Log($"Current Room: {currentRoom.ToString()}");
-            ClearFog(currentRoom);
-            
+            Debug.Log(currentRoom);
+            if(currentRoom != null) {
+                FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
+            }
         } 
     }
 
-    public void ClearFog(Room room) {
-        //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-        FogOfWar.Instance.SetFog(room.Bounds, FogState.visible);
+    public bool IsInRoom(Room room) {
+        return room.Bounds.Contains(transform.position.RoundToInt());
     }
-    public void ReturnFog(Room room) {
-        //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-        FogOfWar.Instance.SetFog(room.Bounds, FogState.discovered);
-    }
+    //public void ClearFog(Room room) {
+    //    //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
+    //    FogOfWar.Instance.SetFog(room.Bounds, FogState.visible);
+    //}
+    //public void ReturnFog(Room room) {
+    //    //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
+    //    FogOfWar.Instance.SetFog(room.Bounds, FogState.discovered);
+    //}
 }
