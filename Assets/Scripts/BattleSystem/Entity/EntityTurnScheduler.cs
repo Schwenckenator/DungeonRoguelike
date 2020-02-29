@@ -91,7 +91,8 @@ public class EntityTurnScheduler : MonoBehaviour
 
         actionsRemaining -= numberOfActions;
         SetActionArrowsVisibility(actionsRemaining);
-        
+
+        myEntity.State = EntityState.idle;
 
         if (debug) {
             Debug.Log($"{this.ToString()} has {actionsRemaining} remaining.");
