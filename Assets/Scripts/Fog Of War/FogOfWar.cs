@@ -8,6 +8,8 @@ public enum FogState { undiscovered, discovered, visible }
 
 public class FogOfWar : MonoBehaviour
 {
+    public static FogOfWar Instance { get; private set; }
+
     public Tilemap fogTiles;
     public Tile undiscoveredTile;
     public Tile discoveredTile;
@@ -18,15 +20,8 @@ public class FogOfWar : MonoBehaviour
     
     // Start is called before the first frame update
     public void Initialise(Dungeon dungeon) {
+        Instance = this;
         size = dungeon.FilledArea.size;
-        //fogMap = new bool[size, size];
-
-        ////Fog is default true
-        //for (int x = 0; x < size; x++) {
-        //    for(int y = 0; y < size; y++) {
-        //        fogMap[x, y] = true;
-        //    }
-        //}
 
         fogDict = new Dictionary<FogState, Tile> {
             { FogState.visible, null },
@@ -47,5 +42,15 @@ public class FogOfWar : MonoBehaviour
         TileBase[] tiles = new TileBase[size * size].Populate(fogDict[state]);
         fogTiles.SetTilesBlock(bounds, tiles);
     }
+
+
+    //private void OnTriggerEnter2D(Collider2D collision) {
+    //    if (!collision.CompareTag("Entity")) return;
+    //    Entity entity = collision.GetComponent<Entity>();
+    //    if(entity.allegiance == EntityAllegiance.player) {
+    //        BoundsInt collisionArea = new BoundsInt(entity.transform.position.RoundToInt(), Vector3Int.one);
+    //        SetFog(collisionArea, FogState.visible);
+    //    }
+    //}
 
 }

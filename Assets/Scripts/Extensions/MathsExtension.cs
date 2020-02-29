@@ -65,6 +65,10 @@ public static class MathsExtension {
         }
         return vector2s.ToArray();
     }
+
+    public static Vector3Int RoundToInt(this Vector3 input) {
+        return new Vector3Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y), Mathf.RoundToInt(input.z));
+    }
     #endregion
 
     #region Vector3Int

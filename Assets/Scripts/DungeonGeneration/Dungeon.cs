@@ -80,6 +80,21 @@ public class Dungeon : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Returns the Room found at position. Returns null if no such room exists.
+    /// </summary>
+    public Room GetRoomOfPosition(Vector2Int position) {
+        return GetRoomOfPosition(position.ToVector3Int());
+    }
+    public Room GetRoomOfPosition(Vector3Int position) {
+        foreach (Room room in rooms) {
+            if (room.Bounds.Contains(position)) {
+                return room;
+            }
+        }
+        return null;
+    }
+
     private void OnDrawGizmos() {
         if (!showFilledArea) return;
 

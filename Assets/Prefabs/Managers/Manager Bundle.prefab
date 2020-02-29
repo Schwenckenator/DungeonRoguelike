@@ -278,8 +278,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fogTiles: {fileID: 35960181}
-  undiscovered: {fileID: 11400000, guid: c703c451e5f1c914ca3a433909ef3f04, type: 2}
-  discovered: {fileID: 11400000, guid: e05340f6919b9f74686e1f3cb95d2644, type: 2}
+  undiscoveredTile: {fileID: 11400000, guid: c703c451e5f1c914ca3a433909ef3f04, type: 2}
+  discoveredTile: {fileID: 11400000, guid: e05340f6919b9f74686e1f3cb95d2644, type: 2}
 --- !u!1001 &4998510161696613523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -347,6 +347,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1209282043229702824, guid: 2681b7a1d9e88c04d8724e116f410737,
+        type: 3}
+      propertyPath: fog
+      value: 
+      objectReference: {fileID: 841027606}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2681b7a1d9e88c04d8724e116f410737, type: 3}
 --- !u!1 &6167254308504759812 stripped
