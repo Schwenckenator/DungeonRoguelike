@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7013186433616244447}
   - component: {fileID: 2990717355629631846}
   - component: {fileID: 7191635266414379245}
+  - component: {fileID: 936641631}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -44,10 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4955291ff2ea8cf48b20b04b5797bd13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generateOnStart: 1
+  generateDungeon: 1
+  spawnEncounters: 1
+  spawnHeroes: 1
+  spawnItems: 0
+  startBattle: 1
   dungeon: {fileID: 0}
   encounterGenerator: {fileID: 0}
   heroSpawner: {fileID: 7191635266414379245}
+  itemGenerator: {fileID: 936641631}
 --- !u!114 &7191635266414379245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,3 +70,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f94d9f059ffb0864f91a4bca5a5bdf57, type: 2}
   - {fileID: 11400000, guid: a677e3aaf43c9b64fb83a7431cf14815, type: 2}
   - {fileID: 11400000, guid: 4b07725ce20341848b81d9a313427f56, type: 2}
+  - {fileID: 11400000, guid: 4b6fe433244d8b04dae4072c113927f0, type: 2}
+--- !u!114 &936641631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7738499642637106830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a03125e6936300545885116c5d1ae90c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemBase: {fileID: 1117206835429161428, guid: d6646bc820e60444fa996403d05326f7,
+    type: 3}
+  numberOfItems:
+    Min: 50
+    Max: 60
+  itemList:
+  - {fileID: 11400000, guid: 4089c34da80b08347b9feb92928d4fdc, type: 2}
+  - {fileID: 11400000, guid: dd9e699671d27f846a62b9b2d46df5fa, type: 2}

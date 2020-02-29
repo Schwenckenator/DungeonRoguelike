@@ -16,7 +16,7 @@ MonoBehaviour:
   abilities: []
   passives:
   - id: Armour_Body
-    attribute: 0
+    statType: 5
     operation: 0
     value: 5
   sprite: {fileID: 21300000, guid: 2a727ec92a475f74e93d4a472010e2e0, type: 3}
