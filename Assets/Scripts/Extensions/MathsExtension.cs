@@ -69,6 +69,12 @@ public static class MathsExtension {
     public static Vector3Int RoundToInt(this Vector3 input) {
         return new Vector3Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y), Mathf.RoundToInt(input.z));
     }
+    public static Vector3Int FloorToInt(this Vector3 input) {
+        return new Vector3Int(Mathf.FloorToInt(input.x), Mathf.FloorToInt(input.y), Mathf.FloorToInt(input.z));
+    }
+    public static Vector3Int CeilToInt(this Vector3 input) {
+        return new Vector3Int(Mathf.CeilToInt(input.x), Mathf.CeilToInt(input.y), Mathf.CeilToInt(input.z));
+    }
     #endregion
 
     #region Vector3Int

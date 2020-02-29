@@ -49,6 +49,14 @@ public class Room {
         }
     }
 
+    public bool Contains(Vector3 point) {
+        Bounds bounds = new Bounds(Bounds.center, Bounds.size);
+        return bounds.Contains(point);
+    }
+    public bool Contains(Vector3Int point) {
+        return Bounds.Contains(point);
+    }
+
     public Vector2Int RandomSpawnablePoint() {
         return SpawnableSquares.RandomItem();
     }
@@ -85,5 +93,8 @@ public class Room {
         Debug.Log(
             $"Room: {Bounds.center.ToString()}\nSize: {Bounds.size.ToString()}\nBounds: {Bounds.ToString()}" +
             $"Min X: {Bounds.xMin}, Max X: {Bounds.xMax}, Min Y: {Bounds.yMin}, Max Y:{Bounds.yMax}");
+    }
+    public override string ToString() {
+        return $"Room: {Bounds.ToString()}";
     }
 }

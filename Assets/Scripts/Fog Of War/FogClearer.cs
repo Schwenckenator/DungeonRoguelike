@@ -11,7 +11,7 @@ public class FogClearer : MonoBehaviour
     private void Start()
     {
         dungeon = GameObject.FindGameObjectWithTag("Dungeon").GetComponent<Dungeon>();
-        currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
+        currentRoom = dungeon.GetRoomOfPosition(transform.position);
         Debug.Log(currentRoom);
         FogOfWar.Instance.AddClearer(this);
         FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
@@ -19,29 +19,31 @@ public class FogClearer : MonoBehaviour
 
     private void Update() {
         // Is current room null? Search for your room
-        if(currentRoom == null) {
-            currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-            if(currentRoom != null) {
+        if (currentRoom == null) {
+            FindRoom();
+            if (currentRoom != null) {
                 FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
             }
             return;
         }
 
         // Are you no longer in the current room?
-        if (!currentRoom.Bounds.Contains(transform.position.RoundToInt())){
+        if (!currentRoom.Contains(transform.position)){
 
             FogOfWar.Instance.OnFogClearerLeaveRoom(currentRoom);
 
-            currentRoom = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
+            currentRoom = dungeon.GetRoomOfPosition(transform.position);
             Debug.Log(currentRoom);
-            if(currentRoom != null) {
-                FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
-            }
+            FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
         } 
     }
 
     public bool IsInRoom(Room room) {
-        return room.Bounds.Contains(transform.position.RoundToInt());
+        return room.Contains(transform.position);
+    }
+
+    private void FindRoom() {
+        currentRoom = dungeon.GetRoomOfPosition(transform.position);
     }
     //public void ClearFog(Room room) {
     //    //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());

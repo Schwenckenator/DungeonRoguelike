@@ -34,6 +34,7 @@ public class FogOfWar : MonoBehaviour
         clearers = new List<FogClearer>();
 
         SetFog(FogState.undiscovered);
+        //DebugSeeAllRooms();
     }
 
     public void OnFogClearerEnterRoom(Room room) {
@@ -66,5 +67,16 @@ public class FogOfWar : MonoBehaviour
     public void AddClearer(FogClearer value) {
         clearers.Add(value);
     }
+
+    #region Debug
+
+    private void DebugSeeAllRooms() {
+        SetFog(FogState.undiscovered);
+        foreach(Room room in dungeon.rooms) {
+            SetFog(FogState.visible, room.Bounds);
+        }
+    }
+
+    #endregion
 
 }

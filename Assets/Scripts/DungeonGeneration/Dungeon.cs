@@ -88,7 +88,15 @@ public class Dungeon : MonoBehaviour
     }
     public Room GetRoomOfPosition(Vector3Int position) {
         foreach (Room room in rooms) {
-            if (room.Bounds.Contains(position)) {
+            if (room.Contains(position)) {
+                return room;
+            }
+        }
+        return null;
+    }
+    public Room GetRoomOfPosition(Vector3 position) {
+        foreach (Room room in rooms) {
+            if (room.Contains(position)) {
                 return room;
             }
         }
