@@ -7,13 +7,16 @@ public class LevelStartManager : MonoBehaviour
     public bool generateDungeon = true;
     public bool spawnEncounters = true;
     public bool spawnHeroes = true;
+    public bool spawnItems = false;
     public bool startBattle = true;
+
 
     private bool isGenerating = false;
 
     public Dungeon dungeon;
     public EncounterGenerator encounterGenerator;
     public HeroSpawner heroSpawner;
+    public ItemGenerator itemGenerator;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +48,10 @@ public class LevelStartManager : MonoBehaviour
         //Generate Heroes
         if (spawnHeroes) {
             heroSpawner.SpawnHeroes(dungeon.rooms[0]); // first room
+        }
+        //Generate Items
+        if (spawnItems) {
+            itemGenerator.GenerateItems(dungeon);
         }
 
         //Start Battle

@@ -7,22 +7,22 @@ using UnityEngine;
 
 
 namespace GridPathfinding {
+
+    
+
     /// <summary>
-    /// This is a pathfinder that floods the grid from a start point and finds the best paths.
+    /// This is a pathfinder that floods the grid from a start point and finds the best paths
     /// </summary>
+    /// 
     public class BreadthFirstPathfinder : MonoBehaviour
     {
-        #region Public Fields
         public static bool readyToGetPath = true;
         public static BreadthFirstPathfinder Instance { get; private set; }
 
         public int size = 100;
-        public static readonly int stepCost = 10; //TODO: Replace with MapNode Cost
+        public static readonly int stepCost = 10;
         public float diagonalPenalty = 1.5f;
 
-        #endregion
-
-        #region Private Fields
         private bool originSet = false;
         private int[,] scoreMap;
 
@@ -32,9 +32,7 @@ namespace GridPathfinding {
         PathNode currentNode;
 
         private Thread pathThread; // Not sure what to do with this...
-        #endregion
 
-        #region Unity Callbacks 
         private void Awake() {
             Instance = this;
             scoreMap = new int[size, size];
@@ -44,29 +42,8 @@ namespace GridPathfinding {
             //maxScore = maxDistance * 10 + 5;
             //halfMax = maxScore / 2;
         }
-        private void OnDrawGizmos() {
-            if (originSet) {
+    
 
-
-                foreach (var node in visited) {
-                    Gizmos.color = new Color(1, 0, 0, 0.5f);
-                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-
-                }
-                foreach (var node in frontier) {
-
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-                }
-                if (currentNode != null) {
-                    Gizmos.color = Color.blue;
-                    Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
-                }
-            }
-        }
-        #endregion
-
-        #region Public Methods
         public void SetOrigin(Vector2Int origin, int maxSteps) {
         
             StartCoroutine(SetOriginCoroutine(origin, maxSteps));
@@ -172,6 +149,26 @@ namespace GridPathfinding {
         public static int StepsToDistance(int stepCount) {
             return stepCount * stepCost;
         }
-        #endregion
+
+        private void OnDrawGizmos() {
+            if (originSet) {
+            
+
+                foreach (var node in visited) {
+                    Gizmos.color = new Color(1, 0, 0, 0.5f);
+                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+                
+                }
+                foreach (var node in frontier) {
+
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+                }
+                if(currentNode != null) {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
+                }
+            }
+        }
     }
 }

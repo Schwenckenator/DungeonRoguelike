@@ -50,7 +50,7 @@ public class EntityTurnScheduler : MonoBehaviour
             BattleController.Instance.NextTurn();
             return;
         }
-
+        MainUI.Instance.SetAbilityBar(myEntity);
         //Say its my turn
         myTurn = true;
         actionsRemaining = actionsPerTurn;
@@ -99,7 +99,6 @@ public class EntityTurnScheduler : MonoBehaviour
         }
     }
 
-
     public void SetActionArrowsVisibility(int actions) {
         for(int i = 0; i < actionArrows.Length; i++) {
             actionArrows[i].enabled = i < actions;
@@ -111,6 +110,7 @@ public class EntityTurnScheduler : MonoBehaviour
     }
     public void ActionFinished() {
         currentlyPerformingAction = false;
+        MainUI.Instance.SetAbilityBar(myEntity); //Update ability bar after an action
         CheckForEndOfTurn();
     }
 

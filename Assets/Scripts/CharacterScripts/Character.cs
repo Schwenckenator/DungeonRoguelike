@@ -10,4 +10,10 @@ public class Character : ScriptableObject
     public Sprite deadSprite;
     public List<Ability> baseAbilities;
 
+//    public CharacterAttributes attributes;
+    public int grace;
+    public int intellect;
+    public int might;
+    public int vitality;
+
 }
