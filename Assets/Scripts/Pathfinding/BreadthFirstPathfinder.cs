@@ -20,6 +20,10 @@ namespace GridPathfinding {
         public static readonly int stepCost = 10; //TODO: Replace with MapNode Cost
         public float diagonalPenalty = 1.5f;
 
+        readonly Vector2Int[] DIRECTIONS = {
+                    Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left,
+                    new Vector2Int(1,1), new Vector2Int(1,-1), new Vector2Int(-1,-1), new Vector2Int(-1,1),
+                };
         #endregion
 
         #region Private Fields
@@ -64,12 +68,65 @@ namespace GridPathfinding {
                 }
             }
         }
+        List<PathNode> Neighbours(MapNode[,] map)
+        {
+            List<PathNode> neighbours = new List<PathNode>();
+            foreach (var next in DIRECTIONS)
+            {
+                int x = next.x + currentNode.position.x;
+                int y = next.y + currentNode.position.y;
+
+                if (!map[x, y].IsPathable) continue;
+
+                //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
+                int thisStepCost = stepCost;
+                if (Mathf.Abs(next.x + next.y) != 1)
+                {
+                    thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
+                }
+                //Debug.Log($"New neighbour's stepcost is {stepCost}.");
+                neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
+            }
+            return neighbours;
+
+        }
+
         #endregion
 
         #region Public Methods
         public void SetOrigin(Vector2Int origin, int maxSteps) {
         
             StartCoroutine(SetOriginCoroutine(origin, maxSteps));
+        }
+
+        public Vector2 NearestNeighbour(Vector2 closest)
+        {
+            MapNode[,] map = NodeMap.GetMap();
+
+            List<PathNode> neighbours = Neighbours(map);
+
+            PathNode closestNode = neighbours[0];
+            bool found = false;
+            float closestDistance = float.PositiveInfinity;
+
+            foreach (var neighbour in neighbours)
+            {
+
+                if (map[neighbour.position.x, neighbour.position.y].IsPathable)
+                {
+
+                    closestNode = neighbour;
+
+                    //Debug.Log($"Node {neighbour} already in frontier.");
+                    //continue;
+                }
+
+
+            }
+            return closestNode.position;
+
+
+
         }
 
         public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxSteps) {
@@ -93,27 +150,11 @@ namespace GridPathfinding {
                 frontier.Remove(currentNode);
                 visited.Add(currentNode);
 
-                Vector2Int[] directions = {
-                    Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left,
-                    new Vector2Int(1,1), new Vector2Int(1,-1), new Vector2Int(-1,-1), new Vector2Int(-1,1),
-                };
 
-                List<PathNode> neighbours = new List<PathNode>();
-                foreach (var next in directions) {
-                    int x = next.x + currentNode.position.x;
-                    int y = next.y + currentNode.position.y;
+                // Moved to function
+                List<PathNode> neighbours = Neighbours(map);
 
-                    if (!map[x, y].IsPathable) continue;
-
-                    //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
-                    int thisStepCost = stepCost;
-                    if(Mathf.Abs(next.x + next.y) != 1) {
-                        thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
-                    }
-                    //Debug.Log($"New neighbour's stepcost is {stepCost}.");
-                    neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
-                }
-                foreach(var neighbour in neighbours) {
+                foreach (var neighbour in neighbours) {
                     if (frontier.Contains(neighbour)) {
                         //Debug.Log($"Node {neighbour} already in frontier.");
                         continue;

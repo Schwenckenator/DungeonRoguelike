@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Pathfinding;
 using UnityEngine;
 
 namespace GridPathfinding {
@@ -80,12 +82,26 @@ namespace GridPathfinding {
                 return false;
         }
 
+        public Vector2 GoalToReachableCoord(Vector2Int origin, Vector2Int goal)
+        {
+            //Action<Vector2Int> aStarPath = new Action<Vector2Int> ;
 
+            Action<Vector2Int[]> pathCallBack = null;
+            AstarPathfinder.Instance.GetPathAsync(origin, goal, pathCallBack);
+
+            //public IEnumerator GetPathAsync(Vector2Int origin, Vector2Int goal, Action<Vector2Int[]> callback)
+
+
+            return new Vector2();
+        }
 
 
         #endregion
 
         #region Private Methods
+
+
+
 
         void SetOrigin(Vector2 point) {
 

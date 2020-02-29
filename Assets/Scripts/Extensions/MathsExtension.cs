@@ -85,6 +85,13 @@ public static class MathsExtension {
 
         return output;
     }
+    public static int RoundToInt(this float input)
+    {
+        float rounded = Mathf.Round(input);
+
+        int output = (int)rounded;
+        return output;
+    }
 
     public static bool IsWithin(this float value, float minimum, float maximum)
     {

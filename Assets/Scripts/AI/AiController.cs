@@ -101,7 +101,10 @@ public class AiController : MonoBehaviour
         //Debug.Log($"The vector clamped to magnitude 1 is {Vector3.ClampMagnitude(nearestEntity.transform.position - transform.position, 1f)}");
         //Debug.Log($"The adjacent square vector is {adjacentVector}.");
 
+        Vector2Int origin = new Vector2Int(transform.position.x.RoundToInt(), transform.position.y.RoundToInt());
+        Vector2Int goal = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
 
+        MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
 
         if (debug) debugCircle.gameObject.transform.position = adjacentVector;
 
