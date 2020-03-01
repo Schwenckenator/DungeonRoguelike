@@ -66,33 +66,56 @@ namespace GridPathfinding {
 
 
 
-        public bool PathCheck(Vector2 start, Vector2 finish)
+        public int PathCheckIntDistance(Vector2 goalToCheck)
         {
+            int length = 0;
             if (origin != null)
             {
-                goal = finish.RoundToInt();
+                goal = goalToCheck.RoundToInt();
 
-                var checkPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
+                var checkPath = BreadthFirstPathfinder.Instance.GetPath(goal, out length);
                 if (checkPath != null)
                 {
-                    return true;
+                    return length;
                 }
 
             }
-                return false;
+                return 0;
         }
 
-        public Vector2 GoalToReachableCoord(Vector2Int origin, Vector2Int goal)
+        public Vector2Int GoalToReachableCoord(Vector2Int origin, Vector2Int goal)
         {
             //Action<Vector2Int> aStarPath = new Action<Vector2Int> ;
 
             //Action<Vector2Int[]> pathCallBack = null;
-            Vector2Int[] path = AstarPathfinder.Instance.GetPath(origin, goal);
+            Vector2Int[] path = null;
+            float distance;
+            Vector2Int reachableGoal = new Vector2Int();
+            AstarPathfinder.Instance.GetPath(origin, goal,out path,out distance);
+
+            if (path == null)
+            {
+                return new Vector2Int();
+
+            }
+
+            Array.Reverse(path);
+
+            int pathDistance = 0;
+            foreach (Vector2 p in path)
+            {
+                pathDistance = PathCheckIntDistance(p);
+                if (pathDistance > 0)
+                {
+                    return p.RoundToVector2Int();
+                }
+            }
+
 
             //public IEnumerator GetPathAsync(Vector2Int origin, Vector2Int goal, Action<Vector2Int[]> callback)
 
 
-            return new Vector2();
+            return origin;
         }
 
 

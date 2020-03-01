@@ -15,7 +15,7 @@ namespace GridPathfinding {
             Instance = this;
         }
 
-        public void GetPath(Vector2Int origin, Vector2Int goal, out Vector2Int[] path, out float distance) {
+        public Vector2Int[] GetPath(Vector2Int origin, Vector2Int goal, out Vector2Int[] path, out float distance) {
             MapNode[,] map = NodeMap.GetMap();
             Debug.Log($"Path wanted from {origin} to {goal}!");
 
@@ -138,9 +138,11 @@ namespace GridPathfinding {
                 Debug.Log("Path not found.");
             }
 
+
+            return path;
         }
 
-        public Vector2Int[] GetPath(Vector2Int origin, Vector2Int goal)
+        public Vector2Int[] GetPathToGoal(Vector2Int origin, Vector2Int goal)
         {
             startedPathfinding = true;
             MapNode[,] map = NodeMap.GetMap();
@@ -281,6 +283,7 @@ namespace GridPathfinding {
             {
                 Debug.Log("Path not found.");
             }
+            startedPathfinding = false; 
 
             //Give the path
             return path;
@@ -417,7 +420,7 @@ namespace GridPathfinding {
         }
 
         private void OnDrawGizmos() {
-            if (startedPathfinding) {
+            if (startedPathfinding && open!=null) {
                 foreach (var node in open) {
 
                     Gizmos.color = Color.green;

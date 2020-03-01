@@ -50,6 +50,8 @@ public class AiController : MonoBehaviour
         if(nearestEntity == null) {
             //Do Nothing
             MyEntity.TurnScheduler.actionsRemaining = 0; // Naughty Matt!
+            MyEntity.TurnScheduler.ActionFinished();
+            return;
         }
 
 
@@ -62,17 +64,18 @@ public class AiController : MonoBehaviour
             MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
            
         } 
-        else if (!MyEntity.PathAgent.PathCheck(transform.position, nearestEntity.transform.position))
-        {
-            //Cannot find a path to the player
-            //TODO For now it just skips the turn after the delay.
-
-            MyEntity.TurnScheduler.actionsRemaining = 0;
-        }
+        //else if (MyEntity.PathAgent.PathCheck(nearestEntity.transform.position)==0)
+        //{
+        //    //Cannot find a path to the player
+        //    //TODO For now it just skips the turn after the delay.
+        //    int result = MyEntity.PathAgent.PathCheck(nearestEntity.transform.position);
+        //    Debug.Log("PATH CHECK Found: " + result);
+        //    MyEntity.TurnScheduler.actionsRemaining = 0;
+        //}
         else {
             //Valid path found and move to nearest entity.
             MoveToNearestPlayer(nearestEntity);
-            //MyEntity.TurnScheduler.actionsRemaining = 0;
+            MyEntity.TurnScheduler.actionsRemaining -= 1;
         }
 
         //If there are remaining actions
@@ -81,7 +84,7 @@ public class AiController : MonoBehaviour
             turnAttemptCount++;
             Invoke("DoTurn", 1f);
         } else {
-            turnAttemptCount = 0;
+            //turnAttemptCount = 0;
             MyEntity.TurnScheduler.ActionFinished();
             if (debug) Debug.Log("I have no actions left. Finished Turn.");
 
@@ -92,7 +95,7 @@ public class AiController : MonoBehaviour
         if (debug) Debug.Log("MoveToNearestPlayer Called");
 
         Vector3 adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
-        Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
+        //Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
         //Move towards target
         //Find position one square away from target
 
@@ -104,12 +107,19 @@ public class AiController : MonoBehaviour
         Vector2Int origin = new Vector2Int(transform.position.x.RoundToInt(), transform.position.y.RoundToInt());
         Vector2Int goal = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
 
-        MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
+        Vector2Int reachableGoal = MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
+        if (reachableGoal == origin)
+        {
+            //No path found
+            //return;
+        }
+        Vector2Int adjacentVector2D = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
 
-        if (debug) debugCircle.gameObject.transform.position = adjacentVector;
+        if (debug) debugCircle.gameObject.transform.position = new Vector3(reachableGoal.x,reachableGoal.y,0);
 
         float distanceFromGoal = minDistance;
-        MyEntity.PathAgent.SetGoalAndFindPath(adjacentVector2D);
+
+        MyEntity.PathAgent.SetGoalAndFindPath(reachableGoal);
 
         if (debug) Debug.Log("Finished set goal and find path.");
 
