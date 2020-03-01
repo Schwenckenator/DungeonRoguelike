@@ -83,15 +83,13 @@ namespace GridPathfinding {
                 return 0;
         }
 
+        /// <summary>
+        ///Using both Astar and Breathfirst to find closed node to goal
+        /// </summary>
         public Vector2Int GoalToReachableCoord(Vector2Int origin, Vector2Int goal)
         {
-            //Action<Vector2Int> aStarPath = new Action<Vector2Int> ;
 
-            //Action<Vector2Int[]> pathCallBack = null;
-            Vector2Int[] path = null;
-            float distance;
-            Vector2Int reachableGoal = new Vector2Int();
-            AstarPathfinder.Instance.GetPath(origin, goal,out path,out distance);
+            AstarPathfinder.Instance.GetPath(origin, goal, out Vector2Int[] path, out float distance);
 
             if (path == null)
             {
@@ -111,10 +109,7 @@ namespace GridPathfinding {
                 }
             }
 
-
-            //public IEnumerator GetPathAsync(Vector2Int origin, Vector2Int goal, Action<Vector2Int[]> callback)
-
-
+            //No path found
             return origin;
         }
 
@@ -135,8 +130,6 @@ namespace GridPathfinding {
         }
 
         bool PathFind() {
-            //NodeMap.Instance.GetPath(origin, goal, out lastPath, out float distance);
-            //AstarPathfinder.Instance.StartCoroutine(AstarPathfinder.Instance.GetPathAsync(origin, goal, FoundPath));
             lastPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
             if(lastPath == null) {
                 Debug.Log("Path not found!");
