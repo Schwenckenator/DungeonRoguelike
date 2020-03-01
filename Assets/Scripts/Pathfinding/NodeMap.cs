@@ -11,7 +11,7 @@ namespace GridPathfinding {
 
         private MapNode[,] Map { get; set; }
 
-        private static NodeMap instance;
+        public static NodeMap instance;
         private bool displayGizmos = false;
 
         #region Public Methods
@@ -43,6 +43,7 @@ namespace GridPathfinding {
         public void SetPathable(Vector2Int coords, bool isPathable) {
             Map[coords.x, coords.y].IsPathable = isPathable;
         }
+
 
         public void SetCost(Vector2Int coords, int cost) {
 
@@ -88,6 +89,11 @@ namespace GridPathfinding {
                 }
             }
             Debug.Log("Log dump complete.");
+        }
+
+        internal void SetPathable(Vector2Int? origin, bool v)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

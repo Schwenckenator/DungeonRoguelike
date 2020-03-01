@@ -99,6 +99,11 @@ public static class MathsExtension {
         return new Vector2Int(input.x.RoundToInt(), input.y.RoundToInt());
     }
 
+    public static Vector2 RestoreToVector2(this Vector2Int input)
+    {
+        return new Vector2((float)input.x, (float)input.y);
+    }
+
     public static Vector3Int RoundToVector3Int(this Vector3 input)
     {
         return new Vector3Int(input.x.RoundToInt(), input.y.RoundToInt(),input.y.RoundToInt());

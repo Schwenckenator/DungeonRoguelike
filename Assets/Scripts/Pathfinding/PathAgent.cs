@@ -46,6 +46,7 @@ namespace GridPathfinding {
         private void OnEnable() {
             //I have been enabled, it must be my turn!
             SetOrigin(transform.position);
+
         }
         #endregion
 
@@ -97,13 +98,18 @@ namespace GridPathfinding {
 
             }
 
+            //Reverse to get the closest possible to goal appear first
             Array.Reverse(path);
 
             int pathDistance = 0;
             foreach (Vector2 p in path)
             {
                 pathDistance = PathCheckIntDistance(p);
-                if (pathDistance > 0)
+                //TODO check for square occupied
+                bool occupied=false;
+
+
+                if (pathDistance > 0 && !occupied)
                 {
                     return p.RoundToVector2Int();
                 }
@@ -122,6 +128,11 @@ namespace GridPathfinding {
 
 
         void SetOrigin(Vector2 point) {
+            //TODO working on this at the moment
+            //Open the old origin position up
+            //if(origin!=null)NodeMap.instance.SetPathable(origin.Value, true);
+            ////Close the new origin position
+            //NodeMap.instance.SetPathable(point.RoundToVector2Int(), false);
 
             origin = point.RoundToInt();
             goal = Vector2Int.zero;
@@ -152,9 +163,12 @@ namespace GridPathfinding {
             if ((transform.position - goal.ToVector3Int()).sqrMagnitude < 0.01f) {
                 //Reached the goal!
                 transform.position = goal.ToVector3Int();
+
                 isMoving = false;
                 SetOrigin(goal);
+
                 myEntity.TurnScheduler.ActionFinished();
+                
                 return;
             }
 
