@@ -75,6 +75,7 @@ public class AiController : MonoBehaviour
         else {
             //Valid path found and move to nearest entity.
             MoveToNearestPlayer(nearestEntity);
+
             MyEntity.TurnScheduler.actionsRemaining -= 1;
         }
 
@@ -85,7 +86,7 @@ public class AiController : MonoBehaviour
             Invoke("DoTurn", 1f);
         } else {
             //turnAttemptCount = 0;
-            MyEntity.TurnScheduler.ActionFinished();
+            //MyEntity.TurnScheduler.ActionFinished();
             if (debug) Debug.Log("I have no actions left. Finished Turn.");
 
         }
@@ -94,7 +95,7 @@ public class AiController : MonoBehaviour
     private void MoveToNearestPlayer(Entity nearestEntity) {
         if (debug) Debug.Log("MoveToNearestPlayer Called");
 
-        Vector3 adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
+        //Vector3 adjacentVector = LerpByDistance(nearestEntity.transform.position, transform.position, minDistance);
         //Vector2 adjacentVector2D = new Vector2(adjacentVector.x, adjacentVector.y);
         //Move towards target
         //Find position one square away from target
@@ -113,7 +114,7 @@ public class AiController : MonoBehaviour
             //No path found
             //return;
         }
-        Vector2Int adjacentVector2D = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
+        //Vector2Int adjacentVector2D = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
 
         if (debug) debugCircle.gameObject.transform.position = new Vector3(reachableGoal.x,reachableGoal.y,0);
 
@@ -121,13 +122,14 @@ public class AiController : MonoBehaviour
 
         MyEntity.PathAgent.SetGoalAndFindPath(reachableGoal);
 
+
         if (debug) Debug.Log("Finished set goal and find path.");
 
         //Debug.DrawLine(transform.position, adjacentVector2D, Color.red, 10f);
 
     }
 
-
+    //Find the a distance point between two Vectors
     public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
     {
         Vector3 P = x * Vector3.Normalize(B - A) + A;
