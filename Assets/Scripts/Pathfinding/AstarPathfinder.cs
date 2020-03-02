@@ -136,6 +136,8 @@ namespace GridPathfinding {
                 Debug.Log($"Path found with size {path.Length}");
             } else {
                 Debug.Log("Path not found.");
+                //Hopefully stop infinity loop
+                path = new List<Vector2Int>().ToArray();
             }
 
 

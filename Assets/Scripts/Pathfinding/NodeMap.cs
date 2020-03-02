@@ -57,15 +57,8 @@ namespace GridPathfinding {
                 displayGizmos = !displayGizmos;
             }
         }
-        private void DebugDump() {
-            Debug.Log("Logging all map data...");
-            for (int x = 0; x < Map.GetUpperBound(0); x++) {
-                for (int y = 0; y < Map.GetUpperBound(1); y++) {
-                    Debug.Log($"Node {x},{y}. {Map[x, y].ToString()}");
-                }
-            }
-            Debug.Log("Log dump complete.");
-        }
+        #region Private Methods
+
         private void OnDrawGizmos() {
             if (!displayGizmos) return;
 
@@ -81,9 +74,7 @@ namespace GridPathfinding {
             }
 
         }
-        #endregion
 
-        #region Private Methods
         private void DebugDump() {
             Debug.Log("Logging all map data...");
             for (int x = 0; x < Map.GetUpperBound(0); x++) {
