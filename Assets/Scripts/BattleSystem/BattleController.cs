@@ -80,9 +80,9 @@ public class BattleController : MonoBehaviour {
         if(currentEntity != null) {
                         
             //Check if any more monsters aggro, if it is a hero
-            if (currentEntity.allegiance == EntityAllegiance.player) {
-                CheckForNewMonsterAggro();
-            }
+            //if (currentEntity.allegiance == EntityAllegiance.hero) {
+            //    CheckForNewMonsterAggro();
+            //}
 
             currentEntity.TurnScheduler.EndTurn();
         }
@@ -98,7 +98,7 @@ public class BattleController : MonoBehaviour {
         /* ***************************************/
         currentEntity = currentTurn.Entity;
 
-        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
+        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.hero);
         //MainUI.Instance.SetAbilityBar(currentEntity);
         FocusOnUnit.Instance.MoveCameraToUnit(currentEntity.transform);
         currentEntity.TurnScheduler.StartTurn();
@@ -129,7 +129,7 @@ public class BattleController : MonoBehaviour {
 
         //Find all heroes
         foreach (var entity in allPossibleCombatants) {
-            if(entity.allegiance == EntityAllegiance.player) {
+            if(entity.allegiance == EntityAllegiance.hero) {
                 //It's a hero!
                 heroes.Add(entity);
                 newCombatants.Add(entity);
@@ -171,7 +171,24 @@ public class BattleController : MonoBehaviour {
         foreach (var hit in hits) {
             if (hit.transform == hero.transform) continue; // Don't count yourself
             if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
-            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.player) continue; //Don't count heroes
+            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
+
+            //If it's here, it should be a monster!
+            Entity monster = hit.GetComponent<Entity>();
+
+            monsters.Add(monster);
+        }
+
+        return monsters.ToArray();
+    }
+
+    private Entity[] FindMonstersInBounds(BoundsInt bounds) {
+        var monsters = new List<Entity>();
+        Collider2D[] hits = Physics2D.OverlapAreaAll(bounds.min.ToVector2Int(), bounds.max.ToVector2Int());
+
+        foreach (var hit in hits) {
+            if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
+            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
 
             //If it's here, it should be a monster!
             Entity monster = hit.GetComponent<Entity>();
@@ -193,6 +210,15 @@ public class BattleController : MonoBehaviour {
 
     private void CheckForNewMonsterAggro() {
         var monsters = FindMonstersInRadius(currentEntity);
+        foreach (var monster in monsters) {
+            if (!EntitiesWithTurns().Contains(monster)) {
+                monster.TurnScheduler.ScheduleTurn();
+            }
+        }
+    }
+
+    public void CheckForNewMonsterAggro(BoundsInt bounds) {
+        var monsters = FindMonstersInBounds(bounds);
         foreach (var monster in monsters) {
             if (!EntitiesWithTurns().Contains(monster)) {
                 monster.TurnScheduler.ScheduleTurn();

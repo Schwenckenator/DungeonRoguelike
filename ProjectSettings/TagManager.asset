@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Entity
   - TargetingRing
+  - Dungeon
   layers:
   - Default
   - TransparentFX

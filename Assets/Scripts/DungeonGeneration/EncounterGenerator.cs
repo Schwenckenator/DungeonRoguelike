@@ -22,7 +22,7 @@ public class EncounterGenerator : MonoBehaviour
     }
 
     public IEnumerator GenerateEncounters(Dungeon dungeon) {
-        List<Room> freeRooms = dungeon.rooms;
+        List<Room> freeRooms = new List<Room>(dungeon.rooms);
 
         freeRooms.RemoveAt(0); // Remove the first room, that's where the heroes spawn
 
