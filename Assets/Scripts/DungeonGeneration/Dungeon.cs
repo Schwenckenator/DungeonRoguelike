@@ -16,7 +16,7 @@ public class Dungeon : MonoBehaviour
 
     public List<Room> rooms;
 
-
+    public FogOfWar fog;
 
     private IDungeonGenerator generator;
     private bool showFilledArea = false;
@@ -76,6 +76,23 @@ public class Dungeon : MonoBehaviour
 
     public IEnumerator GenerateDungeon() {
         yield return StartCoroutine(generator.GenerateDungeon(this));
+        
+        
+    }
+
+    /// <summary>
+    /// Returns the Room found at position. Returns null if no such room exists.
+    /// </summary>
+    public Room GetRoomOfPosition(Vector2Int position) {
+        return GetRoomOfPosition(position.ToVector3Int());
+    }
+    public Room GetRoomOfPosition(Vector3Int position) {
+        foreach (Room room in rooms) {
+            if (room.Contains(position)) {
+                return room;
+            }
+        }
+        return null;
     }
 
     private void OnDrawGizmos() {

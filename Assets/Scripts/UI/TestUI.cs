@@ -27,7 +27,8 @@ public class TestUI : MonoBehaviour
     public void SpawnUnits(int number) {
         Debug.Log($"Spawning {number} warriors.");
         for(int i=0; i < number; ++i) {
-            Spawn(hero, warrior);
+            //Spawn(hero, warrior);
+            Spawn(monster, goblin);
         }
     }
 
