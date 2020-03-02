@@ -27,6 +27,7 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
+        debugCircle = Instantiate(debugCircle);
     }
 
     // Update is called once per frame

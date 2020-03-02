@@ -65,7 +65,7 @@ namespace GridPathfinding {
                     }
                     pathList.Reverse();
                     //Path found
-                    return pathList.ToArray();
+                    path = pathList.ToArray();
 
                 }
 

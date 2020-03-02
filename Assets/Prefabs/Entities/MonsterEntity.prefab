@@ -28,7 +28,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a9c0db9b52d9e42b0d6ab6641931ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugCircle: {fileID: 5914022767571755628, guid: 723cc7f1853da42eab80d078668f24ac,
+  debugCircle: {fileID: 4944248538278691224, guid: 74769874fe5c747bfa54b2e90a781d2d,
     type: 3}
   minDistance: 1
   debug: 1
@@ -99,6 +99,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -443152729989545843, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -443152729989545843, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4128388199214397066, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: allegience
@@ -124,11 +134,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5688986333672390504, guid: 5a71753eb18b6b04db2df0e5430107c4,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4688124379612218704, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -150,6 +155,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5688986332596991928, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688986333672390504, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -194,16 +204,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -443152729989545843, guid: 5a71753eb18b6b04db2df0e5430107c4,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: -443152729989545843, guid: 5a71753eb18b6b04db2df0e5430107c4,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a71753eb18b6b04db2df0e5430107c4, type: 3}
