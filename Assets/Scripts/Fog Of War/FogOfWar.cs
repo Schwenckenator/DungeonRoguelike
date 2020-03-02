@@ -72,6 +72,9 @@ public class FogOfWar : MonoBehaviour
                 hidee.SetVisible(state == FogState.visible);
             }
         }
+        if(state == FogState.visible) {
+            BattleController.Instance.CheckForNewMonsterAggro(bounds);
+        }
     }
 
     public void AddClearer(FogClearer value) {

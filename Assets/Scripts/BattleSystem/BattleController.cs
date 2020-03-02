@@ -80,9 +80,9 @@ public class BattleController : MonoBehaviour {
         if(currentEntity != null) {
                         
             //Check if any more monsters aggro, if it is a hero
-            if (currentEntity.allegiance == EntityAllegiance.hero) {
-                CheckForNewMonsterAggro();
-            }
+            //if (currentEntity.allegiance == EntityAllegiance.hero) {
+            //    CheckForNewMonsterAggro();
+            //}
 
             currentEntity.TurnScheduler.EndTurn();
         }
@@ -182,6 +182,23 @@ public class BattleController : MonoBehaviour {
         return monsters.ToArray();
     }
 
+    private Entity[] FindMonstersInBounds(BoundsInt bounds) {
+        var monsters = new List<Entity>();
+        Collider2D[] hits = Physics2D.OverlapAreaAll(bounds.min.ToVector2Int(), bounds.max.ToVector2Int());
+
+        foreach (var hit in hits) {
+            if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
+            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
+
+            //If it's here, it should be a monster!
+            Entity monster = hit.GetComponent<Entity>();
+
+            monsters.Add(monster);
+        }
+
+        return monsters.ToArray();
+    }
+
     private List<Entity> EntitiesWithTurns() {
         var entitiesWithTurns = new List<Entity>();
         foreach(Turn turn in turnQueue) {
@@ -193,6 +210,15 @@ public class BattleController : MonoBehaviour {
 
     private void CheckForNewMonsterAggro() {
         var monsters = FindMonstersInRadius(currentEntity);
+        foreach (var monster in monsters) {
+            if (!EntitiesWithTurns().Contains(monster)) {
+                monster.TurnScheduler.ScheduleTurn();
+            }
+        }
+    }
+
+    public void CheckForNewMonsterAggro(BoundsInt bounds) {
+        var monsters = FindMonstersInBounds(bounds);
         foreach (var monster in monsters) {
             if (!EntitiesWithTurns().Contains(monster)) {
                 monster.TurnScheduler.ScheduleTurn();
