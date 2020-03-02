@@ -19,6 +19,9 @@ namespace GridPathfinding {
             MapNode[,] map = NodeMap.GetMap();
             Debug.Log($"Path wanted from {origin} to {goal}!");
 
+            //TODO Temporary fix for stopping infinity while loop
+            int laps = 0;
+            int MAXLAPS = 200;
             distance = -1;
             path = null;
 
@@ -31,6 +34,16 @@ namespace GridPathfinding {
 
             //While the open list is not empty
             while (open.Count > 0) {
+
+
+                //TODO temp solution to safe guard infinity loop
+                laps += 1;
+
+                if (laps >= MAXLAPS)
+                {
+                    return null;
+                }
+
                 //Debug.Log($"{open.Count} members in the open list.");
                 //Grab the node with the least F value
                 PathNode currentNode = open[0]; //Sorted list by F value
@@ -51,9 +64,9 @@ namespace GridPathfinding {
                         current = current.parent;
                     }
                     pathList.Reverse();
-                    path = pathList.ToArray();
+                    //Path found
+                    return pathList.ToArray();
 
-                    break;
                 }
 
                 //Debug.Log("Not at the goal, generating children.");
@@ -137,7 +150,7 @@ namespace GridPathfinding {
             } else {
                 Debug.Log("Path not found.");
                 //Hopefully stop infinity loop
-                path = new List<Vector2Int>().ToArray();
+                path = null;
             }
 
 

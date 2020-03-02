@@ -80,7 +80,7 @@ namespace GridPathfinding {
 
             if (path == null)
             {
-                return new Vector2Int();
+                return origin;
 
             }
 

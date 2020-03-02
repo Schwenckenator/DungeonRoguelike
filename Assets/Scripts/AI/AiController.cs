@@ -60,9 +60,20 @@ public class AiController : MonoBehaviour
         } 
         else {
             //Try to move closer to nearest entity.
-            MoveToNearestPlayer(nearestEntity);
 
-            MyEntity.TurnScheduler.actionsRemaining -= 1;
+
+
+            if (!MoveToNearestPlayer(nearestEntity))
+            {
+                if (debug) Debug.Log("Failed to move to target. Finishe Turn.");
+                MyEntity.TurnScheduler.actionsRemaining = 0;
+                MyEntity.TurnScheduler.ActionFinished();
+
+            }
+
+
+
+            //MyEntity.TurnScheduler.actionsRemaining -= 1;
         }
 
         //If there are remaining actions
@@ -75,7 +86,7 @@ public class AiController : MonoBehaviour
         }
     }
 
-    private void MoveToNearestPlayer(Entity nearestEntity) {
+    private bool MoveToNearestPlayer(Entity nearestEntity) {
         if (debug) Debug.Log("MoveToNearestPlayer Called");
 
         //Move towards target
@@ -92,6 +103,7 @@ public class AiController : MonoBehaviour
         if (reachableGoal == origin)
         {
             //No path found
+            return false;
         }
 
         if (debug) debugCircle.gameObject.transform.position = new Vector3(reachableGoal.x,reachableGoal.y,0);
@@ -102,7 +114,7 @@ public class AiController : MonoBehaviour
 
 
         if (debug) Debug.Log("Finished set goal and find path.");
-
+        return true;
 
         //MyEntity.ClickToMove.MoveOrder(targetPosition);
         
