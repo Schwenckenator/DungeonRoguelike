@@ -7,17 +7,20 @@ using UnityEngine;
 
 
 namespace GridPathfinding {
+
+    
+
     /// <summary>
-    /// This is a pathfinder that floods the grid from a start point and finds the best paths.
+    /// This is a pathfinder that floods the grid from a start point and finds the best paths
     /// </summary>
+    /// 
     public class BreadthFirstPathfinder : MonoBehaviour
     {
-        #region Public Fields
         public static bool readyToGetPath = true;
         public static BreadthFirstPathfinder Instance { get; private set; }
 
         public int size = 100;
-        public static readonly int stepCost = 10; //TODO: Replace with MapNode Cost
+        public static readonly int stepCost = 10;
         public float diagonalPenalty = 1.5f;
 
         readonly Vector2Int[] DIRECTIONS = {
@@ -36,9 +39,7 @@ namespace GridPathfinding {
         PathNode currentNode;
 
         private Thread pathThread; // Not sure what to do with this...
-        #endregion
 
-        #region Unity Callbacks 
         private void Awake() {
             Instance = this;
             scoreMap = new int[size, size];
@@ -48,9 +49,7 @@ namespace GridPathfinding {
             //maxScore = maxDistance * 10 + 5;
             //halfMax = maxScore / 2;
         }
-        private void OnDrawGizmos() {
-            if (originSet) {
-
+    
 
                 foreach (var node in visited) {
                     Gizmos.color = new Color(1, 0, 0, 0.5f);
@@ -146,21 +145,35 @@ namespace GridPathfinding {
             while(frontier.Count > 0) {
                 currentNode = frontier[0];
                 yield return null;
-                //Debug.Log($"Current node is {currentNode}.");
+                
                 frontier.Remove(currentNode);
                 visited.Add(currentNode);
 
 
-                // Moved to function
-                List<PathNode> neighbours = Neighbours(map);
+                List<PathNode> neighbours = new List<PathNode>();
+                foreach (var next in directions) {
+                    int x = next.x + currentNode.position.x;
+                    int y = next.y + currentNode.position.y;
+                    bool isDiagonal = Mathf.Abs(next.x + next.y) != 1;
 
-                foreach (var neighbour in neighbours) {
+
+                    if (!map[x, y].IsPathable) continue;
+                    if (isDiagonal && (!map[x - next.x, y].IsPathable || !map[x, y - next.y].IsPathable)) continue;
+
+                    int thisStepCost = stepCost;
+                    if(isDiagonal) {
+                        thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
+                    }
+                    //Debug.Log($"New neighbour's stepcost is {stepCost}.");
+                    neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
+                }
+                foreach(var neighbour in neighbours) {
+
+                    //Don't re-add nodes that will be or have been visited
                     if (frontier.Contains(neighbour)) {
-                        //Debug.Log($"Node {neighbour} already in frontier.");
                         continue;
                     }
                     if (visited.Contains(neighbour)) {
-                        //Debug.Log($"Node {neighbour} has been visited!");
                         continue;
                     }
 
@@ -174,9 +187,7 @@ namespace GridPathfinding {
                     }
                 
                 }
-
             }
-        
         
             Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
@@ -213,6 +224,26 @@ namespace GridPathfinding {
         public static int StepsToDistance(int stepCount) {
             return stepCount * stepCost;
         }
-        #endregion
+
+        private void OnDrawGizmos() {
+            if (originSet) {
+            
+
+                foreach (var node in visited) {
+                    Gizmos.color = new Color(1, 0, 0, 0.5f);
+                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+                
+                }
+                foreach (var node in frontier) {
+
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+                }
+                if(currentNode != null) {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
+                }
+            }
+        }
     }
 }

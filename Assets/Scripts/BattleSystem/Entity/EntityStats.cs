@@ -4,52 +4,63 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using System;
+using TMPro;
+
+
 
 public class EntityStats : MonoBehaviour
 {
-    public float health;
-    public float maxHealth;
+    private static readonly float vitalityToHealthMultiplier = 10;
+
+    public StatCollection stats;
 
     public bool isDead = false;
 
-    //public float TestDamage;
-    //public float TestHealing;
-
     public Image healthBar;
+    public TextMeshProUGUI healthText;
 
     private Entity myEntity;
 
+    #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
+        stats = new StatCollection(myEntity.character);
+        //stats.onHealthUpdate += UpdateHealthBar;
+        stats.onStatUpdate[StatType.health] += UpdateHealthBar;
+        stats.onStatUpdate[StatType.health] += CheckForDeath;
+        stats.Initialise();
     }
 
-    public void SetHealth(float newHealth) {
-        //Set Health
-        health = newHealth;
+    public void SetStat(StatType attr, int newValue) {
+        stats.Set(attr, newValue);
+    }
+    public void ModifyStatByValue(StatType attr, int value) {
+        int newValue = stats.Get(attr) + value;
+        SetStat(attr, newValue);
+    }
 
-        //Check for over/ underflow
+    internal void DebugLogStats() {
+        stats.DebugLogStats(myEntity);
+    }
+    #endregion
 
-        if(health < 0) {
-            health = 0;
-            Die();
-        }else if (health > maxHealth) {
-            health = maxHealth;
+    #region private methods
+    private void CheckForDeath(Stat health) {
+        if(health.ValueNow <= 0) {
+            isDead = true;
+            myEntity.Die();
         }
-
-        //Update health bar image
-
-        healthBar.fillAmount = (health / maxHealth);
     }
 
-    private void Die() {
-        isDead = true;
-        myEntity.Die();
+    private void UpdateHealthBar(Stat health) {
+        healthBar.fillAmount = (float)health.ValueNow / health.Max;
+        healthText.text = $"{health.ValueNow} / {health.Max}";
     }
 
-    public void ModifyHealth(float value) {
-        float newHealth = health + value;
-        SetHealth(newHealth);
-    }
+    
+
+    #endregion
+
 }
 
 [CustomEditor(typeof(EntityStats))]
@@ -57,7 +68,11 @@ public class EntityStatsEditor : Editor {
     public override void OnInspectorGUI() {
         DrawDefaultInspector();
 
-        //EntityStats myScript = (EntityStats)target;
+        EntityStats myScript = (EntityStats)target;
+
+        if(GUILayout.Button("Print Stats")) {
+            myScript.DebugLogStats();
+        }
         //if (GUILayout.Button("Set Health")) {
         //    myScript.SetHealth(myScript.health);
         //}

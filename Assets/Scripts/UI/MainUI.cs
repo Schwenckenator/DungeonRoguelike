@@ -9,8 +9,9 @@ using UnityEngine.UI;
 public class MainUI : MonoBehaviour
 {
     public static MainUI Instance { get; private set; }
-    public GameObject EndTurnButton;
+    public GameObject endTurnButton;
     public GameObject[] abilityButtons;
+    public GameObject pickUpItemButton;
 
     private void Start() {
         Instance = this;
@@ -37,7 +38,8 @@ public class MainUI : MonoBehaviour
             } else {
                 abilityButtons[i].SetActive(false);
             }
-            EndTurnButton.SetActive(true);
+            CheckShowPickupButton();
+            endTurnButton.SetActive(true);
         }
     }
 
@@ -45,7 +47,13 @@ public class MainUI : MonoBehaviour
         for (int i = 0; i < abilityButtons.Length; i++) {
             abilityButtons[i].SetActive(false);
         }
-        EndTurnButton.SetActive(false);
+        pickUpItemButton.SetActive(false);
+        endTurnButton.SetActive(false);
+    }
+
+    public void CheckShowPickupButton() {
+        bool show = BattleController.Instance.currentEntity.Inventory.IsCollidingWithWorldItem();
+        pickUpItemButton.SetActive(show);
     }
 
     public void Interact(int index) {
@@ -55,9 +63,14 @@ public class MainUI : MonoBehaviour
         //For Current entity, Change state to targeting.
         currentEntity.State = EntityState.targeting;
         currentEntity.Interaction.SetCurrentAbility(index);
-        
     }
 
+    public void PickUpItem() {
+        //Obtain reference for ease of use
+        Entity currentEntity = BattleController.Instance.currentEntity;
+
+        currentEntity.Inventory.PickUpItemsOnFloor();
+    }
 
     public void EndTurn() {
         BattleController.Instance.NextTurn();

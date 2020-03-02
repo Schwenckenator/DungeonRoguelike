@@ -27,6 +27,7 @@ public class EntitySpawner : MonoBehaviour
         GameObject newEntity = Instantiate(obj, position.ToVector3Int(), Quaternion.identity);
 
         newEntity.GetComponent<Entity>().character = character;
+        newEntity.name = $"{entityType} Entity ({character.name})";
         newEntity.GetComponent<Entity>().Initialise();
     }
 

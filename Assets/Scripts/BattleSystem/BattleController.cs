@@ -78,8 +78,7 @@ public class BattleController : MonoBehaviour {
         //Disable Control of Current Entity
         /* ***************************************/
         if(currentEntity != null) {
-            
-            
+                        
             //Check if any more monsters aggro, if it is a hero
             if (currentEntity.allegiance == EntityAllegiance.player) {
                 CheckForNewMonsterAggro();
@@ -100,7 +99,7 @@ public class BattleController : MonoBehaviour {
         currentEntity = currentTurn.Entity;
 
         PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
-        MainUI.Instance.SetAbilityBar(currentEntity);
+        //MainUI.Instance.SetAbilityBar(currentEntity);
         FocusOnUnit.Instance.MoveCameraToUnit(currentEntity.transform);
         currentEntity.TurnScheduler.StartTurn();
     }

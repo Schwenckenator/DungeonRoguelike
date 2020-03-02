@@ -6,13 +6,7 @@ public class AiController : MonoBehaviour
 {
     public Entity MyEntity { get; private set; }
 
-    public GameObject debugCircle;
-
     private int turnAttemptCount = 0;
-
-    public float minDistance = 1;
-    public bool debug = true;
-
     //Basic AI
 
     //Checks all enemies
@@ -27,9 +21,6 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
-
-        if (debug) debugCircle = Instantiate(debugCircle);
-
     }
 
     // Update is called once per frame
@@ -37,14 +28,13 @@ public class AiController : MonoBehaviour
     {
         
     }
-    public void StartTurn() 
-    {
-        if(debug)Debug.Log("AI TURN! Adding delay...");
+    public void StartTurn() {
+        Debug.Log("AI TURN! Adding delay...");
         Invoke("DoTurn", 2f);
     }
 
     private void DoTurn() {
-        if (debug) Debug.Log("Do my turn!");
+        Debug.Log("Do my turn!");
 
         Entity nearestEntity = GetNearestEntity(FindTargets());
         if(nearestEntity == null) {
@@ -53,8 +43,6 @@ public class AiController : MonoBehaviour
             MyEntity.TurnScheduler.ActionFinished();
             return;
         }
-
-
         float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
         if (distanceToEntity < 1.5f) {
@@ -73,7 +61,7 @@ public class AiController : MonoBehaviour
 
         //If there are remaining actions
         if(MyEntity.TurnScheduler.actionsRemaining > 0) {
-            if (debug) Debug.Log("I still have actions, doing turn again.");
+            Debug.Log("I still have actions, doing turn again.");
             turnAttemptCount++;
             Invoke("DoTurn", 1f);
         } else {
@@ -110,6 +98,8 @@ public class AiController : MonoBehaviour
         if (debug) Debug.Log("Finished set goal and find path.");
 
 
+        //MyEntity.ClickToMove.MoveOrder(targetPosition);
+        
     }
 
     //Find the a distance point between two Vectors

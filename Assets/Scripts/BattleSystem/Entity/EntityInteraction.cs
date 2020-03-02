@@ -36,7 +36,7 @@ public class EntityInteraction : MonoBehaviour
         myEntity = GetComponent<Entity>();
         //Debug.Log(myEntity.character.baseAbilities.Count.ToString());
         //Select first ability for safety
-        abilities = myEntity.character.baseAbilities;
+        abilities = new List<Ability>(myEntity.character.baseAbilities);
 
         //currentAbility = abilities[0];
         SetCurrentAbility(0);
@@ -148,7 +148,6 @@ public class EntityInteraction : MonoBehaviour
             actionCost = myEntity.TurnScheduler.actionsRemaining;
         }
         //Spend the actions
-
         myEntity.TurnScheduler.SpendActions(actionCost);
         Invoke("CheckForEndOfTurn", 1f);
         myEntity.State = EntityState.idle;
@@ -169,6 +168,7 @@ public class EntityInteraction : MonoBehaviour
         return true;
     }
 
+    //This may become "play animation" method
     private void CheckForEndOfTurn() {
         myEntity.TurnScheduler.ActionFinished();
     }
@@ -185,7 +185,14 @@ public class EntityInteraction : MonoBehaviour
             
         //}
     }
-
+    public void AddAbility(Ability ability) {
+        abilities.Add(ability);
+    }
+    public void RemoveAbility(Ability ability) {
+        if (abilities.Contains(ability)) {
+            abilities.Remove(ability);
+        }
+    }
 }
 
 [CustomEditor(typeof(EntityInteraction))]
