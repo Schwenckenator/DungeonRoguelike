@@ -8,7 +8,7 @@ namespace GridPathfinding {
 
         private MapNode[,] Map { get; set; }
 
-        private static NodeMap instance;
+        public static NodeMap instance;
         private bool displayGizmos = false;
 
         #region public methods
@@ -57,15 +57,8 @@ namespace GridPathfinding {
                 displayGizmos = !displayGizmos;
             }
         }
-        private void DebugDump() {
-            Debug.Log("Logging all map data...");
-            for (int x = 0; x < Map.GetUpperBound(0); x++) {
-                for (int y = 0; y < Map.GetUpperBound(1); y++) {
-                    Debug.Log($"Node {x},{y}. {Map[x, y].ToString()}");
-                }
-            }
-            Debug.Log("Log dump complete.");
-        }
+        #region Private Methods
+
         private void OnDrawGizmos() {
             if (!displayGizmos) return;
 
@@ -81,5 +74,21 @@ namespace GridPathfinding {
             }
 
         }
+
+        private void DebugDump() {
+            Debug.Log("Logging all map data...");
+            for (int x = 0; x < Map.GetUpperBound(0); x++) {
+                for (int y = 0; y < Map.GetUpperBound(1); y++) {
+                    Debug.Log($"Node {x},{y}. {Map[x, y].ToString()}");
+                }
+            }
+            Debug.Log("Log dump complete.");
+        }
+
+        internal void SetPathable(Vector2Int? origin, bool v)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Pathfinding;
 using UnityEngine;
 
 namespace GridPathfinding {
@@ -40,6 +42,7 @@ namespace GridPathfinding {
         private void OnEnable() {
             //I have been enabled, it must be my turn!
             SetOrigin(transform.position);
+
         }
         #endregion
 
@@ -50,9 +53,74 @@ namespace GridPathfinding {
             }
         }
 
-        #region private methods
+
+
+
+        public int PathCheckIntDistance(Vector2 goalToCheck)
+        {
+            int length = 0;
+            if (origin != null)
+            {
+                goal = goalToCheck.RoundToInt();
+
+                var checkPath = BreadthFirstPathfinder.Instance.GetPath(goal, out length);
+                if (checkPath != null)
+                {
+                    return length;
+                }
+
+            }
+                return 0;
+        }
+
+        /// <summary>
+        ///Using both Astar and Breathfirst to find closed node to goal
+        /// </summary>
+        public Vector2Int GoalToReachableCoord(Vector2Int origin, Vector2Int goal)
+        {
+
+            AstarPathfinder.Instance.GetPath(origin, goal, out Vector2Int[] path, out float distance);
+
+            if (path == null)
+            {
+                return origin;
+
+            }
+
+            //Reverse to get the closest possible to goal appear first
+            Array.Reverse(path);
+
+            int pathDistance = 0;
+            foreach (Vector2 p in path)
+            {
+                pathDistance = PathCheckIntDistance(p);
+                //TODO check for square occupied
+                bool occupied=false;
+
+
+                if (pathDistance > 0 && !occupied)
+                {
+                    return p.RoundToVector2Int();
+                }
+            }
+
+            //No path found
+            return origin;
+        }
+
+
+
+        #region Private Methods
+
+
+
 
         void SetOrigin(Vector2 point) {
+            //TODO working on this at the moment
+            //Open the old origin position up
+            //if(origin!=null)NodeMap.instance.SetPathable(origin.Value, true);
+            ////Close the new origin position
+            //NodeMap.instance.SetPathable(point.RoundToVector2Int(), false);
 
             origin = point.RoundToInt();
             goal = Vector2Int.zero;
@@ -60,13 +128,11 @@ namespace GridPathfinding {
             BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxSteps);
         }
 
-        void PathFind() {
-            //NodeMap.Instance.GetPath(origin, goal, out lastPath, out float distance);
-            //AstarPathfinder.Instance.StartCoroutine(AstarPathfinder.Instance.GetPathAsync(origin, goal, FoundPath));
+        bool PathFind() {
             lastPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
             if(lastPath == null) {
                 Debug.Log("Path not found!");
-                return;
+                return false;
             }
             pathIndex = 0;
             isMoving = true;
@@ -78,22 +144,34 @@ namespace GridPathfinding {
 
             myEntity.TurnScheduler.ActionStarted();
             myEntity.TurnScheduler.SpendActions(actionCost);
+            return true;
         }
 
         void Walk() {
             if ((transform.position - goal.ToVector3Int()).sqrMagnitude < 0.01f) {
                 //Reached the goal!
                 transform.position = goal.ToVector3Int();
+
                 isMoving = false;
                 SetOrigin(goal);
+
                 myEntity.TurnScheduler.ActionFinished();
+                
                 return;
             }
-            if ((transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
+
+            //Checked lastPath exists to stop null exception errors
+            if ((lastPath!=null && pathIndex < lastPath.Length) && (transform.position - lastPath[pathIndex].ToVector3Int()).sqrMagnitude < 0.01f) {
                 //Reached a sub-goal
                 pathIndex++;
             }
-            transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
+            if (lastPath != null && pathIndex < lastPath.Length) {
+                transform.position = Vector3.MoveTowards(transform.position, lastPath[pathIndex].ToVector3Int(), walkSpeed * Time.deltaTime);
+            }
+
+
+            return;
+
         }
         #endregion
     }

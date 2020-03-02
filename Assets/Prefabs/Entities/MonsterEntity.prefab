@@ -28,6 +28,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a9c0db9b52d9e42b0d6ab6641931ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugCircle: {fileID: 5914022767571755628, guid: 723cc7f1853da42eab80d078668f24ac,
+    type: 3}
+  minDistance: 1
+  debug: 1
 --- !u!1001 &7163113410882170835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109,6 +113,21 @@ PrefabInstance:
         type: 3}
       propertyPath: myTickDelay
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7339988922619381412, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4688124379612218704, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688986333672390504, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4688124379612218704, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}

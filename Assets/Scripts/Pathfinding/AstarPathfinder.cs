@@ -15,10 +15,13 @@ namespace GridPathfinding {
             Instance = this;
         }
 
-        public void GetPath(Vector2Int origin, Vector2Int goal, out Vector2Int[] path, out float distance) {
+        public Vector2Int[] GetPath(Vector2Int origin, Vector2Int goal, out Vector2Int[] path, out float distance) {
             MapNode[,] map = NodeMap.GetMap();
             Debug.Log($"Path wanted from {origin} to {goal}!");
 
+            //TODO Temporary fix for stopping infinity while loop
+            int laps = 0;
+            int MAXLAPS = 200;
             distance = -1;
             path = null;
 
@@ -31,6 +34,16 @@ namespace GridPathfinding {
 
             //While the open list is not empty
             while (open.Count > 0) {
+
+
+                //TODO temp solution to safe guard infinity loop
+                laps += 1;
+
+                if (laps >= MAXLAPS)
+                {
+                    return null;
+                }
+
                 //Debug.Log($"{open.Count} members in the open list.");
                 //Grab the node with the least F value
                 PathNode currentNode = open[0]; //Sorted list by F value
@@ -51,9 +64,9 @@ namespace GridPathfinding {
                         current = current.parent;
                     }
                     pathList.Reverse();
-                    path = pathList.ToArray();
+                    //Path found
+                    return pathList.ToArray();
 
-                    break;
                 }
 
                 //Debug.Log("Not at the goal, generating children.");
@@ -136,9 +149,15 @@ namespace GridPathfinding {
                 Debug.Log($"Path found with size {path.Length}");
             } else {
                 Debug.Log("Path not found.");
+                //Hopefully stop infinity loop
+                path = null;
             }
 
+
+            return path;
         }
+
+
 
         public IEnumerator GetPathAsync(Vector2Int origin, Vector2Int goal, Action<Vector2Int[]> callback) {
             startedPathfinding = true;
@@ -269,7 +288,7 @@ namespace GridPathfinding {
         }
 
         private void OnDrawGizmos() {
-            if (startedPathfinding) {
+            if (startedPathfinding && open!=null) {
                 foreach (var node in open) {
 
                     Gizmos.color = Color.green;

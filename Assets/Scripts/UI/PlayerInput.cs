@@ -13,6 +13,8 @@ public class PlayerInput : MonoBehaviour
 
     public Action<Vector2> onLeftMouseButtonPressed;
     public Action<Vector2> onRightMouseButtonPressed;
+    public Action<Transform> onSpaceButtonPressed;
+
     public Action<Vector2> onMouseHover;
 
     private Camera mainCamera;
@@ -37,6 +39,12 @@ public class PlayerInput : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1)) {
             onRightMouseButtonPressed?.Invoke(mousePosition);
+        }
+        if (Input.GetKeyDown("space"))
+        {
+            Debug.Log("Space pressed");
+
+            onSpaceButtonPressed?.Invoke(BattleController.Instance.getCurrentEntity().transform);
         }
         onMouseHover?.Invoke(mousePosition);
     }
