@@ -5,7 +5,7 @@ using UnityEngine;
 using GridPathfinding;
 
 public enum EntityState { inactive, targeting, moving, idle}
-public enum EntityAllegiance { player, monster}
+public enum EntityAllegiance { hero, monster}
 
 public class Entity : MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class Entity : MonoBehaviour
     public EntityStats Stats { get; private set; }
     public EntityTurnScheduler TurnScheduler { get; private set; }
     public PathAgent PathAgent { get; private set; }
+    public FogClearer FogClearer { get; private set; }
     //public ClickToMove ClickToMove { get; private set; }
     public EntityAllegiance allegiance;
 
@@ -30,26 +31,33 @@ public class Entity : MonoBehaviour
         {
             state = value;
             if(state == EntityState.moving) {
+
                 PathAgent.enabled = true;
                 Interaction.enabled = false;
-                
+                if (allegiance == EntityAllegiance.hero)
+                    FogClearer.enabled = true;
 
             } else if(state == EntityState.idle) {
 
-                //Debug.Log("SET IDLE");
                 PathAgent.enabled = true;
                 Interaction.enabled = false;
-                
+                if (allegiance == EntityAllegiance.hero)
+                    FogClearer.enabled = true;
+
 
             } else if(state == EntityState.targeting) {
                 PathAgent.enabled = false;
                 Interaction.enabled = true;
-                
+                if (allegiance == EntityAllegiance.hero)
+                    FogClearer.enabled = true;
+
 
             } else if(state == EntityState.inactive) {
                 PathAgent.enabled = false;
                 Interaction.enabled = false;
-                
+                if (allegiance == EntityAllegiance.hero)
+                    FogClearer.enabled = false;
+
             }
         }
     }
@@ -68,6 +76,9 @@ public class Entity : MonoBehaviour
         Stats = GetComponent<EntityStats>();
         TurnScheduler = GetComponent<EntityTurnScheduler>();
         PathAgent = GetComponent<PathAgent>();
+        if(allegiance == EntityAllegiance.hero) {
+            FogClearer = GetComponent<FogClearer>();
+        }
 
         State = EntityState.inactive;
 

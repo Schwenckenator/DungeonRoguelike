@@ -80,7 +80,7 @@ public class BattleController : MonoBehaviour {
         if(currentEntity != null) {
                         
             //Check if any more monsters aggro, if it is a hero
-            if (currentEntity.allegiance == EntityAllegiance.player) {
+            if (currentEntity.allegiance == EntityAllegiance.hero) {
                 CheckForNewMonsterAggro();
             }
 
@@ -98,7 +98,7 @@ public class BattleController : MonoBehaviour {
         /* ***************************************/
         currentEntity = currentTurn.Entity;
 
-        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.player);
+        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.hero);
         //MainUI.Instance.SetAbilityBar(currentEntity);
         FocusOnUnit.Instance.MoveCameraToUnit(currentEntity.transform);
         currentEntity.TurnScheduler.StartTurn();
@@ -129,7 +129,7 @@ public class BattleController : MonoBehaviour {
 
         //Find all heroes
         foreach (var entity in allPossibleCombatants) {
-            if(entity.allegiance == EntityAllegiance.player) {
+            if(entity.allegiance == EntityAllegiance.hero) {
                 //It's a hero!
                 heroes.Add(entity);
                 newCombatants.Add(entity);
@@ -171,7 +171,7 @@ public class BattleController : MonoBehaviour {
         foreach (var hit in hits) {
             if (hit.transform == hero.transform) continue; // Don't count yourself
             if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
-            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.player) continue; //Don't count heroes
+            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
 
             //If it's here, it should be a monster!
             Entity monster = hit.GetComponent<Entity>();

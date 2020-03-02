@@ -17,6 +17,7 @@ public class FogOfWar : MonoBehaviour
 
     private Dictionary<FogState, Tile> fogDict;
     private List<FogClearer> clearers;
+    private List<FogHidee> hidees;
     private Dungeon dungeon;
 
     private void Awake() {
@@ -34,6 +35,7 @@ public class FogOfWar : MonoBehaviour
         };
 
         clearers = new List<FogClearer>();
+        hidees = new List<FogHidee>();
 
         SetFog(FogState.undiscovered);
         //DebugSeeAllRooms();
@@ -64,10 +66,20 @@ public class FogOfWar : MonoBehaviour
     public void SetFog(FogState state, BoundsInt bounds) {
         TileBase[] tiles = new TileBase[size * size].Populate(fogDict[state]);
         fogTiles.SetTilesBlock(bounds, tiles);
+
+        foreach (FogHidee hidee in hidees) {
+            if (bounds.Contains(hidee.transform.position.RoundToInt())) {
+                hidee.SetVisible(state == FogState.visible);
+            }
+        }
     }
 
     public void AddClearer(FogClearer value) {
         clearers.Add(value);
+    }
+
+    public void AddHidee(FogHidee value) {
+        hidees.Add(value);
     }
 
     #region Debug

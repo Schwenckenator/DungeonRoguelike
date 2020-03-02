@@ -49,12 +49,4 @@ public class FogClearer : MonoBehaviour
     private Room FindCurrentRoom() {
         return dungeon.GetRoomOfPosition(transform.position.RoundToInt());
     }
-    //public void ClearFog(Room room) {
-    //    //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-    //    FogOfWar.Instance.SetFog(room.Bounds, FogState.visible);
-    //}
-    //public void ReturnFog(Room room) {
-    //    //Room room = dungeon.GetRoomOfPosition(transform.position.RoundToInt());
-    //    FogOfWar.Instance.SetFog(room.Bounds, FogState.discovered);
-    //}
 }
