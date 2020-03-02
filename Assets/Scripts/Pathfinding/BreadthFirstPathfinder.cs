@@ -27,7 +27,6 @@ namespace GridPathfinding {
                     Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left,
                     new Vector2Int(1,1), new Vector2Int(1,-1), new Vector2Int(-1,-1), new Vector2Int(-1,1),
                 };
-        #endregion
 
         #region Private Fields
         private bool originSet = false;
@@ -49,7 +48,12 @@ namespace GridPathfinding {
             //maxScore = maxDistance * 10 + 5;
             //halfMax = maxScore / 2;
         }
-    
+
+        private void OnDrawGizmos()
+        {
+            if (originSet)
+            {
+
 
                 foreach (var node in visited) {
                     Gizmos.color = new Color(1, 0, 0, 0.5f);
@@ -151,7 +155,7 @@ namespace GridPathfinding {
 
 
                 List<PathNode> neighbours = new List<PathNode>();
-                foreach (var next in directions) {
+                foreach (var next in DIRECTIONS) {
                     int x = next.x + currentNode.position.x;
                     int y = next.y + currentNode.position.y;
                     bool isDiagonal = Mathf.Abs(next.x + next.y) != 1;
@@ -225,25 +229,27 @@ namespace GridPathfinding {
             return stepCount * stepCost;
         }
 
-        private void OnDrawGizmos() {
-            if (originSet) {
+        //This go duplicated in the merge conflict
+        //private void OnDrawGizmos() {
+        //    if (originSet) {
             
 
-                foreach (var node in visited) {
-                    Gizmos.color = new Color(1, 0, 0, 0.5f);
-                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+        //        foreach (var node in visited) {
+        //            Gizmos.color = new Color(1, 0, 0, 0.5f);
+        //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
                 
-                }
-                foreach (var node in frontier) {
+        //        }
+        //        foreach (var node in frontier) {
 
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-                }
-                if(currentNode != null) {
-                    Gizmos.color = Color.blue;
-                    Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
-                }
-            }
-        }
+        //            Gizmos.color = Color.green;
+        //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+        //        }
+        //        if(currentNode != null) {
+        //            Gizmos.color = Color.blue;
+        //            Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
+        //        }
+        //    }
+        //}
     }
 }
+#endregion

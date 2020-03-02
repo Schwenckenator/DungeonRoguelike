@@ -106,7 +106,6 @@ namespace GridPathfinding {
         }
 
 
-        #endregion
 
         #region Private Methods
 
@@ -130,7 +129,7 @@ namespace GridPathfinding {
             lastPath = BreadthFirstPathfinder.Instance.GetPath(goal, out int length);
             if(lastPath == null) {
                 Debug.Log("Path not found!");
-                return;
+                return false;
             }
             pathIndex = 0;
             isMoving = true;
@@ -142,6 +141,7 @@ namespace GridPathfinding {
 
             myEntity.TurnScheduler.ActionStarted();
             myEntity.TurnScheduler.SpendActions(actionCost);
+            return true;
         }
 
         void Walk() {

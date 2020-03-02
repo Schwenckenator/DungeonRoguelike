@@ -6,7 +6,13 @@ public class AiController : MonoBehaviour
 {
     public Entity MyEntity { get; private set; }
 
+
+    public GameObject debugCircle;
+
     private int turnAttemptCount = 0;
+
+    public float minDistance = 1;
+    public bool debug = true;
     //Basic AI
 
     //Checks all enemies
