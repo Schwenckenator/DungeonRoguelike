@@ -140,7 +140,7 @@ namespace GridPathfinding {
                     bool isDiagonal = Mathf.Abs(next.x + next.y) != 1;
 
 
-                    if (!map[x, y].IsPathable) continue;
+                    if (!map[x, y].IsPathable || map[x,y].IsOccupied) continue;
                     if (isDiagonal && (!map[x - next.x, y].IsPathable || !map[x, y - next.y].IsPathable)) continue;
 
                     int thisStepCost = stepCost;

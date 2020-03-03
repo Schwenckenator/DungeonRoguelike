@@ -42,6 +42,11 @@ namespace GridPathfinding {
             instance.Map[coords.x, coords.y].IsPathable = isPathable;
         }
 
+        public static void SetOccupied(Vector2Int coords, bool isOccupied) {
+            Debug.Log($"Node {coords} set IsOccupied to {isOccupied}");
+            instance.Map[coords.x, coords.y].IsOccupied = isOccupied;
+        }
+
         public static void SetCost(Vector2Int coords, int cost) {
             throw new NotImplementedException();
         }

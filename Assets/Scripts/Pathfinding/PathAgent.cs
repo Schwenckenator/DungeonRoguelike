@@ -24,7 +24,7 @@ namespace GridPathfinding {
             myEntity = GetComponent<Entity>();
 
             //Reserve my current space
-            NodeMap.SetPathable(transform.position.RoundToInt().ToVector2Int(), false);
+            NodeMap.SetOccupied(transform.position.RoundToInt().ToVector2Int(), true);
         }
 
         #region Unity Callbacks
@@ -156,8 +156,8 @@ namespace GridPathfinding {
                 transform.position = goal.ToVector3Int();
 
                 //Free original space, restrict new space
-                NodeMap.SetPathable(origin.Value, true);
-                NodeMap.SetPathable(goal, false);
+                NodeMap.SetOccupied(origin.Value, false);
+                NodeMap.SetOccupied(goal, true);
 
                 isMoving = false;
                 SetOrigin(goal);
