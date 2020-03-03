@@ -111,7 +111,9 @@ namespace GridPathfinding {
             return origin;
         }
 
-
+        public void FreeMySpace() {
+            NodeMap.SetOccupied(transform.position.RoundToInt().ToVector2Int(), false);
+        }
 
         #region Private Methods
 
