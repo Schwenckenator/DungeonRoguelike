@@ -39,6 +39,9 @@ namespace GridPathfinding {
 
         private Thread pathThread; // Not sure what to do with this...
 
+        #endregion
+
+        #region Unity Callbacks
         private void Awake() {
             Instance = this;
             scoreMap = new int[size, size];
@@ -53,8 +56,6 @@ namespace GridPathfinding {
         {
             if (originSet)
             {
-
-
                 foreach (var node in visited) {
                     Gizmos.color = new Color(1, 0, 0, 0.5f);
                     Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
@@ -71,29 +72,7 @@ namespace GridPathfinding {
                 }
             }
         }
-        List<PathNode> Neighbours(MapNode[,] map)
-        {
-            List<PathNode> neighbours = new List<PathNode>();
-            foreach (var next in DIRECTIONS)
-            {
-                int x = next.x + currentNode.position.x;
-                int y = next.y + currentNode.position.y;
-
-                if (!map[x, y].IsPathable) continue;
-
-                //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
-                int thisStepCost = stepCost;
-                if (Mathf.Abs(next.x + next.y) != 1)
-                {
-                    thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
-                }
-                //Debug.Log($"New neighbour's stepcost is {stepCost}.");
-                neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
-            }
-            return neighbours;
-
-        }
-
+        
         #endregion
 
         #region Public Methods
@@ -228,16 +207,38 @@ namespace GridPathfinding {
         public static int StepsToDistance(int stepCount) {
             return stepCount * stepCost;
         }
+        #endregion
 
+        #region Private Methods
+        List<PathNode> Neighbours(MapNode[,] map) {
+            List<PathNode> neighbours = new List<PathNode>();
+            foreach (var next in DIRECTIONS) {
+                int x = next.x + currentNode.position.x;
+                int y = next.y + currentNode.position.y;
+
+                if (!map[x, y].IsPathable) continue;
+
+                //Debug.Log($"x={next.x}, y={next.y}, x+y={next.x + next.y}, Abs(x+y)={Mathf.Abs(next.x + next.y)}.");
+                int thisStepCost = stepCost;
+                if (Mathf.Abs(next.x + next.y) != 1) {
+                    thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
+                }
+                //Debug.Log($"New neighbour's stepcost is {stepCost}.");
+                neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
+            }
+            return neighbours;
+
+        }
+        #endregion
         //This go duplicated in the merge conflict
         //private void OnDrawGizmos() {
         //    if (originSet) {
-            
+
 
         //        foreach (var node in visited) {
         //            Gizmos.color = new Color(1, 0, 0, 0.5f);
         //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-                
+
         //        }
         //        foreach (var node in frontier) {
 
@@ -252,4 +253,3 @@ namespace GridPathfinding {
         //}
     }
 }
-#endregion

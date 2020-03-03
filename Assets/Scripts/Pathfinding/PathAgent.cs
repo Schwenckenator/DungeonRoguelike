@@ -22,6 +22,9 @@ namespace GridPathfinding {
 
         public void Initialise() {
             myEntity = GetComponent<Entity>();
+
+            //Reserve my current space
+            NodeMap.SetPathable(transform.position.RoundToInt().ToVector2Int(), false);
         }
 
         #region Unity Callbacks
@@ -152,11 +155,15 @@ namespace GridPathfinding {
                 //Reached the goal!
                 transform.position = goal.ToVector3Int();
 
+                //Free original space, restrict new space
+                NodeMap.SetPathable(origin.Value, true);
+                NodeMap.SetPathable(goal, false);
+
                 isMoving = false;
                 SetOrigin(goal);
 
                 myEntity.TurnScheduler.ActionFinished();
-                
+
                 return;
             }
 
