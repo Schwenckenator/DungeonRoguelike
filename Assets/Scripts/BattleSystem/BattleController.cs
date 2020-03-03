@@ -225,9 +225,10 @@ public class BattleController : MonoBehaviour {
 
     public void CheckForNewMonsterAggro(BoundsInt bounds) {
         var monsters = FindMonstersInBounds(bounds);
+        int tickDelay = 1;
         foreach (var monster in monsters) {
             if (!EntitiesWithTurns().Contains(monster)) {
-                monster.TurnScheduler.ScheduleTurn();
+                monster.TurnScheduler.ScheduleTurn(tickDelay);
             }
         }
     }
