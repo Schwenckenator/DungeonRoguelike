@@ -95,5 +95,6 @@ public class Entity : MonoBehaviour
     //TODO: Graphics should be moved out of this script
     public void Die() {
         spriteRenderer.sprite = character.deadSprite;
+        PathAgent.FreeMySpace();
     }
 }
