@@ -14,6 +14,10 @@ public class EntityInventory : MonoBehaviour
         myEntity = GetComponent<Entity>();
         items = new List<Item>();
         itemsStoodOn = new List<WorldItem>();
+
+        foreach(Item item in myEntity.character.startingItems) {
+            AddItem(item);
+        }
     }
 
     public void AddItem(Item item) {
