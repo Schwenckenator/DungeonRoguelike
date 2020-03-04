@@ -84,14 +84,6 @@ namespace GridPathfinding {
                     if (!map[x, y].IsPathable || (map[x,y].IsOccupied && new Vector2Int(x, y) != goal)) continue;
                     children.Add(new PathNode(currentNode, new Vector2Int(x, y)));
                 }
-                //for (int x = -1; x <= 1; x++) {
-                //    for (int y = -1; y <= 1; y++) {
-                //        if (x == 0 && y == 0) continue;
-                //        //Debug.Log($"Checking square {x}, {y}.");
-                //        if (!map[x + currentNode.position.x, y + currentNode.position.y].IsPathable) continue;
-                //        children.Add(new PathNode(currentNode, new Vector2Int(x + currentNode.position.x, y + currentNode.position.y)));
-                //    }
-                //}
 
                 //For each child in children
                 foreach (PathNode child in children) {
