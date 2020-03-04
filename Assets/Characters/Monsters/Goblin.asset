@@ -18,6 +18,8 @@ MonoBehaviour:
     type: 3}
   baseAbilities:
   - {fileID: 11400000, guid: 4e0b513774d18ba49ac2d8c8910893c7, type: 2}
+  startingItems:
+  - {fileID: 11400000, guid: 6a5426bf7efc64c47b949a9a19993ae9, type: 2}
   grace: 5
   intellect: 5
   might: 5

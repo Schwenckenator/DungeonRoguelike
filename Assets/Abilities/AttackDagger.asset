@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AttackDagger
   m_EditorClassIdentifier: 
   name: Dagger
+  sortingIndex: 10
   targetType: 3
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,3 +27,4 @@ MonoBehaviour:
   range: 1
   minValue: 15
   maxValue: 25
+  snapToGrid: 1

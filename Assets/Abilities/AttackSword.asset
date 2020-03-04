@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AttackSword
   m_EditorClassIdentifier: 
   name: Sword
+  sortingIndex: 10
   targetType: 3
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,3 +27,4 @@ MonoBehaviour:
   range: 1
   minValue: 25
   maxValue: 35
+  snapToGrid: 1

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SpellHealingTouch
   m_EditorClassIdentifier: 
   name: Healing Touch
+  sortingIndex: 30
   targetType: 4
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,3 +27,4 @@ MonoBehaviour:
   range: 1
   minValue: 20
   maxValue: 25
+  snapToGrid: 1

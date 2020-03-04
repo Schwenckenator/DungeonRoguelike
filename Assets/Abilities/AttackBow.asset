@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AttackBow
   m_EditorClassIdentifier: 
   name: Bow
+  sortingIndex: 15
   targetType: 3
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,3 +27,4 @@ MonoBehaviour:
   range: 10
   minValue: 20
   maxValue: 30
+  snapToGrid: 1
