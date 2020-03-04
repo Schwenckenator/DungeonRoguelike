@@ -11,6 +11,11 @@ namespace GridPathfinding {
         private List<PathNode> open;
         private List<PathNode> closed;
 
+        readonly Vector2Int[] DIRECTIONS = {
+                Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left,
+                new Vector2Int(1,1), new Vector2Int(1,-1), new Vector2Int(-1,-1), new Vector2Int(-1,1),
+            };
+
         private void Awake() {
             Instance = this;
         }
@@ -39,8 +44,7 @@ namespace GridPathfinding {
                 //TODO temp solution to safe guard infinity loop
                 laps += 1;
 
-                if (laps >= MAXLAPS)
-                {
+                if (laps >= MAXLAPS) {
                     return null;
                 }
 
@@ -73,13 +77,12 @@ namespace GridPathfinding {
                 //Generate Children
                 List<PathNode> children = new List<PathNode>();
                 //The children are all of the adjacent nodes
-                for (int x = -1; x <= 1; x++) {
-                    for (int y = -1; y <= 1; y++) {
-                        if (x == 0 && y == 0) continue;
-                        //Debug.Log($"Checking square {x}, {y}.");
-                        if (!map[x + currentNode.position.x, y + currentNode.position.y].IsPathable) continue;
-                        children.Add(new PathNode(currentNode, new Vector2Int(x + currentNode.position.x, y + currentNode.position.y)));
-                    }
+                foreach (var next in DIRECTIONS) {
+                    int x = next.x + currentNode.position.x;
+                    int y = next.y + currentNode.position.y;
+
+                    if (!map[x, y].IsPathable || (map[x,y].IsOccupied && new Vector2Int(x, y) != goal)) continue;
+                    children.Add(new PathNode(currentNode, new Vector2Int(x, y)));
                 }
 
                 //For each child in children
