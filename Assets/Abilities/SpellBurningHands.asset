@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SpellBurningHands
   m_EditorClassIdentifier: 
   name: Burning Hands
+  sortingIndex: 30
   targetType: 5
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,4 +27,5 @@ MonoBehaviour:
   range: 3
   minValue: 25
   maxValue: 45
+  snapToGrid: 1
   angle: 90

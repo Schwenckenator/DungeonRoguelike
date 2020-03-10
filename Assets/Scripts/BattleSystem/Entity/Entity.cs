@@ -82,9 +82,9 @@ public class Entity : MonoBehaviour
 
         State = EntityState.inactive;
 
+        Stats.Initialise();
         Interaction.Initialise();
         Inventory.Initialise();
-        Stats.Initialise();
         TurnScheduler.Initialise();
         PathAgent.Initialise();
 

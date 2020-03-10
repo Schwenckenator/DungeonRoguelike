@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AttackPunch
   m_EditorClassIdentifier: 
   name: Punch
+  sortingIndex: 10
   targetType: 3
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,3 +27,4 @@ MonoBehaviour:
   range: 1
   minValue: 5
   maxValue: 15
+  snapToGrid: 1

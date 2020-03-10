@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEditor;
 
-public class EntityInteraction : MonoBehaviour
-{
-    
+public class EntityInteraction : MonoBehaviour {
+
     public List<Ability> abilities; //Set this in inspector
 
     public Collider2D selector;
@@ -16,7 +15,7 @@ public class EntityInteraction : MonoBehaviour
     private Entity myEntity;
     private Ability currentAbility;
     private ContactFilter2D contactFilter;
-    
+
     private void OnEnable() {
         PlayerInput.Instance.onMouseHover += HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed += SelectTarget;
@@ -34,19 +33,18 @@ public class EntityInteraction : MonoBehaviour
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        //Debug.Log(myEntity.character.baseAbilities.Count.ToString());
-        //Select first ability for safety
         abilities = new List<Ability>(myEntity.character.baseAbilities);
 
-        //currentAbility = abilities[0];
-        SetCurrentAbility(0);
+        //Select first ability for safety.... Do I actually need this??
+        //SetCurrentAbility(0);
+
         contactFilter = new ContactFilter2D();
         contactFilter.NoFilter();
-        
+
     }
 
     private void Update() {
-        if(myEntity.State != EntityState.targeting) {
+        if (myEntity.State != EntityState.targeting) {
             Debug.LogError("This should not run while not targeting. Aborting.");
             this.enabled = false;
             return;
@@ -54,24 +52,12 @@ public class EntityInteraction : MonoBehaviour
     }
 
     private void HoverOverTarget(Vector2 worldPoint) {
-        //Vector2 movePoint = worldPoint;
-
-        ////Raycast at position
-        //RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
-
-        //foreach (var hit in hits) {
-
-        //    if (hit.collider.CompareTag("Entity")) {
-        //        movePoint = hit.collider.transform.position;
-        //    }
-        //}
-
-        //selector.transform.position = movePoint;
         if (currentAbility.PositionLocked) {
             RotateSelector(worldPoint);
             MoveSelector(this.transform.position);
         } else {
             MoveSelector(worldPoint);
+            selector.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
     private void MoveSelector(Vector2 worldPoint) {
@@ -93,14 +79,9 @@ public class EntityInteraction : MonoBehaviour
         //Find angle between Vector.Right and mouse point
         Vector2 relativePosition = worldPoint.ToVector3() - transform.position;
         float angle = Vector2.SignedAngle(Vector2.right, relativePosition);
-        
+
 
         selector.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        //Debug.Log($"Rotation! WP: {worldPoint}, RP: {relativePosition}, Ang: {angle}.");
-        
-
-        //TODO: Make rotation?
     }
     public void SelectTarget(Vector2 worldPoint) {
 
@@ -132,7 +113,7 @@ public class EntityInteraction : MonoBehaviour
             currentAbility.TriggerAbility(target);
             validTargets++;
         }
-        if(!currentAbility.requireValidTarget || validTargets > 0) {
+        if (!currentAbility.requireValidTarget || validTargets > 0) {
             currentAbility.DisplayVisual(worldPoint);
             SpendActions();
         }
@@ -176,18 +157,31 @@ public class EntityInteraction : MonoBehaviour
     public void SetCurrentAbility(int index) {
         currentAbility = abilities[index];
 
-        GameObject obj = selector.gameObject;
+        GameObject obj = selector.gameObject; // Can't insert directly
         currentAbility.PrepareSelector(ref obj);
-        //if(currentAbility is SingleTargetAbility) {
-        //    SelectorObj = targetingRing;
-        //}else if(currentAbility as CircleAreaAbility) {
-        //    SelectorObj = areaSelector;
-            
-        //}
     }
+
     public void AddAbility(Ability ability) {
-        abilities.Add(ability);
+        //abilities.Add(ability);
+        if(abilities.Count == 0) {
+            abilities.Add(ability);
+            return;
+        }
+
+        if(ability.sortingIndex > abilities[abilities.Count - 1].sortingIndex) {
+            abilities.Add(ability);
+            return;
+        }
+
+        for(int i=0; i< abilities.Count; i++) {
+            if(ability.sortingIndex < abilities[i].sortingIndex) {
+                abilities.Insert(i, ability);
+                return;
+            }
+        }
+
     }
+
     public void RemoveAbility(Ability ability) {
         if (abilities.Contains(ability)) {
             abilities.Remove(ability);

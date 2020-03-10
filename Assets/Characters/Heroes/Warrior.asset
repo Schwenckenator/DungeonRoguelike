@@ -15,8 +15,10 @@ MonoBehaviour:
   charName: Warrior
   sprite: {fileID: 21300210, guid: c51d6277d6e5e86499e6eca007e73e8d, type: 3}
   deadSprite: {fileID: 21300000, guid: 38894b122e501c842b735d4a3dd16e36, type: 3}
-  baseAbilities:
-  - {fileID: 11400000, guid: bcfc6b61f433b044aae49192689ce550, type: 2}
+  baseAbilities: []
+  startingItems:
+  - {fileID: 11400000, guid: dd9e699671d27f846a62b9b2d46df5fa, type: 2}
+  - {fileID: 11400000, guid: 4089c34da80b08347b9feb92928d4fdc, type: 2}
   grace: 9
   intellect: 9
   might: 9

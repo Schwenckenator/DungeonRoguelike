@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +10,11 @@ public enum AbilityType { empty, damage, heal }
 /// </summary>
 
 //[CreateAssetMenu(fileName = "New Ability", menuName = "Ability/Ability", order = 51)]
-public abstract class Ability : ScriptableObject
-{
+public abstract class Ability : ScriptableObject, IComparable {
     //Handle type through subclassing
     //I'll think of what all abilities share later.
     public new string name;
+    public int sortingIndex;
     public TargetType targetType;
     public bool canTargetDead = false;
     public bool canTargetAlive = true;
@@ -98,5 +99,9 @@ public abstract class Ability : ScriptableObject
         };
 
         return mesh;
+    }
+
+    public int CompareTo(object obj) {
+        return sortingIndex.CompareTo(obj);
     }
 }

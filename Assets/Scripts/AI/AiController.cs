@@ -55,7 +55,7 @@ public class AiController : MonoBehaviour
         if (distanceToEntity < 1.5f) {
             //You're in range! Punch the sucker!
             if (debug) Debug.Log("Enemy close! Attacking!");
-
+            MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
             MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
            
         } 

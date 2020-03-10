@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SpellThrowFire
   m_EditorClassIdentifier: 
   name: Throw Fire
+  sortingIndex: 20
   targetType: 3
   canTargetDead: 0
   canTargetAlive: 1
@@ -26,3 +27,4 @@ MonoBehaviour:
   range: 10
   minValue: 25
   maxValue: 35
+  snapToGrid: 1

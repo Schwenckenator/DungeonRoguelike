@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SpellFireball
   m_EditorClassIdentifier: 
   name: Fireball
+  sortingIndex: 40
   targetType: 0
   canTargetDead: 0
   canTargetAlive: 1
@@ -23,7 +24,8 @@ MonoBehaviour:
   actionCost: 1
   endsTurn: 1
   requireValidTarget: 0
-  range: 15
+  range: 10
   minValue: 30
   maxValue: 65
+  snapToGrid: 1
   radius: 3
