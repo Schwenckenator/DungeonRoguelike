@@ -33,12 +33,11 @@ public class EntityInteraction : MonoBehaviour {
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        //Debug.Log(myEntity.character.baseAbilities.Count.ToString());
-        //Select first ability for safety
         abilities = new List<Ability>(myEntity.character.baseAbilities);
 
-        //currentAbility = abilities[0];
-        SetCurrentAbility(0);
+        //Select first ability for safety.... Do I actually need this??
+        //SetCurrentAbility(0);
+
         contactFilter = new ContactFilter2D();
         contactFilter.NoFilter();
 
@@ -58,6 +57,7 @@ public class EntityInteraction : MonoBehaviour {
             MoveSelector(this.transform.position);
         } else {
             MoveSelector(worldPoint);
+            selector.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
     private void MoveSelector(Vector2 worldPoint) {
@@ -82,11 +82,6 @@ public class EntityInteraction : MonoBehaviour {
 
 
         selector.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        //Debug.Log($"Rotation! WP: {worldPoint}, RP: {relativePosition}, Ang: {angle}.");
-
-
-        //TODO: Make rotation?
     }
     public void SelectTarget(Vector2 worldPoint) {
 
@@ -162,18 +157,29 @@ public class EntityInteraction : MonoBehaviour {
     public void SetCurrentAbility(int index) {
         currentAbility = abilities[index];
 
-        GameObject obj = selector.gameObject;
+        GameObject obj = selector.gameObject; // Can't insert directly
         currentAbility.PrepareSelector(ref obj);
-        //if(currentAbility is SingleTargetAbility) {
-        //    SelectorObj = targetingRing;
-        //}else if(currentAbility as CircleAreaAbility) {
-        //    SelectorObj = areaSelector;
-
-        //}
     }
 
     public void AddAbility(Ability ability) {
-        abilities.Add(ability);
+        //abilities.Add(ability);
+        if(abilities.Count == 0) {
+            abilities.Add(ability);
+            return;
+        }
+
+        if(ability.sortingIndex > abilities[abilities.Count - 1].sortingIndex) {
+            abilities.Add(ability);
+            return;
+        }
+
+        for(int i=0; i< abilities.Count; i++) {
+            if(ability.sortingIndex < abilities[i].sortingIndex) {
+                abilities.Insert(i, ability);
+                return;
+            }
+        }
+
     }
 
     public void RemoveAbility(Ability ability) {
