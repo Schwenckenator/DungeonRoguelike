@@ -51,7 +51,8 @@ public class EntityInteraction : MonoBehaviour {
         }
     }
 
-    private void HoverOverTarget(Vector2 worldPoint) {
+    //Make this available to the AI hopefully keep it dry if possible
+    public void HoverOverTarget(Vector2 worldPoint) {
         if (currentAbility != null && currentAbility.PositionLocked) {
             RotateSelector(worldPoint);
             MoveSelector(this.transform.position);
@@ -84,6 +85,7 @@ public class EntityInteraction : MonoBehaviour {
         selector.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
     public void SelectTarget(Vector2 worldPoint) {
+
 
         if (!IsValidInteraction(worldPoint)) {
             return;

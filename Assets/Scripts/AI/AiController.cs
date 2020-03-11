@@ -58,6 +58,8 @@ public class AiController : MonoBehaviour
             //You're in range! Punch the sucker!
             if (debug) Debug.Log("Enemy close! Attacking!");
             MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
+            //Immitate the player using mouse by letting ai show hover.
+            MyEntity.Interaction.HoverOverTarget(nearestEntity.transform.position);
             MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
            
         } 
