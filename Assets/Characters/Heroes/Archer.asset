@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: baa3eec2d120de74bb3788e0f5111a80, type: 3}
-  m_Name: Thief
+  m_Name: Archer
   m_EditorClassIdentifier: 
   charName: Thief
   sprite: {fileID: 21300534, guid: c51d6277d6e5e86499e6eca007e73e8d, type: 3}
   deadSprite: {fileID: 21300000, guid: 38894b122e501c842b735d4a3dd16e36, type: 3}
   baseAbilities: []
   startingItems:
-  - {fileID: 11400000, guid: 6a5426bf7efc64c47b949a9a19993ae9, type: 2}
+  - {fileID: 11400000, guid: d4b612b00775a2e4c8617e6cdd668b54, type: 2}
   grace: 9
   intellect: 9
   might: 9

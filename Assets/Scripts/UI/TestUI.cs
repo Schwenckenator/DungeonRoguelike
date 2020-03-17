@@ -11,6 +11,7 @@ public class TestUI : MonoBehaviour
     public Character thief;
     public Character cleric;
     public Character goblin;
+    public Character archer;
 
     private void Start() {
         dungeon = FindObjectOfType<Dungeon>();
@@ -36,6 +37,8 @@ public class TestUI : MonoBehaviour
         if(heroType == "warrior") Spawn(hero, warrior);
         else if(heroType == "thief") Spawn(hero, thief);
         else if (heroType == "cleric") Spawn(hero, cleric);
+        else if (heroType == "archer") Spawn(hero, archer);
+
     }
     public void SpawnMonster(string monsterType) {
         if(monsterType == "goblin") Spawn(monster, goblin);
