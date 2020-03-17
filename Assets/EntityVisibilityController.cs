@@ -36,7 +36,7 @@ public class EntityVisibilityController : MonoBehaviour
         //Maybe just overengineering for now
         UICanvas.sortingOrder = 0;
         spriteRenderer.sortingOrder = 0;
-
+         
     }
 
     public void SetDeadSprite(Character character)
