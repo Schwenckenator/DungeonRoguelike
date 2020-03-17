@@ -21,6 +21,7 @@ public abstract class Ability : ScriptableObject, IComparable {
     public Sprite selectorSprite;
     public GameObject visual;
 
+
     public Effect[] effects;
     public int actionCost = 1;
     public bool endsTurn = false;
@@ -39,7 +40,7 @@ public abstract class Ability : ScriptableObject, IComparable {
             effect.TriggerEffect(target, minValue, maxValue);
         }
     }
-    public abstract void DisplayVisual(Vector2 position);
+    public abstract void DisplayVisual(Entity me);
 
     public abstract void PrepareSelector(ref GameObject selector);
 

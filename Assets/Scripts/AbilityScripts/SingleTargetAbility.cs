@@ -12,7 +12,9 @@ public class SingleTargetAbility : Ability {
     //    new Vector2(0f, -0.25f)
     //};
 
-    public override void DisplayVisual(Vector2 position) {
+    public override void DisplayVisual(Entity me)
+    {
+        Vector2 position = me.transform.position;
         Instantiate(visual, position, Quaternion.identity);
     }
 

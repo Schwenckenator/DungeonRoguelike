@@ -116,7 +116,7 @@ public class EntityInteraction : MonoBehaviour {
             validTargets++;
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
-            currentAbility.DisplayVisual(worldPoint);
+            currentAbility.DisplayVisual(myEntity);
             SpendActions();
         }
     }

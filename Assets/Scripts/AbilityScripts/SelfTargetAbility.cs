@@ -12,7 +12,10 @@ public class SelfTargetAbility : Ability {
     //    new Vector2(0f, -0.25f)
     //};
 
-    public override void DisplayVisual(Vector2 position) {
+    public override void DisplayVisual(Entity me)
+    {
+        Vector2 position = me.transform.position;
+        EnterHide(me);
         Instantiate(visual, position, Quaternion.identity);
     }
 
@@ -26,9 +29,9 @@ public class SelfTargetAbility : Ability {
     }
 
 
-    private void EnterHide()
+    private void EnterHide(Entity me)
     {
-
+        
     }
 
 

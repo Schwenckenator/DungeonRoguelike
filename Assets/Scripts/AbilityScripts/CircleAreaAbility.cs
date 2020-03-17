@@ -37,7 +37,8 @@ public class CircleAreaAbility : Ability {
         selector.GetComponent<MeshFilter>().mesh = CreateMesh(points, "Circle");
     }
 
-    public override void DisplayVisual(Vector2 position) {
+    public override void DisplayVisual(Entity me) {
+        Vector2 position = me.transform.position;
         var newObj = Instantiate(visual, position, Quaternion.identity);
         newObj.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
     }
