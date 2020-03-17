@@ -17,6 +17,8 @@ public class Entity : MonoBehaviour
     public EntityTurnScheduler TurnScheduler { get; private set; }
     public PathAgent PathAgent { get; private set; }
     public FogClearer FogClearer { get; private set; }
+    public EntityVisibilityController EntityVisibilityController { get; private set; }
+
     //public ClickToMove ClickToMove { get; private set; }
     public EntityAllegiance allegiance;
 
@@ -76,7 +78,10 @@ public class Entity : MonoBehaviour
         Stats = GetComponent<EntityStats>();
         TurnScheduler = GetComponent<EntityTurnScheduler>();
         PathAgent = GetComponent<PathAgent>();
-        if(allegiance == EntityAllegiance.hero) {
+        EntityVisibilityController = GetComponent<EntityVisibilityController>();
+
+
+        if (allegiance == EntityAllegiance.hero) {
             FogClearer = GetComponent<FogClearer>();
         }
 
