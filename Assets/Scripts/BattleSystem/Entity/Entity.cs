@@ -97,9 +97,10 @@ public class Entity : MonoBehaviour
         spriteRenderer.sprite = character.sprite;
     }
 
-    //TODO: Graphics should be moved out of this script
     public void Die() {
-        spriteRenderer.sprite = character.deadSprite;
+        EntityVisibilityController.SetDeadSprite(character);
+        EntityVisibilityController.DowngradeVisibilityLayer();
+
         PathAgent.FreeMySpace();
     }
 }

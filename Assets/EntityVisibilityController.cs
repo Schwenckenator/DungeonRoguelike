@@ -16,26 +16,35 @@ public class EntityVisibilityController : MonoBehaviour
         
     }
 
-
+    /// <summary>
+    /// Use this so to set living enitities to have the priority on the ui visibility
+    /// </summary>
     public void DowngradeVisibilityLayer()
     {
 
-        UICanvas.sortingLayerID = -1;
-        spriteRenderer.sortingLayerID = -1;
+        UICanvas.sortingOrder = -1;
+        spriteRenderer.sortingOrder = -1;
 
     }
+
+    /// <summary>
+    /// Use this so to restore original ui visibility state
+    /// </summary>
     public void RestoreVisibilityLayer()
     {
-
-        UICanvas.sortingLayerID = 0;
-        spriteRenderer.sortingLayerID = 0;
+        //TODO maybe should keep the original value in case we want to use different sorting layers in the future.
+        //Maybe just overengineering for now
+        UICanvas.sortingOrder = 0;
+        spriteRenderer.sortingOrder = 0;
 
     }
 
- 
-    //// Update is called once per frame
-    //void Update()
-    //{
+    public void SetDeadSprite(Character character)
+    {
 
-    //}
+        spriteRenderer.sprite = character.deadSprite;
+
+    }
+
+
 }
