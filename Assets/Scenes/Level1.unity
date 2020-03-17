@@ -1036,5 +1036,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Battle Controller
       objectReference: {fileID: 0}
+    - target: {fileID: 3916916930664243176, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: heroesToSpawn.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3916916930664243176, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: heroesToSpawn.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9fd543d3dc53b450181c0c86de6b433d,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39fe941210b89ee42ae0871df4e1b78d, type: 3}
