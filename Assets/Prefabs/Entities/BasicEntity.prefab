@@ -581,6 +581,7 @@ GameObject:
   - component: {fileID: -3255921281094858450}
   - component: {fileID: 2414215985182535640}
   - component: {fileID: -443152729989545843}
+  - component: {fileID: 938768810810331003}
   m_Layer: 0
   m_Name: BasicEntity
   m_TagString: Entity
@@ -648,7 +649,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69b6ab50e789b1d40900ffd7ce0ea68f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
 --- !u!114 &7674847316774029211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +664,7 @@ MonoBehaviour:
   isDead: 0
   healthBar: {fileID: 7967690373950252782}
   healthText: {fileID: 816690316142955816}
+  UICanvas: {fileID: 0}
 --- !u!114 &4061216150727006508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,6 +747,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &938768810810331003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4061216150727006419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a5f50d8e9c246e88a8da2b7518348e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UICanvas: {fileID: 2804088584417032521}
+  spriteRenderer: {fileID: 1042253517969308516}
 --- !u!1 &4367331689997767131
 GameObject:
   m_ObjectHideFlags: 0
