@@ -5,18 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New SingleTargetAbility", menuName = "Ability/Self Target Ability", order = 51)]
 public class SelfTargetAbility : Ability {
 
-    //private readonly Vector2[] points = {
-    //    new Vector2(0.25f, 0f),
-    //    new Vector2(0f, 0.25f),
-    //    new Vector2(-0.25f, 0f),
-    //    new Vector2(0f, -0.25f)
-    //};
-    public float hiddenAlpha = 0.5f;
+    private readonly Vector2[] points = {
+        new Vector2(0.25f, 0f),
+        new Vector2(0f, 0.25f),
+        new Vector2(-0.25f, 0f),
+        new Vector2(0f, -0.25f)
+    };
 
     public override void DisplayVisual(Entity me)
     {
         Vector2 position = me.transform.position;
-        EnterHide(me);
         Instantiate(visual, position, Quaternion.identity);
     }
 
@@ -30,16 +28,9 @@ public class SelfTargetAbility : Ability {
     }
 
 
-    private void EnterHide(Entity me)
-    {
-        me.EntityVisibilityController.SetEntityAlpha(hiddenAlpha);
-    }
+  
 
-    public void ExitHide(Entity me)
-    {
-        me.EntityVisibilityController.SetEntityAlpha(1);
 
-    }
 
     //private Mesh CalculateMesh(Vector3[] circlePoints) {
     //    List<Vector3> vertexList = new List<Vector3>();
