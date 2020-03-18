@@ -20,6 +20,7 @@ public class EntityStats : MonoBehaviour
     public TextMeshProUGUI healthText;
 
     private Entity myEntity;
+    private List<Effect> activeOvertimeEffects;
 
     #region public methods
     public void Initialise() {
@@ -37,6 +38,11 @@ public class EntityStats : MonoBehaviour
     public void ModifyStatByValue(StatType attr, int value) {
         int newValue = stats.Get(attr) + value;
         SetStat(attr, newValue);
+    }
+    public void AddOvertimeEffect(Effect effect)
+    {
+        activeOvertimeEffects.Add(effect);
+
     }
 
     internal void DebugLogStats() {

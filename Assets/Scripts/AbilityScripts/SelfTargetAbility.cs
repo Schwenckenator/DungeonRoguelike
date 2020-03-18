@@ -11,6 +11,7 @@ public class SelfTargetAbility : Ability {
     //    new Vector2(-0.25f, 0f),
     //    new Vector2(0f, -0.25f)
     //};
+    public float hiddenAlpha = 0.5f;
 
     public override void DisplayVisual(Entity me)
     {
@@ -31,9 +32,14 @@ public class SelfTargetAbility : Ability {
 
     private void EnterHide(Entity me)
     {
-        
+        me.EntityVisibilityController.SetEntityAlpha(hiddenAlpha);
     }
 
+    public void ExitHide(Entity me)
+    {
+        me.EntityVisibilityController.SetEntityAlpha(1);
+
+    }
 
     //private Mesh CalculateMesh(Vector3[] circlePoints) {
     //    List<Vector3> vertexList = new List<Vector3>();
