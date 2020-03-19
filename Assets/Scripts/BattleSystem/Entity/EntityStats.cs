@@ -25,7 +25,6 @@ public class EntityStats : MonoBehaviour
     public void Initialise() {
         myEntity = GetComponent<Entity>();
         stats = new StatCollection(myEntity.character);
-        //stats.onHealthUpdate += UpdateHealthBar;
         stats.onStatUpdate[StatType.health] += UpdateHealthBar;
         stats.onStatUpdate[StatType.health] += CheckForDeath;
         stats.Initialise();
