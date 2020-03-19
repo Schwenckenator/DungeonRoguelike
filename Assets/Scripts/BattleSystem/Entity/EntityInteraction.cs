@@ -51,8 +51,9 @@ public class EntityInteraction : MonoBehaviour {
         }
     }
 
-    private void HoverOverTarget(Vector2 worldPoint) {
-        if (currentAbility.PositionLocked) {
+    //Make this available to the AI hopefully keep it dry if possible
+    public void HoverOverTarget(Vector2 worldPoint) {
+        if (currentAbility != null && currentAbility.PositionLocked) {
             RotateSelector(worldPoint);
             MoveSelector(this.transform.position);
         } else {
@@ -84,6 +85,7 @@ public class EntityInteraction : MonoBehaviour {
         selector.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
     public void SelectTarget(Vector2 worldPoint) {
+
 
         if (!IsValidInteraction(worldPoint)) {
             return;
@@ -135,6 +137,13 @@ public class EntityInteraction : MonoBehaviour {
     }
     private bool IsValidInteraction(Vector3 worldPoint) {
         //First check action count
+        if (currentAbility == null)
+        {
+            Debug.Log("Current Ability not set");
+            return false;
+        }
+
+
         if (myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
             Debug.Log("Not enough Actions remaining!");
             return false;
@@ -155,10 +164,18 @@ public class EntityInteraction : MonoBehaviour {
     }
 
     public void SetCurrentAbility(int index) {
-        currentAbility = abilities[index];
 
+        if (abilities.Count > index)
+        { 
+        currentAbility = abilities[index];
         GameObject obj = selector.gameObject; // Can't insert directly
         currentAbility.PrepareSelector(ref obj);
+        }
+        else
+        {
+            Debug.LogError("Unable to set ability, ability count: " + abilities.Count);
+
+        }
     }
 
     public void AddAbility(Ability ability) {

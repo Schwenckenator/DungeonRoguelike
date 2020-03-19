@@ -36,6 +36,8 @@ public class AiController : MonoBehaviour
         
     }
     public void StartTurn() {
+        //Reset the turn attempt
+        turnAttemptCount = 0;
         Debug.Log("AI TURN! Adding delay...");
         Invoke("DoTurn", 2f);
     }
@@ -56,6 +58,8 @@ public class AiController : MonoBehaviour
             //You're in range! Punch the sucker!
             if (debug) Debug.Log("Enemy close! Attacking!");
             MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
+            //Immitate the player using mouse by letting ai show hover.
+            MyEntity.Interaction.HoverOverTarget(nearestEntity.transform.position);
             MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
            
         } 
@@ -66,7 +70,7 @@ public class AiController : MonoBehaviour
 
             if (!MoveToNearestPlayer(nearestEntity))
             {
-                if (debug) Debug.Log("Failed to move to target. Finishe Turn.");
+                if (debug) Debug.Log("Failed to move to target. Finish Turn.");
                 MyEntity.TurnScheduler.actionsRemaining = 0;
                 MyEntity.TurnScheduler.ActionFinished();
 
@@ -77,8 +81,17 @@ public class AiController : MonoBehaviour
             //MyEntity.TurnScheduler.actionsRemaining -= 1;
         }
 
+        //TODO turnAttemptCount - maybe this could be based on MyEntity.TurnScheduler.actionsRemaining
+        if (turnAttemptCount > 2)
+        {
+            Debug.Log("Too many turn attempts. Cancelling my turn");
+
+            MyEntity.TurnScheduler.actionsRemaining = 0;
+            MyEntity.TurnScheduler.ActionFinished();
+        }
+
         //If there are remaining actions
-        if(MyEntity.TurnScheduler.actionsRemaining > 0) {
+        if (MyEntity.TurnScheduler.actionsRemaining > 0) {
             Debug.Log("I still have actions, doing turn again.");
             turnAttemptCount++;
             Invoke("DoTurn", 1f);

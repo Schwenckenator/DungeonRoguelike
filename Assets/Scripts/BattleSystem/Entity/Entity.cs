@@ -18,6 +18,8 @@ public class Entity : MonoBehaviour
     public PathAgent PathAgent { get; private set; }
     public FogClearer FogClearer { get; private set; }
     public FogInteractor FogInteractor { get; private set; }
+    public EntityVisibilityController EntityVisibilityController { get; private set; }
+
     //public ClickToMove ClickToMove { get; private set; }
     public EntityAllegiance allegiance;
 
@@ -82,9 +84,7 @@ public class Entity : MonoBehaviour
         TurnScheduler = GetComponent<EntityTurnScheduler>();
         PathAgent = GetComponent<PathAgent>();
         FogInteractor = GetComponent<FogInteractor>();
-        //if (allegiance == EntityAllegiance.hero) {
-        //    FogClearer = GetComponent<FogClearer>();
-        //}
+        EntityVisibilityController = GetComponent<EntityVisibilityController>();
 
         State = EntityState.inactive;
 
@@ -99,9 +99,10 @@ public class Entity : MonoBehaviour
         spriteRenderer.sprite = character.sprite;
     }
 
-    //TODO: Graphics should be moved out of this script
     public void Die() {
-        spriteRenderer.sprite = character.deadSprite;
+        EntityVisibilityController.SetDeadSprite(character);
+        EntityVisibilityController.DowngradeVisibilityLayer();
+
         PathAgent.FreeMySpace();
     }
 }
