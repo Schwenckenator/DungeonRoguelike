@@ -112,7 +112,7 @@ public class EntityInteraction : MonoBehaviour {
             }
 
             //Do the ability
-            currentAbility.TriggerAbility(target);
+            currentAbility.TriggerAbility(myEntity, target);
             validTargets++;
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
