@@ -16,6 +16,8 @@ public class FogClearer : FogInteractor
         FogOfWar.Instance.OnFogClearerLeaveRoom(currentRoom);
 
         currentRoom = FindCurrentRoom();
+
+        FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
         Debug.Log(currentRoom);
     }
 

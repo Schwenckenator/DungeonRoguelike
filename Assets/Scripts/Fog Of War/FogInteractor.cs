@@ -25,7 +25,7 @@ public abstract class FogInteractor : MonoBehaviour
         }
 
         if (!roomFound && currentRoom != null) {
-            FogOfWar.Instance.OnFogClearerEnterRoom(currentRoom);
+            
             roomFound = true;
         }
 
