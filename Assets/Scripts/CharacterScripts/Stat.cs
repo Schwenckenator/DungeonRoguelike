@@ -1,19 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 public class Stat
 {
     [SerializeField] private string name;
+    [SerializeField] private StatType type;
     [SerializeField] private int valueNow;
     [SerializeField] private int maxValue;
 
-    private Stat parent;
-    private string formula;
+
+
+    //private Stat parent;
+    //private string formula;
  
     public string Name {
         get{ return name;}
+    }
+    public StatType Type {
+        get { return type; }
     }
 
     /// <summary>
@@ -56,10 +63,11 @@ public class Stat
         set { maxValue = value; }
     }
 
-    public Stat(string name, int value, Stat parent = null) {
-        this.name = name;
+    public Stat(StatType type, int value) {
+        this.type = type;
+        this.name = type.ToString();
         this.maxValue = value;
         this.valueNow = value;
-        this.parent = parent;
+        //this.parent = parent;
     }
 }

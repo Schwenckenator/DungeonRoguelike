@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum StatType { health, mana, grace, intellect, might, vitality }
+public enum StatType { health, mana, defence, armour, grace, intellect, might, vitality }
 
 public class StatCollection
 {
@@ -18,30 +18,40 @@ public class StatCollection
 
     public StatCollection(Character character) {
         this.character = character;
-        Stat grace = new Stat("grace", character.grace);
-        Stat might = new Stat("might", character.might);
-        Stat vitality = new Stat("vitality", character.vitality);
-        Stat intellect = new Stat("intellect", character.intellect);
+        
+        //Primary stats
+        Stat grace = new Stat(StatType.grace, character.grace);
+        Stat might = new Stat(StatType.might, character.might);
+        Stat vitality = new Stat(StatType.vitality, character.vitality);
+        Stat intellect = new Stat(StatType.intellect, character.intellect);
 
+        // Secondary Stats
         //TODO: generalise formula
-        Stat health = new Stat("health", character.vitality * 10);
-        Stat mana = new Stat("mana", character.intellect * 10);
+        Stat health = new Stat(StatType.health, 0);
+        Stat mana = new Stat(StatType.mana, 0);
+        Stat armour = new Stat(StatType.armour, 0);
+        Stat defence = new Stat(StatType.defence, 0);
+
 
         baseStats = new Dictionary<StatType, Stat>() {
-            { StatType.grace, grace },
-            {StatType.intellect, intellect },
-            { StatType.might, might },
-            { StatType.vitality, vitality },
-            { StatType.health, health },
-            { StatType.mana, mana }
+            { StatType.grace,       grace },
+            { StatType.intellect,   intellect },
+            { StatType.might,       might },
+            { StatType.vitality,    vitality },
+            { StatType.health,      health },
+            { StatType.mana,        mana },
+            { StatType.armour,      armour },
+            { StatType.defence,     defence }
         };
         modifiers = new Dictionary<StatType, List<StatModifier>>() {
-            { StatType.grace, new List<StatModifier>() },
-            { StatType.intellect, new List<StatModifier>() },
-            { StatType.might, new List<StatModifier>() },
-            { StatType.vitality, new List<StatModifier>() },
-            { StatType.health, new List<StatModifier>() },
-            { StatType.mana, new List<StatModifier>() }
+            { StatType.grace,       new List<StatModifier>() },
+            { StatType.intellect,   new List<StatModifier>() },
+            { StatType.might,       new List<StatModifier>() },
+            { StatType.vitality,    new List<StatModifier>() },
+            { StatType.health,      new List<StatModifier>() },
+            { StatType.mana,        new List<StatModifier>() },
+            { StatType.armour,      new List<StatModifier>() },
+            { StatType.defence,     new List<StatModifier>() }
         };
         onStatUpdate = new Dictionary<StatType, Action<Stat>>() {
             { StatType.grace, null },
@@ -49,11 +59,15 @@ public class StatCollection
             { StatType.might, null },
             { StatType.vitality, null },
             { StatType.health, null },
-            { StatType.mana, null }
+            { StatType.mana, null },
+            { StatType.armour, null },
+            { StatType.defence, null }
         };
 
         onStatUpdate[StatType.vitality] += CalculateMaxHealth;
-
+        onStatUpdate[StatType.intellect] += CalculateMaxMana;
+        onStatUpdate[StatType.armour] += CalculateDefence;
+        onStatUpdate[StatType.grace] += CalculateDefence;
     }
 
 
@@ -102,11 +116,6 @@ public class StatCollection
     public void SetBase(StatType attr, int newBase) {
         baseStats[attr].Value = newBase;
         onStatUpdate[attr]?.Invoke(baseStats[attr]);
-        //if (attr != StatType.health) { // Don't waste time calculating for health
-        //    CalculateSecondaryAttributes();
-        //} else {
-        //    onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
-        //}
     }
 
     /// <summary>
@@ -127,7 +136,6 @@ public class StatCollection
         }
         modifiers[mod.statType].Add(mod);
         onStatUpdate[mod.statType]?.Invoke(baseStats[mod.statType]);
-        //CalculateSecondaryAttributes();
     }
 
     /// <summary>
@@ -137,7 +145,6 @@ public class StatCollection
     public void RemoveModifier(StatModifier mod) {
         modifiers[mod.statType].Remove(mod);
         onStatUpdate[mod.statType]?.Invoke(baseStats[mod.statType]);
-        //CalculateSecondaryAttributes();
     }
 
     internal void DebugLogStats(Entity entity) {
@@ -167,13 +174,30 @@ public class StatCollection
     //    onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
     //}
 
-    private void CalculateMaxHealth(Stat vitality) {
 
+    //TODO: Generalise these formulas??
+    private void CalculateMaxHealth(Stat temp) {
+        int mult = 10;
         int hpLost = GetMax(StatType.health) - Get(StatType.health);
-        baseStats[StatType.health].Max = Mathf.RoundToInt(Get(StatType.vitality) * 10);
+        baseStats[StatType.health].Max = Mathf.RoundToInt(Get(StatType.vitality) * mult);
         baseStats[StatType.health].ValueNow = GetMax(StatType.health) - hpLost;
 
         onStatUpdate[StatType.health]?.Invoke(baseStats[StatType.health]);
     }
+
+    private void CalculateMaxMana(Stat temp) {
+        int mult = 10;
+        int lost = GetMax(StatType.mana) - Get(StatType.mana);
+        baseStats[StatType.mana].Max = Mathf.RoundToInt(Get(StatType.intellect) * mult);
+        baseStats[StatType.mana].ValueNow = GetMax(StatType.mana) - lost;
+
+        onStatUpdate[StatType.mana]?.Invoke(baseStats[StatType.mana]);
+    }
+
+    private void CalculateDefence(Stat temp) {
+        baseStats[StatType.defence].Value = Get(StatType.grace) + Get(StatType.armour);
+        onStatUpdate[StatType.defence]?.Invoke(baseStats[StatType.defence]);
+    }
+
     #endregion
 }

@@ -17,7 +17,6 @@ MonoBehaviour:
   targetType: 3
   canTargetDead: 0
   canTargetAlive: 1
-  selectorSprite: {fileID: 21300000, guid: 81793a975cece7649bdd10d2987e8767, type: 3}
   visual: {fileID: 1134481946190490, guid: 30b58b96590ae7d478cf1e262ecb7e10, type: 3}
   effects:
   - {fileID: 11400000, guid: 4aae88667d3151744a2c78fdd024a931, type: 2}
@@ -27,4 +26,8 @@ MonoBehaviour:
   range: 1
   minValue: 20
   maxValue: 30
+  alwaysHit: 0
+  attackStat: 6
+  defenceStat: 2
+  attackBonus: 0
   snapToGrid: 1
