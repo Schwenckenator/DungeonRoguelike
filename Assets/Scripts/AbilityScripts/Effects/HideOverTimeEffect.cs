@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New HideOverTimeEffect", menuName = "Effect/Hide OverTime Effect", order = 52)]
 public class HideOverTimeEffect : OTEffect {
     public int remainingActiveTurns;
     public float hiddenAlpha = 0.5f;

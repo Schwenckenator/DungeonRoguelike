@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New OverTime Effect", menuName = "Effect/Overtime Effect 2", order = 52)]
+[CreateAssetMenu(fileName = "New OverTime Effect", menuName = "Effect/Overtime Effect", order = 52)]
 public class OverTimeEffect : OTEffect {
     public int remainingActiveTurns;
     public float hiddenAlpha = 0.5f;
