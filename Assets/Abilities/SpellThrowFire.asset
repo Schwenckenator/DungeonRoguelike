@@ -31,3 +31,4 @@ MonoBehaviour:
   defenceStat: 2
   attackBonus: 0
   snapToGrid: 1
+  isBlockedByTerrain: 1

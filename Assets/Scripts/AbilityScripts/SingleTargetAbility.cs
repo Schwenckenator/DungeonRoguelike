@@ -12,7 +12,7 @@ public class SingleTargetAbility : Ability {
     public override void PrepareSelector(ref GameObject selector) {
         //selector.GetComponent<SpriteRenderer>().sprite = selectorSprite;
         PositionLocked = false;
-        selector.transform.localScale = Vector3.one;
+        selector.transform.localScale = Vector3.one * 0.95f; // Need it smaller than 1 or it splashes
         var points = CalculateCirclePoints(16);
         selector.GetComponent<PolygonCollider2D>().points = points.ToVector2s();
         selector.GetComponent<MeshFilter>().mesh = CreateMesh(points, "Circle");
