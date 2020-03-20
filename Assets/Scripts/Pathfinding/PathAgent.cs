@@ -28,14 +28,6 @@ namespace GridPathfinding {
         }
 
         #region Unity Callbacks
-        // Update is called once per frame
-        void Update() {
-            if (Input.GetMouseButtonDown(1)) { // TODO: Only allow for players (Once AI is working)
-                Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                SetGoalAndFindPath(point);
-            }
-
-        }
         private void FixedUpdate() {
             if (isMoving) {
                 Walk();
@@ -45,7 +37,14 @@ namespace GridPathfinding {
         private void OnEnable() {
             //I have been enabled, it must be my turn!
             SetOrigin(transform.position);
-
+            if(myEntity.allegiance == EntityAllegiance.hero) {
+                PlayerInput.Instance.onRightMouseButtonPressed += SetGoalAndFindPath;
+            }
+        }
+        private void OnDisable() {
+            if (myEntity.allegiance == EntityAllegiance.hero) {
+                PlayerInput.Instance.onRightMouseButtonPressed -= SetGoalAndFindPath;
+            }
         }
         #endregion
 
