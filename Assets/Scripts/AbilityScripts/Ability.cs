@@ -32,6 +32,7 @@ public abstract class Ability : ScriptableObject, IComparable {
     public int attackBonus = 0;
 
     public bool snapToGrid = true;
+    public bool isBlockedByTerrain = false;
     public bool PositionLocked { get; protected set; }
 
     

@@ -136,14 +136,14 @@ public class EntityInteraction : MonoBehaviour {
         myEntity.State = EntityState.idle;
     }
     private bool IsValidInteraction(Vector3 worldPoint) {
-        //First check action count
+        
         if (currentAbility == null)
         {
             Debug.Log("Current Ability not set");
             return false;
         }
 
-
+        //First check action count
         if (myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
             Debug.Log("Not enough Actions remaining!");
             return false;
@@ -154,6 +154,12 @@ public class EntityInteraction : MonoBehaviour {
             Debug.Log("Out of range!");
             return false;
         }
+
+        if(currentAbility.isBlockedByTerrain && !IsLineOfSight(transform.position.RoundToVector2Int(), worldPoint.RoundToVector2Int())) {
+            Debug.Log("No line of sight!");
+            return false;
+        }
+
         Debug.Log("No obvious impediment.");
         return true;
     }
@@ -203,6 +209,30 @@ public class EntityInteraction : MonoBehaviour {
         if (abilities.Contains(ability)) {
             abilities.Remove(ability);
         }
+    }
+
+    private static bool IsLineOfSight(Vector2 origin, Vector2 target) {
+        // Cast 4 lines, from centre of origin to 4 corners of the target square
+        float offset = 0.49f;
+        Vector2[] targetPoints = {
+            new Vector2(target.x + offset, target.y + offset),
+            new Vector2(target.x + offset, target.y - offset),
+            new Vector2(target.x - offset, target.y - offset),
+            new Vector2(target.x - offset, target.y + offset)
+        };
+        bool lineOfSight = false;
+        foreach(Vector2 point in targetPoints) {
+            var hits = Physics2D.LinecastAll(origin, point, LayerMask.GetMask("Obstacle"));
+
+            if (hits.Length > 0) {
+                Debug.DrawLine(origin, point, Color.red, 5f);
+                continue;
+            }
+            Debug.DrawLine(origin, point, Color.green, 5f);
+            lineOfSight = true;
+        }
+
+        return lineOfSight;
     }
 }
 

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class MathsExtension {
+
+    //Regions are organised by the "this" paramater
+
     #region Vector2
     public static Vector2Int RoundToInt(this Vector2 input) {
         return new Vector2Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
@@ -75,6 +78,10 @@ public static class MathsExtension {
     public static Vector3Int CeilToInt(this Vector3 input) {
         return new Vector3Int(Mathf.CeilToInt(input.x), Mathf.CeilToInt(input.y), Mathf.CeilToInt(input.z));
     }
+
+    public static Vector2Int RoundToVector2Int(this Vector3 input) {
+        return new Vector2Int(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
+    }
     #endregion
 
     #region Vector3Int
@@ -112,11 +119,6 @@ public static class MathsExtension {
     public static Vector2 RestoreToVector2(this Vector2Int input)
     {
         return new Vector2((float)input.x, (float)input.y);
-    }
-
-    public static Vector3Int RoundToVector3Int(this Vector3 input)
-    {
-        return new Vector3Int(input.x.RoundToInt(), input.y.RoundToInt(),input.y.RoundToInt());
     }
 
     public static bool IsWithin(this float value, float minimum, float maximum)
