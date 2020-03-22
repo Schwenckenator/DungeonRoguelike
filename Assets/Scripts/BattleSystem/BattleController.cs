@@ -46,6 +46,8 @@ public class BattleController : MonoBehaviour {
 
         currentAllegiance = EntityAllegiance.monster; // Heroes go first, but you need to set it to monster?
 
+        PlayerInput.Instance.onTabPressed += NextEntity;
+
         NextTurn();
     }
 
