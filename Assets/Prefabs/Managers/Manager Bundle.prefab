@@ -280,6 +280,18 @@ MonoBehaviour:
   fogTiles: {fileID: 35960181}
   undiscoveredTile: {fileID: 11400000, guid: c703c451e5f1c914ca3a433909ef3f04, type: 2}
   discoveredTile: {fileID: 11400000, guid: e05340f6919b9f74686e1f3cb95d2644, type: 2}
+--- !u!114 &1310066829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6167254308504759812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a38e5226496764098d0fedafce037a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4998510161696613523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -290,7 +302,12 @@ PrefabInstance:
     - target: {fileID: 1209282043229702807, guid: 2681b7a1d9e88c04d8724e116f410737,
         type: 3}
       propertyPath: m_Name
-      value: DungeonController
+      value: Dungeon Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 1209282043229702807, guid: 2681b7a1d9e88c04d8724e116f410737,
+        type: 3}
+      propertyPath: m_TagString
+      value: Dungeon
       objectReference: {fileID: 0}
     - target: {fileID: 1209282043229702827, guid: 2681b7a1d9e88c04d8724e116f410737,
         type: 3}
@@ -397,6 +414,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1949173751215812946}
     m_Modifications:
+    - target: {fileID: 7738499642637106830, guid: 082b508998e880c41ae1d9bc0908a34a,
+        type: 3}
+      propertyPath: m_Name
+      value: Game Controller
+      objectReference: {fileID: 0}
     - target: {fileID: 7013186433616244447, guid: 082b508998e880c41ae1d9bc0908a34a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -452,11 +474,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7738499642637106830, guid: 082b508998e880c41ae1d9bc0908a34a,
-        type: 3}
-      propertyPath: m_Name
-      value: Game Controller
-      objectReference: {fileID: 0}
     - target: {fileID: 2990717355629631846, guid: 082b508998e880c41ae1d9bc0908a34a,
         type: 3}
       propertyPath: dungeon
@@ -482,6 +499,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1949173751215812946}
     m_Modifications:
+    - target: {fileID: 8784567091710726895, guid: 10d5518479cc07944b0407c5f84c3c01,
+        type: 3}
+      propertyPath: m_Name
+      value: Battle Controller
+      objectReference: {fileID: 0}
     - target: {fileID: 8784567091710726882, guid: 10d5518479cc07944b0407c5f84c3c01,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -536,11 +558,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8784567091710726895, guid: 10d5518479cc07944b0407c5f84c3c01,
-        type: 3}
-      propertyPath: m_Name
-      value: BattleController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10d5518479cc07944b0407c5f84c3c01, type: 3}

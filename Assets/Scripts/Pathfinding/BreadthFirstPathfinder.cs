@@ -232,26 +232,5 @@ namespace GridPathfinding {
 
         }
         #endregion
-        //This go duplicated in the merge conflict
-        //private void OnDrawGizmos() {
-        //    if (originSet) {
-
-
-        //        foreach (var node in visited) {
-        //            Gizmos.color = new Color(1, 0, 0, 0.5f);
-        //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-
-        //        }
-        //        foreach (var node in frontier) {
-
-        //            Gizmos.color = Color.green;
-        //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-        //        }
-        //        if(currentNode != null) {
-        //            Gizmos.color = Color.blue;
-        //            Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
-        //        }
-        //    }
-        //}
     }
 }

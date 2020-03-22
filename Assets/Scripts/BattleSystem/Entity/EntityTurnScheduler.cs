@@ -32,16 +32,6 @@ public class EntityTurnScheduler : MonoBehaviour
         SetActionArrowsVisibility(actionsRemaining);
     }
 
-    //public void ScheduleTurn(int tickDelay) {
-        
-    //    Turn myNextTurn = new Turn(myEntity, tickDelay);
-
-    //    BattleController.Instance.ScheduleTurn(myNextTurn);
-    //}
-    //public void ScheduleTurn() {
-    //    ScheduleTurn(myTickDelay);
-    //}
-
     public void Refresh() {
         Debug.Log($"{ToString()} is refreshed.");
         actionsRemaining = actionsPerTurn;
@@ -133,10 +123,6 @@ public class EntityTurnSchedulerEditor : Editor {
 
         EntityTurnScheduler myScript = (EntityTurnScheduler)target;
         if (Application.isPlaying) {
-
-            //if (GUILayout.Button("Schedule Turn")) {
-            //    //myScript.ScheduleTurn(myScript.myTickDelay);
-            //}
 
             if (GUILayout.Button("Spend Action")) {
                 myScript.SpendActions(1);

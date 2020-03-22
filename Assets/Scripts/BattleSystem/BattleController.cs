@@ -42,7 +42,6 @@ public class BattleController : MonoBehaviour {
         }
         //Hand control to first entity
         turnQueue.Add(EntityAllegiance.hero);
-        //turnQueue.Add(EntityAllegiance.monster);
 
         currentAllegiance = EntityAllegiance.monster; // Heroes go first, but you need to set it to monster?
 
@@ -179,23 +178,6 @@ public class BattleController : MonoBehaviour {
         return newCombatants.ToArray();
     }
 
-    //private Entity[] FindMonstersInRadius(Entity hero) {
-    //    var monsters = new List<Entity>();
-    //    Collider2D[] hits = Physics2D.OverlapCircleAll(hero.transform.position, aggroRadius);
-    //    foreach (var hit in hits) {
-    //        if (hit.transform == hero.transform) continue; // Don't count yourself
-    //        if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
-    //        if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
-
-    //        //If it's here, it should be a monster!
-    //        Entity monster = hit.GetComponent<Entity>();
-
-    //        monsters.Add(monster);
-    //    }
-
-    //    return monsters.ToArray();
-    //}
-
     private Entity[] FindMonstersInBounds(BoundsInt bounds) {
         var monsters = new List<Entity>();
         Collider2D[] hits = Physics2D.OverlapAreaAll(bounds.min.ToVector2Int(), bounds.max.ToVector2Int());
@@ -224,15 +206,6 @@ public class BattleController : MonoBehaviour {
         return activeCombatants;
     }
 
-    //private void CheckForNewMonsterAggro() {
-    //    var monsters = FindMonstersInRadius(currentEntity);
-    //    foreach (var monster in monsters) {
-    //        if (!EntitiesWithTurns().Contains(monster)) {
-    //            monster.TurnScheduler.ScheduleTurn();
-    //        }
-    //    }
-    //}
-
     public void CheckForNewMonsterAggro(BoundsInt bounds) {
         var monsters = FindMonstersInBounds(bounds);
         foreach (var monster in monsters) {
@@ -243,11 +216,11 @@ public class BattleController : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        //if (highlightCombatants && Application.isPlaying) {
-        //    foreach (var turn in turnQueue) {
-        //        Gizmos.DrawWireSphere(turn.Entity.transform.position, 1.0f);
-        //    }
-        //}
+        if (highlightCombatants && Application.isPlaying) {
+            foreach (var entity in ActiveCombatants()) {
+                Gizmos.DrawWireSphere(entity.transform.position, 1.0f);
+            }
+        }
     }
 
     #endregion
