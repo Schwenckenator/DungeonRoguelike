@@ -9,8 +9,7 @@ public class EntityTurnScheduler : MonoBehaviour
 {
     public bool debug = true;
 
-    public bool myTurn = false;
-    public int myTickDelay = 10;
+    public bool hasControl = false;
 
     public GameObject selectionRingObj;
 
@@ -33,17 +32,23 @@ public class EntityTurnScheduler : MonoBehaviour
         SetActionArrowsVisibility(actionsRemaining);
     }
 
-    public void ScheduleTurn(int tickDelay) {
+    //public void ScheduleTurn(int tickDelay) {
         
-        Turn myNextTurn = new Turn(myEntity, tickDelay);
+    //    Turn myNextTurn = new Turn(myEntity, tickDelay);
 
-        BattleController.Instance.ScheduleTurn(myNextTurn);
-    }
-    public void ScheduleTurn() {
-        ScheduleTurn(myTickDelay);
+    //    BattleController.Instance.ScheduleTurn(myNextTurn);
+    //}
+    //public void ScheduleTurn() {
+    //    ScheduleTurn(myTickDelay);
+    //}
+
+    public void Refresh() {
+        Debug.Log($"{ToString()} is refreshed.");
+        actionsRemaining = actionsPerTurn;
+        SetActionArrowsVisibility(actionsRemaining);
     }
 
-    public void StartTurn() {
+    public void StartControl() {
 
         if (myEntity.Stats.isDead) {
             //If I'm dead, skip my turn
@@ -52,8 +57,8 @@ public class EntityTurnScheduler : MonoBehaviour
         }
         MainUI.Instance.SetAbilityBar(myEntity);
         //Say its my turn
-        myTurn = true;
-        actionsRemaining = actionsPerTurn;
+        hasControl = true;
+        
         selectionRingObj.SetActive(true);
         myEntity.State = EntityState.idle;
 
@@ -68,14 +73,13 @@ public class EntityTurnScheduler : MonoBehaviour
 
     }
 
-    public void EndTurn() {
+    public void EndControl() {
         if (!myEntity.Stats.isDead) {
             // Schedule next turn in battle if not dead
-            ScheduleTurn(myTickDelay);
         }
 
         //Disable self
-        myTurn = false;
+        hasControl = false;
         selectionRingObj.SetActive(false);
         myEntity.State = EntityState.inactive;
 
@@ -117,7 +121,7 @@ public class EntityTurnScheduler : MonoBehaviour
     private void CheckForEndOfTurn() {
         if (actionsRemaining <= 0) {
             actionsRemaining = 0;
-            BattleController.Instance.NextTurn();
+            BattleController.Instance.NextEntity();
         }
     }
 }
@@ -130,9 +134,9 @@ public class EntityTurnSchedulerEditor : Editor {
         EntityTurnScheduler myScript = (EntityTurnScheduler)target;
         if (Application.isPlaying) {
 
-            if (GUILayout.Button("Schedule Turn")) {
-                myScript.ScheduleTurn(myScript.myTickDelay);
-            }
+            //if (GUILayout.Button("Schedule Turn")) {
+            //    //myScript.ScheduleTurn(myScript.myTickDelay);
+            //}
 
             if (GUILayout.Button("Spend Action")) {
                 myScript.SpendActions(1);

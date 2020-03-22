@@ -6,20 +6,26 @@ using UnityEditor;
 public class BattleController : MonoBehaviour {
     public static BattleController Instance { get; private set; }
 
-    public int CurrentTick { get; private set; }
     public Entity currentEntity;
-
-    public float aggroRadius;
+    private int entityIndex = 0;
+    public EntityAllegiance currentAllegiance;
+    
 
     public bool highlightCombatants = true;
 
-    private List<Turn> turnQueue;
+    private List<EntityAllegiance> turnQueue;
     private bool acceptingNewTurns = true;
-
+    private Dictionary<EntityAllegiance, List<Entity>> combatants;
 
     private void Awake() {
         Instance = this;
-        turnQueue = new List<Turn>();
+        turnQueue = new List<EntityAllegiance>();
+
+        combatants = new Dictionary<EntityAllegiance, List<Entity>>() {
+            { EntityAllegiance.hero, new List<Entity>()},
+            { EntityAllegiance.monster, new List<Entity>() }
+        };
+
         Random.InitState(System.DateTime.Now.Millisecond);
     }
     #region publicMethods
@@ -28,94 +34,107 @@ public class BattleController : MonoBehaviour {
         //Search for combatants
         acceptingNewTurns = true;
         //Find combatants
-        Entity[] combatants = FindCombatants();
-        //All combatants schedule a turn
-        foreach(var combatant in combatants) {
-            combatant.TurnScheduler.ScheduleTurn();
+        Entity[] entities = FindCombatants();
+        
+        //All found entites get added to the combatants list
+        foreach(var entity in entities) {
+            combatants[entity.allegiance].Add(entity);
         }
         //Hand control to first entity
+        turnQueue.Add(EntityAllegiance.hero);
+        //turnQueue.Add(EntityAllegiance.monster);
+
+        currentAllegiance = EntityAllegiance.monster; // Heroes go first, but you need to set it to monster?
+
         NextTurn();
     }
 
     public void EndBattle() {
         acceptingNewTurns = false;
         if (currentEntity != null) {
-            currentEntity.TurnScheduler.EndTurn();
+            currentEntity.TurnScheduler.EndControl();
         }
         turnQueue.Clear();
 
         Debug.Log("Battle Finished.");
-        CurrentTick = 0;
         currentEntity = null;
     }
 
-    public void ScheduleTurn(Turn newTurn) {
+    public void ScheduleTurn(EntityAllegiance allegiance) {
         if (!acceptingNewTurns) {
             Debug.Log("Not accepting new turns.");
             return;
         }
-        //Set turn to current tick + delay
-        newTurn.SetTick(CurrentTick);
-		//Debug.Log($"{newTurn.Entity}'s tick is {newTurn.Tick}. The Current Tick was {CurrentTick}, and the delay was {newTurn.TickDelay}.");
 
-        //Iterate over queue
-        //Insert before number bigger than tick
+        turnQueue.Add(allegiance);
+    }
 
-        for (int i = 0; i < turnQueue.Count; i++) {
-            if (turnQueue[i].Tick > newTurn.Tick) {
-                turnQueue.Insert(i, newTurn);
-       //         Debug.Log($"New Turn inserted at index {i}.");
+    public void NextTurn() {
+        //Disable Control of Current Entity
+        if(currentEntity != null) {
+
+            currentEntity.TurnScheduler.EndControl();
+        }
+
+        //Add a new turn
+        turnQueue.Add(currentAllegiance);
+
+        //Find the next turn
+        currentAllegiance = turnQueue[0];
+        turnQueue.RemoveAt(0);
+        Debug.Log($"Current turn is {currentAllegiance}");
+
+        if(combatants[currentAllegiance].Count == 0) {
+            // If there's no combatants, skip turn
+            Debug.Log($"No entities in {currentAllegiance}, skipping turn");
+            NextTurn();
+            return;
+        }
+
+        entityIndex = -1; // Next entity adds 1 to make 0;
+                
+        foreach(Entity entity in combatants[currentAllegiance]) {
+            entity.TurnScheduler.Refresh();
+        }
+        PlayerInput.Instance.playerHasControl = (currentAllegiance == EntityAllegiance.hero);
+        NextEntity();
+    }
+
+    public void NextEntity() {
+        bool found = false;
+        if(currentEntity != null) {
+            currentEntity.TurnScheduler.EndControl();
+        }
+        int count = 0;
+
+        while (!found) {
+            entityIndex++;
+            if (entityIndex > combatants[currentAllegiance].Count - 1) entityIndex = 0;
+            Debug.Log($"Next Entity index = {entityIndex}");
+
+            if (combatants[currentAllegiance][entityIndex].TurnScheduler.actionsRemaining > 0) {
+                found = true;
+            }
+
+            count++;
+            if(count > combatants[currentAllegiance].Count - 1) {
+                //We've gone through all the entities, and none have any actions left
+                Debug.Log("We've gone through all the entities, and none have any actions left");
+                NextTurn();
                 return;
             }
         }
 
-        turnQueue.Add(newTurn);
-    //   Debug.Log("New Turn Added to end.");
-    }
-
-    public void NextTurn() {
-   //     Debug.Log("Turn Ended, starting next turn.");
-        //Disable Control of Current Entity
-        /* ***************************************/
-        if(currentEntity != null) {
-                        
-            //Check if any more monsters aggro, if it is a hero
-            //if (currentEntity.allegiance == EntityAllegiance.hero) {
-            //    CheckForNewMonsterAggro();
-            //}
-
-            currentEntity.TurnScheduler.EndTurn();
-        }
-
-        //Find the next turn
-        Turn currentTurn = turnQueue[0];
-        turnQueue.RemoveAt(0);
-  //      Debug.Log($"Next Turn is {currentTurn.ToString()}.");
-        //Change current Tick
-        CurrentTick = currentTurn.Tick;
-  //      Debug.Log($"Current tick changed to {CurrentTick}.");
-        //Give control to new Entity
-        /* ***************************************/
-        currentEntity = currentTurn.Entity;
-
-        PlayerInput.Instance.playerHasControl = (currentEntity.allegiance == EntityAllegiance.hero);
-        //MainUI.Instance.SetAbilityBar(currentEntity);
+        currentEntity = combatants[currentAllegiance][entityIndex];
         FocusOnUnit.Instance.MoveCameraToUnit(currentEntity.transform);
-        currentEntity.TurnScheduler.StartTurn();
-    }
-
-    public Entity getCurrentEntity()
-    {
-        Turn currentTurn = turnQueue[0];
-
-        return currentTurn.Entity;
+        currentEntity.TurnScheduler.StartControl();
     }
 
 
     public void DebugPrintTurnQueue() {
         int turnCount = 0;
-        foreach(Turn turn in turnQueue) {
-            Debug.Log($"Turn {turnCount++}, Entity {turn.Entity.ToString()} with Tick {turn.Tick}.");
+        foreach (EntityAllegiance turn in turnQueue) {
+            Debug.Log($"Turn {turnCount++}, Allegiance {turn.ToString()}");
         }
     }
 
@@ -142,51 +161,38 @@ public class BattleController : MonoBehaviour {
             }
         }
         
-        //Find all entities within aggro radius of heroes
-        foreach(var hero in heroes) {
-            var monsters = FindMonstersInRadius(hero);
-            foreach(var monster in monsters) {
-                if (!newCombatants.Contains(monster)) {
-                    newCombatants.Add(monster);
-                }
-            }
-            
-
-            //Collider2D[] hits = Physics2D.OverlapCircleAll(hero.transform.position, aggroRadius);
-            //foreach(var hit in hits) {
-            //    if (hit.transform == hero.transform) continue; // Don't count yourself
-            //    if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
-            //    if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.player) continue; //Don't count heroes
-
-            //    //If it's here, it should be a monster!
-            //    EntityTurnScheduler monster = hit.GetComponent<EntityTurnScheduler>();
-            //    if (!newCombatants.Contains(monster)) {
-            //        newCombatants.Add(monster);
-            //    }
-            //}
-        }
+        ////Find all entities within aggro radius of heroes
+        //foreach(var hero in heroes) {
+        //    var monsters = FindMonstersInBounds();
+        //    foreach(var monster in monsters) {
+        //        if (!newCombatants.Contains(monster)) {
+        //            newCombatants.Add(monster);
+        //        }
+        //    }
+           
+        //}
         
         
         //Return a list of those entities
         return newCombatants.ToArray();
     }
 
-    private Entity[] FindMonstersInRadius(Entity hero) {
-        var monsters = new List<Entity>();
-        Collider2D[] hits = Physics2D.OverlapCircleAll(hero.transform.position, aggroRadius);
-        foreach (var hit in hits) {
-            if (hit.transform == hero.transform) continue; // Don't count yourself
-            if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
-            if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
+    //private Entity[] FindMonstersInRadius(Entity hero) {
+    //    var monsters = new List<Entity>();
+    //    Collider2D[] hits = Physics2D.OverlapCircleAll(hero.transform.position, aggroRadius);
+    //    foreach (var hit in hits) {
+    //        if (hit.transform == hero.transform) continue; // Don't count yourself
+    //        if (!hit.CompareTag("Entity")) continue; // Don't count non-entities
+    //        if (hit.GetComponent<Entity>().allegiance == EntityAllegiance.hero) continue; //Don't count heroes
 
-            //If it's here, it should be a monster!
-            Entity monster = hit.GetComponent<Entity>();
+    //        //If it's here, it should be a monster!
+    //        Entity monster = hit.GetComponent<Entity>();
 
-            monsters.Add(monster);
-        }
+    //        monsters.Add(monster);
+    //    }
 
-        return monsters.ToArray();
-    }
+    //    return monsters.ToArray();
+    //}
 
     private Entity[] FindMonstersInBounds(BoundsInt bounds) {
         var monsters = new List<Entity>();
@@ -205,40 +211,41 @@ public class BattleController : MonoBehaviour {
         return monsters.ToArray();
     }
 
-    private List<Entity> EntitiesWithTurns() {
-        var entitiesWithTurns = new List<Entity>();
-        foreach(Turn turn in turnQueue) {
-            entitiesWithTurns.Add(turn.Entity);
-        }
-
-        return entitiesWithTurns;
-    }
-
-    private void CheckForNewMonsterAggro() {
-        var monsters = FindMonstersInRadius(currentEntity);
-        foreach (var monster in monsters) {
-            if (!EntitiesWithTurns().Contains(monster)) {
-                monster.TurnScheduler.ScheduleTurn();
+    private List<Entity> ActiveCombatants() {
+        var activeCombatants = new List<Entity>();
+        foreach (var allegianceEntityListPair in combatants) {
+            foreach(var entity in allegianceEntityListPair.Value) {
+                activeCombatants.Add(entity);
             }
         }
+
+        return activeCombatants;
     }
+
+    //private void CheckForNewMonsterAggro() {
+    //    var monsters = FindMonstersInRadius(currentEntity);
+    //    foreach (var monster in monsters) {
+    //        if (!EntitiesWithTurns().Contains(monster)) {
+    //            monster.TurnScheduler.ScheduleTurn();
+    //        }
+    //    }
+    //}
 
     public void CheckForNewMonsterAggro(BoundsInt bounds) {
         var monsters = FindMonstersInBounds(bounds);
-        int tickDelay = 1;
         foreach (var monster in monsters) {
-            if (!EntitiesWithTurns().Contains(monster)) {
-                monster.TurnScheduler.ScheduleTurn(tickDelay);
+            if (!ActiveCombatants().Contains(monster)) {
+                combatants[monster.allegiance].Add(monster);
             }
         }
     }
 
     private void OnDrawGizmos() {
-        if (highlightCombatants && Application.isPlaying) {
-            foreach (var turn in turnQueue) {
-                Gizmos.DrawWireSphere(turn.Entity.transform.position, 1.0f);
-            }
-        }
+        //if (highlightCombatants && Application.isPlaying) {
+        //    foreach (var turn in turnQueue) {
+        //        Gizmos.DrawWireSphere(turn.Entity.transform.position, 1.0f);
+        //    }
+        //}
     }
 
     #endregion

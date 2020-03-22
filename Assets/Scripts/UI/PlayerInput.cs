@@ -44,7 +44,7 @@ public class PlayerInput : MonoBehaviour
         {
             Debug.Log("Space pressed");
 
-            onSpaceButtonPressed?.Invoke(BattleController.Instance.getCurrentEntity().transform);
+            onSpaceButtonPressed?.Invoke(BattleController.Instance.currentEntity.transform);
         }
         onMouseHover?.Invoke(mousePosition);
     }

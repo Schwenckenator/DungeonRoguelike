@@ -144,7 +144,7 @@ namespace GridPathfinding {
             // ActionCost is: length, remove possible diagonal penalty, float divide by distance per action, and round up
             int actionCost = Mathf.CeilToInt((float)(length - 5) / BreadthFirstPathfinder.StepsToDistance(stepsFor1Action));
 
-            Debug.Log($"Length is {length}. Divided by {BreadthFirstPathfinder.StepsToDistance(stepsFor1Action)}. ActionCost is {actionCost}");
+            //Debug.Log($"Length is {length}. Divided by {BreadthFirstPathfinder.StepsToDistance(stepsFor1Action)}. ActionCost is {actionCost}");
 
             myEntity.TurnScheduler.ActionStarted();
             myEntity.TurnScheduler.SpendActions(actionCost);
