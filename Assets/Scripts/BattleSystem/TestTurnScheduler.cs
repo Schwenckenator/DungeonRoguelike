@@ -9,8 +9,8 @@ public class TestTurnScheduler : MonoBehaviour
     public Entity entity;
 
     public void ScheduleTurn() {
-        Turn turn = new Turn(entity, tickDelay);
-        BattleController.Instance.ScheduleTurn(turn);
+        //Turn turn = new Turn(entity, tickDelay);
+        //BattleController.Instance.ScheduleTurn(turn);
     }
 }
 

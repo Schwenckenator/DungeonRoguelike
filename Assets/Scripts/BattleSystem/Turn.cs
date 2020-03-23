@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class Turn
 {
-    public int TickDelay { get; private set; }
-    public int Tick { get; private set; }
-    public Entity Entity { get; private set; }
+    public EntityAllegiance allegiance;
 
-    public Turn(Entity entity, int tickDelay) {
-        Entity = entity;
-        TickDelay = tickDelay;
-    }
+    //public int TickDelay { get; private set; }
+    //public int Tick { get; private set; }
+    //public Entity Entity { get; private set; }
 
-    public void SetTick(int currentTick) {
-        Tick = currentTick + TickDelay;
-    }
+    //public Turn(Entity entity, int tickDelay) {
+    //    Entity = entity;
+    //    TickDelay = tickDelay;
+    //}
 
-    public override string ToString() {
-        return $"Turn: Entity {Entity}, Tick {Tick}.";
-    }
+    //public void SetTick(int currentTick) {
+    //    Tick = currentTick + TickDelay;
+    //}
+
+    //public override string ToString() {
+    //    return $"Turn: Entity {Entity}, Tick {Tick}.";
+    //}
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8784567091710726882}
   - component: {fileID: 8784567091710726893}
-  - component: {fileID: 8784567091710726892}
   - component: {fileID: 5712635809241402775}
   m_Layer: 0
   m_Name: Battle Controller
@@ -46,22 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentEntity: {fileID: 0}
-  aggroRadius: 10
+  currentAllegiance: 0
   highlightCombatants: 1
---- !u!114 &8784567091710726892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8784567091710726895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95e880ee8c4ad264d8b340fe1d85deba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tickDelay: 0
-  entity: {fileID: 0}
 --- !u!114 &5712635809241402775
 MonoBehaviour:
   m_ObjectHideFlags: 0
