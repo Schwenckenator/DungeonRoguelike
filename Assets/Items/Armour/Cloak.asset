@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b99621196f33941c28e6798993fbd1e6, type: 3}
-  m_Name: HideOTEffect
+  m_Script: {fileID: 11500000, guid: 03fa7fc614bd4444088ce39995440a84, type: 3}
+  m_Name: Cloak
   m_EditorClassIdentifier: 
-  remainingActiveTurns: 3
-  hiddenAlpha: 0.5
+  name: 
+  abilities:
+  - {fileID: 11400000, guid: fdf4ffa3932684de6921f5a400504446, type: 2}
+  passives: []
+  sprite: {fileID: 0}

@@ -7,10 +7,9 @@ public class HideOverTimeEffect : OTEffect {
     public int remainingActiveTurns;
     public float hiddenAlpha = 0.5f;
     // Overtime Effect
-    public OTEffect oTEffect;
 
     public override void TriggerEffect(Entity target, int minValue, int maxValue) {
-        target.Stats.AddOvertimeEffect(oTEffect);
+        target.Stats.AddOvertimeEffect(this);
 
     }
     private void EnterHide(Entity me)
