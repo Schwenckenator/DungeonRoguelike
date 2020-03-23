@@ -34,12 +34,16 @@ public class EntityStats : MonoBehaviour
         Collection.Initialise();
     }
 
-    public void SetStat(StatType attr, int newValue) {
+    public void Set(StatType attr, int newValue) {
         Collection.Set(attr, newValue);
     }
-    public void ModifyStatByValue(StatType attr, int value) {
+    public void ModifyByValue(StatType attr, int value) {
         int newValue = Collection.Get(attr) + value;
-        SetStat(attr, newValue);
+        Set(attr, newValue);
+    }
+
+    public int Get(StatType attr) {
+        return Collection.Get(attr);
     }
 
     internal void DebugLogStats() {

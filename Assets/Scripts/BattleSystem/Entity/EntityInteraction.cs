@@ -117,6 +117,7 @@ public class EntityInteraction : MonoBehaviour {
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
             currentAbility.DisplayVisual(worldPoint);
+            myEntity.Stats.ModifyByValue(StatType.mana, -1 * currentAbility.manaCost);
             SpendActions();
         }
     }
@@ -146,6 +147,12 @@ public class EntityInteraction : MonoBehaviour {
         //First check action count
         if (myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
             Debug.Log("Not enough Actions remaining!");
+            return false;
+        }
+
+        //Check mana
+        if(myEntity.Stats.Get(StatType.mana) < currentAbility.manaCost) {
+            Debug.Log("Not enough mana remaining!");
             return false;
         }
 

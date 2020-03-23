@@ -6,6 +6,6 @@ using UnityEngine;
 public class DamageEffect : Effect {
 
     public override void TriggerEffect(Entity target, int minValue, int maxValue) {
-        target.Stats.ModifyStatByValue(StatType.health, Random.Range(minValue, maxValue + 1) * -1);
+        target.Stats.ModifyByValue(StatType.health, Random.Range(minValue, maxValue + 1) * -1);
     }
 }

@@ -30,6 +30,7 @@ public abstract class Ability : ScriptableObject, IComparable {
     public StatType attackStat;
     public StatType defenceStat = StatType.defence;
     public int attackBonus = 0;
+    public int manaCost = 0;
 
     public bool snapToGrid = true;
     public bool isBlockedByTerrain = false;
@@ -119,7 +120,7 @@ public abstract class Ability : ScriptableObject, IComparable {
         if (alwaysHit) return true;
 
         int baseHitChance = 50;
-        int hitChance = baseHitChance + attackBonus + me.Stats.Collection.Get(attackStat) - target.Stats.Collection.Get(defenceStat);
+        int hitChance = baseHitChance + attackBonus + me.Stats.Get(attackStat) - target.Stats.Get(defenceStat);
 
         if (hitChance >= 100) return true; // if hitchance is 100, don't bother rolling
 
