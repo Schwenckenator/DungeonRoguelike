@@ -6,8 +6,11 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
     public new string name;
+    public bool isConsumable;
+    public int charges;
     public Ability[] abilities;
-    public StatModifier[] passives; // TODO: change to proper class
+    public StatModifier[] passives;
+    
 
     public Sprite sprite;
 }
