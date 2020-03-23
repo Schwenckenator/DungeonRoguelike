@@ -26,7 +26,7 @@ public class EntityInventory : MonoBehaviour
             myEntity.Interaction.AddAbility(ability);
         }
         foreach(StatModifier mod in item.passives) {
-            myEntity.Stats.stats.AddModifier(mod);
+            myEntity.Stats.Collection.AddModifier(mod);
         }
     }
 
@@ -36,7 +36,7 @@ public class EntityInventory : MonoBehaviour
             myEntity.Interaction.RemoveAbility(ability);
         }
         foreach (StatModifier mod in item.passives) {
-            myEntity.Stats.stats.RemoveModifier(mod);
+            myEntity.Stats.Collection.RemoveModifier(mod);
         }
     }
 

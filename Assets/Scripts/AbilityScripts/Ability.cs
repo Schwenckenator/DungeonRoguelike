@@ -119,7 +119,7 @@ public abstract class Ability : ScriptableObject, IComparable {
         if (alwaysHit) return true;
 
         int baseHitChance = 50;
-        int hitChance = baseHitChance + attackBonus + me.Stats.stats.Get(attackStat) - target.Stats.stats.Get(defenceStat);
+        int hitChance = baseHitChance + attackBonus + me.Stats.Collection.Get(attackStat) - target.Stats.Collection.Get(defenceStat);
 
         if (hitChance >= 100) return true; // if hitchance is 100, don't bother rolling
 
