@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41c55438f36139b41ae05a1ff85d7e4d, type: 3}
-  m_Name: SpellManaPotion
+  m_Name: ConsumeManaPotion
   m_EditorClassIdentifier: 
-  name: 
-  sortingIndex: 0
-  targetType: 0
+  name: Mana Potion
+  sortingIndex: 51
+  targetType: 1
   canTargetDead: 0
   canTargetAlive: 1
-  visual: {fileID: 0}
-  effects: []
+  visual: {fileID: 7977837134407638966, guid: cbcde11c61b3b5849afc4c2c6ddfb380, type: 3}
+  effects:
+  - {fileID: 11400000, guid: aebbc0ebbb240ef44aab7fbcf72b59ed, type: 2}
   actionCost: 1
   endsTurn: 0
   requireValidTarget: 1
   range: 1
-  minValue: 0
-  maxValue: 0
-  alwaysHit: 0
+  minValue: 45
+  maxValue: 75
+  alwaysHit: 1
   attackStat: 0
   defenceStat: 2
   attackBonus: 0

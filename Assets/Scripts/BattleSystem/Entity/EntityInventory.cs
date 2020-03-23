@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EntityInventory : MonoBehaviour
 {
     private Entity myEntity;
 
     private List<Item> items;
-
+    private Dictionary<Item, int> itemsCount;
+    
     private List<WorldItem> itemsStoodOn;
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
         items = new List<Item>();
+        itemsCount = new Dictionary<Item, int>();
         itemsStoodOn = new List<WorldItem>();
 
         foreach(Item item in myEntity.character.startingItems) {
@@ -22,8 +25,15 @@ public class EntityInventory : MonoBehaviour
 
     public void AddItem(Item item) {
         items.Add(item);
+        int count = item.charges <= 0 ? 1 : item.charges; // Return either 1 or the number of charges
+        itemsCount.Add(item, count);
+
         foreach(Ability ability in item.abilities) {
-            myEntity.Interaction.AddAbility(ability);
+            Action<Item> callback = null;
+            if (item.isConsumable) {
+                callback += DecrementCharges(item);
+            }
+            myEntity.Interaction.AddAbility(ability, callback);
         }
         foreach(StatModifier mod in item.passives) {
             myEntity.Stats.Collection.AddModifier(mod);
@@ -61,6 +71,13 @@ public class EntityInventory : MonoBehaviour
 
     public bool IsCollidingWithWorldItem() {
         return itemsStoodOn.Count > 0;
+    }
+
+    private void DecrementCharges(Item item) {
+        itemsCount[item]--;
+        if (itemsCount[item] <= 0) {
+            RemoveItem(item);
+        }
     }
 
 }

@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03fa7fc614bd4444088ce39995440a84, type: 3}
-  m_Name: HeathPotion
+  m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  name: 
-  abilities: []
+  name: Health Potion
+  isConsumable: 1
+  charges: 1
+  abilities:
+  - {fileID: 11400000, guid: 4802da56f8251f744ad983ebbe590423, type: 2}
   passives: []
-  instants: []
   sprite: {fileID: 0}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New SelfTargetAbility", menuName = "Ability/Self Target Ability", order = 51)]
 public class SelfTargetAbility : Ability {
-
+    
     public override void DisplayVisual(Vector2 position) {
         Instantiate(visual, position, Quaternion.identity);
     }

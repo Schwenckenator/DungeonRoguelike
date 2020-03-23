@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9fe763206974a0347b8ceae0e2158f24, type: 3}
-  m_Name: New ChangeStatEffect
+  m_Name: EffectHealing
   m_EditorClassIdentifier: 
   stat: 0
-  multiplier: 0
+  multiplier: 1

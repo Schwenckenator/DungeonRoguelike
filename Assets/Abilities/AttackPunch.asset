@@ -19,7 +19,7 @@ MonoBehaviour:
   canTargetAlive: 1
   visual: {fileID: 7977837134407638966, guid: cbcde11c61b3b5849afc4c2c6ddfb380, type: 3}
   effects:
-  - {fileID: 11400000, guid: 4aae88667d3151744a2c78fdd024a931, type: 2}
+  - {fileID: 11400000, guid: bba18ed1cdad7d94b8d5e4fae3e2ffa0, type: 2}
   actionCost: 1
   endsTurn: 1
   requireValidTarget: 1
@@ -30,4 +30,6 @@ MonoBehaviour:
   attackStat: 6
   defenceStat: 2
   attackBonus: 0
+  manaCost: 0
   snapToGrid: 1
+  isBlockedByTerrain: 0
