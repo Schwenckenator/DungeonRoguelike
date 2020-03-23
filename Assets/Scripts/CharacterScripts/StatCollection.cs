@@ -11,9 +11,6 @@ public class StatCollection
     protected Character character;
     readonly Dictionary<StatType, Stat> baseStats;
     readonly Dictionary<StatType, List<StatModifier>> modifiers;
-    public Action onAttributeUpdate;
-    public Action<float, float> onHealthUpdate;
-    public Action<StatType, Stat> onStatUpdateOLD;
     public Dictionary<StatType, Action<Stat>> onStatUpdate;
 
     public StatCollection(Character character) {
@@ -160,21 +157,6 @@ public class StatCollection
     #endregion
 
     #region private methods
-    //private void CalculateSecondaryAttributes() {
-
-    //    //Vitality
-    //    // Preserve lost hp when changing maximum
-    //    int hpLost = GetMax(StatType.health) - Get(StatType.health);
-    //    baseStats[StatType.health].Max = HealthFormula();
-    //    baseStats[StatType.health].ValueNow = GetMax(StatType.health) - hpLost;
-
-    //    //Debug.Log($"Base Max HP is {baseAttributes[Attribute.healthMax]}");
-
-    //    onAttributeUpdate?.Invoke();
-    //    onHealthUpdate?.Invoke(Get(StatType.health), GetMax(StatType.health));
-    //}
-
-
     //TODO: Generalise these formulas??
     private void CalculateMaxHealth(Stat temp) {
         int mult = 10;

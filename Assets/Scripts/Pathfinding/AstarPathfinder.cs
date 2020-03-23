@@ -18,6 +18,8 @@ namespace GridPathfinding {
 
         private void Awake() {
             Instance = this;
+            open = new List<PathNode>();
+            closed = new List<PathNode>();
         }
 
         public Vector2Int[] GetPath(Vector2Int origin, Vector2Int goal, out Vector2Int[] path, out float distance) {
