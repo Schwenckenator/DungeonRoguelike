@@ -39,11 +39,11 @@ public class EntityStats : MonoBehaviour
         int newValue = stats.Get(attr) + value;
         SetStat(attr, newValue);
     }
-    public void AddOvertimeEffect(Effect effect)
-    {
-        activeOvertimeEffects.Add(effect);
+    //public void AddOvertimeEffect(Effect effect)
+    //{
+    //    activeOvertimeEffects.Add(effect);
 
-    }
+    //}
 
     internal void DebugLogStats() {
         stats.DebugLogStats(myEntity);

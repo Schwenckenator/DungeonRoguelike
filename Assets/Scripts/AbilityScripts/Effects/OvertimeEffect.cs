@@ -10,7 +10,7 @@ public class OverTimeEffect : OTEffect {
     public OTEffect oTEffect;
 
     public override void TriggerEffect(Entity target, int minValue, int maxValue) {
-        target.Stats.AddOvertimeEffect(oTEffect);
+        //target.Stats.AddOvertimeEffect(oTEffect);
 
     }
 
