@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace GridPathfinding {
     public class NodeMap : MonoBehaviour {
+        public static bool debug = false;
 
         private MapNode[,] Map { get; set; }
 
@@ -38,12 +39,12 @@ namespace GridPathfinding {
         }
 
         public static void SetPathable(Vector2Int coords, bool isPathable) {
-            Debug.Log($"Node {coords} set IsPathable to {isPathable}");
+            if (debug) Debug.Log($"Node {coords} set IsPathable to {isPathable}");
             instance.Map[coords.x, coords.y].IsPathable = isPathable;
         }
 
         public static void SetOccupied(Vector2Int coords, bool isOccupied) {
-            Debug.Log($"Node {coords} set IsOccupied to {isOccupied}");
+            if (debug) Debug.Log($"Node {coords} set IsOccupied to {isOccupied}");
             instance.Map[coords.x, coords.y].IsOccupied = isOccupied;
         }
 

@@ -16,6 +16,8 @@ namespace GridPathfinding {
     /// 
     public class BreadthFirstPathfinder : MonoBehaviour
     {
+        public static bool debug = false;
+
         public static bool readyToGetPath = true;
         public static BreadthFirstPathfinder Instance { get; private set; }
 
@@ -112,7 +114,7 @@ namespace GridPathfinding {
         }
 
         public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxSteps) {
-            Debug.Log("Flood fill pathing started.");
+            //if (debug) Debug.Log("Flood fill pathing started.");
             readyToGetPath = false;
             originSet = true;
 
@@ -147,7 +149,7 @@ namespace GridPathfinding {
                     if(isDiagonal) {
                         thisStepCost = Mathf.RoundToInt(thisStepCost * diagonalPenalty); //Diagonals cost more
                     }
-                    //Debug.Log($"New neighbour's stepcost is {stepCost}.");
+                    //if (debug) Debug.Log($"New neighbour's stepcost is {stepCost}.");
                     neighbours.Add(new PathNode(currentNode, new Vector2Int(x, y), thisStepCost));
                 }
                 foreach(var neighbour in neighbours) {
@@ -164,7 +166,7 @@ namespace GridPathfinding {
                     neighbour.distance = currentNode.distance + neighbour.stepCost;
                     scoreMap[neighbour.position.x, neighbour.position.y] = neighbour.score;
                     if(neighbour.distance > maxDistance) {
-                        //Debug.Log($"Node {neighbour} is over max score");
+                        //if (debug) Debug.Log($"Node {neighbour} is over max score");
                     } else {
                         frontier.Add(neighbour);
                     }
@@ -172,7 +174,7 @@ namespace GridPathfinding {
                 }
             }
         
-            Debug.Log("Flood fill pathing complete.");
+            if (debug) Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
         }
 
@@ -194,7 +196,7 @@ namespace GridPathfinding {
             PathNode firstNode = visited.Find(x => x.position == goal);
             PathNode currentNode = firstNode;
             List<Vector2Int> path = new List<Vector2Int>();
-            Debug.Log($"First Node's distance score is {firstNode.distance}");
+            if (debug) Debug.Log($"First Node's distance score is {firstNode.distance}");
             length = firstNode.distance;
             while (currentNode != null) {
                 path.Add(currentNode.position);
@@ -230,26 +232,5 @@ namespace GridPathfinding {
 
         }
         #endregion
-        //This go duplicated in the merge conflict
-        //private void OnDrawGizmos() {
-        //    if (originSet) {
-
-
-        //        foreach (var node in visited) {
-        //            Gizmos.color = new Color(1, 0, 0, 0.5f);
-        //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-
-        //        }
-        //        foreach (var node in frontier) {
-
-        //            Gizmos.color = Color.green;
-        //            Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
-        //        }
-        //        if(currentNode != null) {
-        //            Gizmos.color = Color.blue;
-        //            Gizmos.DrawWireSphere(currentNode.position.ToVector3Int(), 0.5f);
-        //        }
-        //    }
-        //}
     }
 }

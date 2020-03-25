@@ -199,24 +199,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d91b9e6c43782a4687b331a8114d195, type: 3}
---- !u!1 &1310066820 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
-    type: 3}
-  m_PrefabInstance: {fileID: 6167254309673367130}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1310066829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1310066820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a38e5226496764098d0fedafce037a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1115927483046538932
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -916,16 +898,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager Bundle
       objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_Name
-      value: Dungeon Controller
-      objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_TagString
-      value: Dungeon
-      objectReference: {fileID: 0}
     - target: {fileID: 1949173751215812946, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -980,61 +952,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3206404760064572660, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: aggroRadius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3802633448912417242, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3802633448912417242, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3802633448912417242, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759864, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759864, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759864, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3206404760064572667, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3206404760064572667, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3206404760064572667, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3206404760064572662, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_Name
-      value: Battle Controller
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39fe941210b89ee42ae0871df4e1b78d, type: 3}
