@@ -15,7 +15,8 @@ MonoBehaviour:
   name: Mana Potion
   isConsumable: 1
   charges: 1
+  isDroppable: 1
   abilities:
   - {fileID: 11400000, guid: 66fddf24dbd2b994f9a3af303ecd24c7, type: 2}
   passives: []
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 4b327be392f0aa4488a24f938f265ad5, type: 3}

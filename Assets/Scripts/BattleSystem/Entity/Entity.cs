@@ -93,6 +93,7 @@ public class Entity : MonoBehaviour
     public void Die() {
         EntityVisibilityController.SetDeadSprite(character);
         EntityVisibilityController.DowngradeVisibilityLayer();
+        Inventory.DropAllDroppable();
 
         PathAgent.FreeMySpace();
     }

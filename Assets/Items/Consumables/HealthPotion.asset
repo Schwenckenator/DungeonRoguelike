@@ -15,7 +15,8 @@ MonoBehaviour:
   name: Health Potion
   isConsumable: 1
   charges: 1
+  isDroppable: 1
   abilities:
   - {fileID: 11400000, guid: 4802da56f8251f744ad983ebbe590423, type: 2}
   passives: []
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 5bd1332fed88ce6479e36bdc06cf0c6d, type: 3}
