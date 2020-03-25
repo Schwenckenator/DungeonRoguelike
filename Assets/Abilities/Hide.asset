@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Hide
   sortingIndex: 0
-  targetType: 1
-  canTargetDead: 0
-  canTargetAlive: 0
+  targetType: 0
+  canTargetDead: 1
+  canTargetAlive: 1
   selectorSprite: {fileID: 0}
-  visual: {fileID: 0}
+  visual: {fileID: 1134481946190490, guid: b4ee8b8c6b9f64be6aa7abe34ecc5b9f, type: 3}
   effects:
   - {fileID: 11400000, guid: f3aa1f033574d443ea61aca68ed4a592, type: 2}
   actionCost: 1

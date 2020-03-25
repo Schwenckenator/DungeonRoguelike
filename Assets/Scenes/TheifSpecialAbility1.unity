@@ -120,6 +120,26 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &66041661 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5731855395266410404, guid: f1683147ae039c64cab3213ca0647be4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2525179910947163367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &66041662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66041661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b05b53f9e861423bac9ec9056aa7fa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  remainingActiveTurns: 0
+  hiddenAlpha: 0.5
 --- !u!1001 &1296798397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -916,6 +936,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager Bundle
       objectReference: {fileID: 0}
+    - target: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: m_Name
+      value: Dungeon Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Dungeon
+      objectReference: {fileID: 0}
     - target: {fileID: 1949173751215812946, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -970,16 +1000,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_Name
-      value: Dungeon Controller
-      objectReference: {fileID: 0}
-    - target: {fileID: 6167254308504759812, guid: 39fe941210b89ee42ae0871df4e1b78d,
-        type: 3}
-      propertyPath: m_TagString
-      value: Dungeon
       objectReference: {fileID: 0}
     - target: {fileID: 3206404760064572660, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}

@@ -20,11 +20,15 @@ public class EntityStats : MonoBehaviour
     public TextMeshProUGUI healthText;
 
     private Entity myEntity;
-    private List<Effect> activeOvertimeEffects;
+
+    //TODO Temp idea to test , make private
+    private Dictionary<string,GameObject> activeOvertimeEffects;
+    //private Dictionary<Item, int> effectOvertime;
 
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
+        activeOvertimeEffects = new Dictionary<string, GameObject>();
         stats = new StatCollection(myEntity.character);
         //stats.onHealthUpdate += UpdateHealthBar;
         stats.onStatUpdate[StatType.health] += UpdateHealthBar;
@@ -39,11 +43,14 @@ public class EntityStats : MonoBehaviour
         int newValue = stats.Get(attr) + value;
         SetStat(attr, newValue);
     }
-    //public void AddOvertimeEffect(Effect effect)
-    //{
-    //    activeOvertimeEffects.Add(effect);
-
-    //}
+    public void AddOvertimeEffect(GameObject overTimeEffectObject)
+    {
+        activeOvertimeEffects[overTimeEffectObject.name] = overTimeEffectObject;
+    }
+    public bool CheckForOverTimeEffect(string overTimeEffectObjectName)
+    {
+        return true;
+    }
 
     internal void DebugLogStats() {
         stats.DebugLogStats(myEntity);

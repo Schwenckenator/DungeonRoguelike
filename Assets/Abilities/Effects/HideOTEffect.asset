@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99621196f33941c28e6798993fbd1e6, type: 3}
   m_Name: HideOTEffect
   m_EditorClassIdentifier: 
-  remainingActiveTurns: 3
-  hiddenAlpha: 0.5
+  hideOverTime: {fileID: 6374340668968968030, guid: 00aadd92bdbd34b5f9cf9e554c4fc730,
+    type: 3}
