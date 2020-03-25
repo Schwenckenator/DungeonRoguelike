@@ -9,25 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a94f24897887534caefdb493bb2ef45, type: 3}
-  m_Name: AttackPunch
+  m_Script: {fileID: 11500000, guid: 41c55438f36139b41ae05a1ff85d7e4d, type: 3}
+  m_Name: ConsumeManaPotion
   m_EditorClassIdentifier: 
-  name: Punch
-  sortingIndex: 10
-  targetType: 3
+  name: Mana Potion
+  sortingIndex: 51
+  targetType: 1
   canTargetDead: 0
   canTargetAlive: 1
   visual: {fileID: 7977837134407638966, guid: cbcde11c61b3b5849afc4c2c6ddfb380, type: 3}
   effects:
-  - {fileID: 11400000, guid: bba18ed1cdad7d94b8d5e4fae3e2ffa0, type: 2}
+  - {fileID: 11400000, guid: aebbc0ebbb240ef44aab7fbcf72b59ed, type: 2}
   actionCost: 1
-  endsTurn: 1
+  endsTurn: 0
   requireValidTarget: 1
   range: 1
-  minValue: 5
-  maxValue: 15
-  alwaysHit: 0
-  attackStat: 6
+  minValue: 45
+  maxValue: 75
+  alwaysHit: 1
+  attackStat: 0
   defenceStat: 2
   attackBonus: 0
   manaCost: 0

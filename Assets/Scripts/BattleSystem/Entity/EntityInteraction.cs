@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEditor;
+using System;
 
 public class EntityInteraction : MonoBehaviour {
 
-    public List<Ability> abilities; //Set this in inspector
+    public List<Ability> abilities;
+    public Dictionary<Ability, ItemCallback> abilityCallbacks;
 
     public Collider2D selector;
     //public int raycount = 16;
@@ -20,14 +22,12 @@ public class EntityInteraction : MonoBehaviour {
         PlayerInput.Instance.onMouseHover += HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed += SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed += CancelTargeting;
-        //targetingRing.SetActive(true);
         selector.gameObject.SetActive(true);
     }
     private void OnDisable() {
         PlayerInput.Instance.onMouseHover -= HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed -= SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed -= CancelTargeting;
-        //targetingRing.SetActive(false);
         selector.gameObject.SetActive(false);
     }
 
@@ -35,8 +35,10 @@ public class EntityInteraction : MonoBehaviour {
         myEntity = GetComponent<Entity>();
         abilities = new List<Ability>(myEntity.character.baseAbilities);
 
-        //Select first ability for safety.... Do I actually need this??
-        //SetCurrentAbility(0);
+        abilityCallbacks = new Dictionary<Ability, ItemCallback>();
+        foreach (var ability in abilities) {
+            abilityCallbacks.Add(ability, null);
+        }
 
         contactFilter = new ContactFilter2D();
         contactFilter.NoFilter();
@@ -53,7 +55,10 @@ public class EntityInteraction : MonoBehaviour {
 
     //Make this available to the AI hopefully keep it dry if possible
     public void HoverOverTarget(Vector2 worldPoint) {
-        if (currentAbility != null && currentAbility.PositionLocked) {
+        // No ability? No hovering.
+        if (currentAbility == null) return;
+
+        if (currentAbility.PositionLocked) {
             RotateSelector(worldPoint);
             MoveSelector(this.transform.position);
         } else {
@@ -118,6 +123,7 @@ public class EntityInteraction : MonoBehaviour {
         if (!currentAbility.requireValidTarget || validTargets > 0) {
             currentAbility.DisplayVisual(worldPoint);
             myEntity.Stats.ModifyByValue(StatType.mana, -1 * currentAbility.manaCost);
+            abilityCallbacks[currentAbility]?.Invoke(); // How do I get the item the ability came from?
             SpendActions();
         }
     }
@@ -191,9 +197,11 @@ public class EntityInteraction : MonoBehaviour {
         }
     }
 
-    public void AddAbility(Ability ability) {
-        //abilities.Add(ability);
-        if(abilities.Count == 0) {
+    public void AddAbility(Ability ability, ItemCallback callback) {
+
+        abilityCallbacks.Add(ability, callback);
+
+        if (abilities.Count == 0) {
             abilities.Add(ability);
             return;
         }
@@ -215,6 +223,9 @@ public class EntityInteraction : MonoBehaviour {
     public void RemoveAbility(Ability ability) {
         if (abilities.Contains(ability)) {
             abilities.Remove(ability);
+        }
+        if (abilityCallbacks.ContainsKey(ability)) {
+            abilityCallbacks.Remove(ability);
         }
     }
 

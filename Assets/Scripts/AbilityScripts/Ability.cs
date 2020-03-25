@@ -9,14 +9,12 @@ public enum TargetType { all, selfOnly, alliesOnly, enemiesOnly, selfAndAllies, 
 /// Ability holds valid targets, damage, and all things to do with an interaction
 /// </summary>
 public abstract class Ability : ScriptableObject, IComparable {
-    //Handle type through subclassing
-    //I'll think of what all abilities share later.
+
     public new string name;
     public int sortingIndex;
     public TargetType targetType;
     public bool canTargetDead = false;
     public bool canTargetAlive = true;
-    //public Sprite selectorSprite;
     public GameObject visual;
 
     public Effect[] effects;
@@ -37,8 +35,6 @@ public abstract class Ability : ScriptableObject, IComparable {
     public bool PositionLocked { get; protected set; }
 
     
-    //public abstract void Initialise();
-
     public void TriggerAbility(Entity me, Entity target) {
         if (!IsHit(me, target)) {
             Debug.Log("Miss!");
