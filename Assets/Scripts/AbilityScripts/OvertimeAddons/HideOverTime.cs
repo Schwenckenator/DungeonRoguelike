@@ -34,7 +34,9 @@ public class HideOverTime : MonoBehaviour
     private void EnterHide(Entity me)
     {
         me.EntityVisibilityController.SetEntityAlpha(hiddenAlpha);
-    }
+        //Use this to remove as a valid target for enemies
+        me.Stats.isHidden = true;
+     }
     public void ExitHide()
     {
         parentEntity.EntityVisibilityController.SetEntityAlpha(1);

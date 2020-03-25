@@ -43,8 +43,10 @@ public abstract class Ability : ScriptableObject, IComparable {
     public abstract void DisplayVisual(Entity me);
 
     public abstract void PrepareSelector(ref GameObject selector);
-
+    
+    //TODO add something here to check for hidden
     public bool IsLegalTarget(Entity me, Entity target) {
+        if (target.Stats.isHidden) return false;
         if (!canTargetDead && target.Stats.isDead) return false;
         if (!canTargetAlive && !target.Stats.isDead) return false;
 

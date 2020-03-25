@@ -15,6 +15,7 @@ public class EntityStats : MonoBehaviour
     public StatCollection stats;
 
     public bool isDead = false;
+    public bool isHidden = false;
 
     public Image healthBar;
     public TextMeshProUGUI healthText;
