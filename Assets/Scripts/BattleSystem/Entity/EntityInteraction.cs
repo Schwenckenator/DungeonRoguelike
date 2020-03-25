@@ -8,7 +8,7 @@ using System;
 public class EntityInteraction : MonoBehaviour {
 
     public List<Ability> abilities;
-    public SortedDictionary<Ability, Action<Item>> abilityCallbacks;
+    public Dictionary<Ability, ItemCallback> abilityCallbacks;
 
     public Collider2D selector;
     //public int raycount = 16;
@@ -35,7 +35,7 @@ public class EntityInteraction : MonoBehaviour {
         myEntity = GetComponent<Entity>();
         abilities = new List<Ability>(myEntity.character.baseAbilities);
 
-        abilityCallbacks = new SortedDictionary<Ability, Action<Item>>();
+        abilityCallbacks = new Dictionary<Ability, ItemCallback>();
         foreach (var ability in abilities) {
             abilityCallbacks.Add(ability, null);
         }
@@ -197,7 +197,7 @@ public class EntityInteraction : MonoBehaviour {
         }
     }
 
-    public void AddAbility(Ability ability, Action callback) {
+    public void AddAbility(Ability ability, ItemCallback callback) {
 
         abilityCallbacks.Add(ability, callback);
 

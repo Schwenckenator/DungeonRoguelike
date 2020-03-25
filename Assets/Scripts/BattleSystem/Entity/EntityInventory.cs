@@ -29,9 +29,9 @@ public class EntityInventory : MonoBehaviour
         itemsCount.Add(item, count);
 
         foreach(Ability ability in item.abilities) {
-            Action<Item> callback = null;
+            ItemCallback callback = null;
             if (item.isConsumable) {
-                callback += DecrementCharges(item);
+                callback = new ItemCallback(item, DecrementCharges);
             }
             myEntity.Interaction.AddAbility(ability, callback);
         }
@@ -74,8 +74,10 @@ public class EntityInventory : MonoBehaviour
     }
 
     private void DecrementCharges(Item item) {
+        Debug.Log("Charges decremented!");
         itemsCount[item]--;
         if (itemsCount[item] <= 0) {
+            Debug.Log("Charges are 0, item removed!");
             RemoveItem(item);
         }
     }
