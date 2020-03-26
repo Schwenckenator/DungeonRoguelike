@@ -8,9 +8,8 @@ public class ConeAreaAbility : Ability {
     public float angle = 90;
 
 
-    public override void DisplayVisual(Entity me)
+    public override void DisplayVisual(Vector2 position)
     {
-        Vector2 position = me.transform.position;
         Instantiate(visual, position, Quaternion.identity);
     }
 

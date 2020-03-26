@@ -47,7 +47,7 @@ public abstract class Ability : ScriptableObject, IComparable {
             effect.TriggerEffect(target, minValue, maxValue);
         }
     }
-    public abstract void DisplayVisual(Entity me);
+    public abstract void DisplayVisual(Vector2 postion);
 
     public abstract void PrepareSelector(ref GameObject selector);
 

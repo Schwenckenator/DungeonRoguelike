@@ -10,6 +10,6 @@ public class Item : ScriptableObject
     public int charges;
     public bool isDroppable;
     public Ability[] abilities;
-    public StatModifier[] passives;
+    public Buff[] passives;
     public Sprite sprite;
 }

@@ -12,7 +12,7 @@ public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
 
-    public StatCollection Collection { get; private set; }
+    private StatCollection collection;
 
     public bool isDead = false;
 
@@ -27,30 +27,63 @@ public class EntityStats : MonoBehaviour
     private Dictionary<string,GameObject> activeOvertimeEffects;
     //private Dictionary<Item, int> effectOvertime;
 
+    private List<Buff> buffs;
+
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
+        buffs = new List<Buff>();
         activeOvertimeEffects = new Dictionary<string, GameObject>();
 
-        Collection = new StatCollection(myEntity.character);
-        Collection.onStatUpdate[StatType.health] += UpdateHealthBar;
-        Collection.onStatUpdate[StatType.health] += CheckForDeath;
-        Collection.onStatUpdate[StatType.mana] += UpdateManaBar;
+        collection = new StatCollection(myEntity.character);
+        collection.onStatUpdate[StatType.health] += UpdateHealthBar;
+        collection.onStatUpdate[StatType.health] += CheckForDeath;
+        collection.onStatUpdate[StatType.mana] += UpdateManaBar;
 
-        Collection.Initialise();
+        collection.Initialise();
     }
 
     public void Set(StatType attr, int newValue) {
-        Collection.Set(attr, newValue);
+        collection.Set(attr, newValue);
     }
     public void ModifyByValue(StatType attr, int value) {
-        int newValue = Collection.Get(attr) + value;
+        int newValue = collection.Get(attr) + value;
         Set(attr, newValue);
     }
 
     public int Get(StatType attr) {
-        return Collection.Get(attr);
+        return collection.Get(attr);
     }
+
+    public void AddBuff(Buff buff) {
+        if (buffs.Exists(x => x.id == buff.id)) {
+            if (buff.isStackable) {
+                //Add stacking code here?
+                Debug.LogWarning($"{buff.id} stacking not implemented!");
+                return;
+            } else {
+                Debug.LogWarning($"{buff.id} already exists!");
+                return;
+            }
+        } 
+        
+        buffs.Add(buff);
+        foreach(StatModifier mod in buff.statModifiers) {
+            collection.AddModifier(mod);
+        }
+    }
+
+    public void RemoveBuff(Buff buff) {
+        if (!buffs.Contains(buff)) {
+            Debug.LogWarning($"Tried to remove {buff} from buff list but it doesn't exist!");
+            return;
+        }
+        buffs.Remove(buff);
+        foreach(StatModifier mod in buff.statModifiers) {
+            collection.RemoveModifier(mod);
+        }
+    }
+
     public void AddOvertimeEffect(GameObject overTimeEffectObject)
     {
         activeOvertimeEffects[overTimeEffectObject.name] = overTimeEffectObject;
@@ -61,7 +94,7 @@ public class EntityStats : MonoBehaviour
     }
 
     internal void DebugLogStats() {
-        Collection.DebugLogStats(myEntity);
+        collection.DebugLogStats(myEntity);
     }
     #endregion
 

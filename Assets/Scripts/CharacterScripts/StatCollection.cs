@@ -124,13 +124,10 @@ public class StatCollection
     }
 
     /// <summary>
-    /// Adds a unique modifier to a stat.
+    /// Adds a modifier to a stat.
     /// </summary>
     public void AddModifier(StatModifier mod) {
-        if(modifiers[mod.statType].Exists(x => x.id == mod.id)){
-            Debug.LogWarning($"{mod.id} already exists!");
-            return;
-        }
+
         modifiers[mod.statType].Add(mod);
         onStatUpdate[mod.statType]?.Invoke(baseStats[mod.statType]);
     }
