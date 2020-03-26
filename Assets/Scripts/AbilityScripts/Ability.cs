@@ -4,21 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum TargetType { all, selfOnly, alliesOnly, enemiesOnly, selfAndAllies, others}
-public enum AbilityType { empty, damage, heal }
+
 /// <summary>
 /// Ability holds valid targets, damage, and all things to do with an interaction
 /// </summary>
-
-//[CreateAssetMenu(fileName = "New Ability", menuName = "Ability/Ability", order = 51)]
 public abstract class Ability : ScriptableObject, IComparable {
-    //Handle type through subclassing
-    //I'll think of what all abilities share later.
+
     public new string name;
     public int sortingIndex;
     public TargetType targetType;
     public bool canTargetDead = false;
     public bool canTargetAlive = true;
-    public Sprite selectorSprite;
     public GameObject visual;
 
 
@@ -29,13 +25,24 @@ public abstract class Ability : ScriptableObject, IComparable {
     public float range = 1f;
     public int minValue;
     public int maxValue;
+    public bool alwaysHit = false;
+    public StatType attackStat;
+    public StatType defenceStat = StatType.defence;
+    public int attackBonus = 0;
+    public int manaCost = 0;
 
     public bool snapToGrid = true;
+    public bool isBlockedByTerrain = false;
     public bool PositionLocked { get; protected set; }
 
-    //public abstract void Initialise();
-
-    public void TriggerAbility(Entity target) {
+    
+    public void TriggerAbility(Entity me, Entity target) {
+        if (!IsHit(me, target)) {
+            Debug.Log("Miss!");
+            return;
+        } else {
+            Debug.Log("Hit!");
+        }
         foreach (var effect in effects) {
             effect.TriggerEffect(target, minValue, maxValue);
         }
@@ -104,5 +111,18 @@ public abstract class Ability : ScriptableObject, IComparable {
 
     public int CompareTo(object obj) {
         return sortingIndex.CompareTo(obj);
+    }
+
+    protected bool IsHit(Entity me, Entity target) {
+        if (alwaysHit) return true;
+
+        int baseHitChance = 50;
+        int hitChance = baseHitChance + attackBonus + me.Stats.Get(attackStat) - target.Stats.Get(defenceStat);
+
+        if (hitChance >= 100) return true; // if hitchance is 100, don't bother rolling
+
+        int roll = UnityEngine.Random.Range(0, 100); // Rolls 0 - 99
+        Debug.Log($"Rolled {roll}, target {hitChance}, diff {hitChance - roll}.");
+        return roll < hitChance; 
     }
 }

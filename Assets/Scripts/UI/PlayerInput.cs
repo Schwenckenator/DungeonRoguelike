@@ -14,6 +14,7 @@ public class PlayerInput : MonoBehaviour
     public Action<Vector2> onLeftMouseButtonPressed;
     public Action<Vector2> onRightMouseButtonPressed;
     public Action<Transform> onSpaceButtonPressed;
+    public Action onTabPressed;
 
     public Action<Vector2> onMouseHover;
 
@@ -40,11 +41,14 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetMouseButtonDown(1)) {
             onRightMouseButtonPressed?.Invoke(mousePosition);
         }
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Space pressed");
 
-            onSpaceButtonPressed?.Invoke(BattleController.Instance.getCurrentEntity().transform);
+            onSpaceButtonPressed?.Invoke(BattleController.Instance.currentEntity.transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            onTabPressed?.Invoke();
         }
         onMouseHover?.Invoke(mousePosition);
     }

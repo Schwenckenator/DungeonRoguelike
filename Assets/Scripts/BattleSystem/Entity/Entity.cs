@@ -17,9 +17,9 @@ public class Entity : MonoBehaviour
     public EntityTurnScheduler TurnScheduler { get; private set; }
     public PathAgent PathAgent { get; private set; }
     public FogClearer FogClearer { get; private set; }
+    public FogInteractor FogInteractor { get; private set; }
     public EntityVisibilityController EntityVisibilityController { get; private set; }
 
-    //public ClickToMove ClickToMove { get; private set; }
     public EntityAllegiance allegiance;
 
     private EntityState state;
@@ -36,29 +36,25 @@ public class Entity : MonoBehaviour
 
                 PathAgent.enabled = true;
                 Interaction.enabled = false;
-                if (allegiance == EntityAllegiance.hero)
-                    FogClearer.enabled = true;
+                FogInteractor.enabled = true;
 
             } else if(state == EntityState.idle) {
 
                 PathAgent.enabled = true;
                 Interaction.enabled = false;
-                if (allegiance == EntityAllegiance.hero)
-                    FogClearer.enabled = true;
+                FogInteractor.enabled = true;
 
 
             } else if(state == EntityState.targeting) {
                 PathAgent.enabled = false;
                 Interaction.enabled = true;
-                if (allegiance == EntityAllegiance.hero)
-                    FogClearer.enabled = true;
+                FogInteractor.enabled = true;
 
 
             } else if(state == EntityState.inactive) {
                 PathAgent.enabled = false;
                 Interaction.enabled = false;
-                if (allegiance == EntityAllegiance.hero)
-                    FogClearer.enabled = false;
+                FogInteractor.enabled = false;
 
             }
         }
@@ -78,12 +74,8 @@ public class Entity : MonoBehaviour
         Stats = GetComponent<EntityStats>();
         TurnScheduler = GetComponent<EntityTurnScheduler>();
         PathAgent = GetComponent<PathAgent>();
+        FogInteractor = GetComponent<FogInteractor>();
         EntityVisibilityController = GetComponent<EntityVisibilityController>();
-
-
-        if (allegiance == EntityAllegiance.hero) {
-            FogClearer = GetComponent<FogClearer>();
-        }
 
         State = EntityState.inactive;
 
@@ -92,6 +84,7 @@ public class Entity : MonoBehaviour
         Inventory.Initialise();
         TurnScheduler.Initialise();
         PathAgent.Initialise();
+        FogInteractor.Initialise();
 
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = character.sprite;
@@ -100,6 +93,7 @@ public class Entity : MonoBehaviour
     public void Die() {
         EntityVisibilityController.SetDeadSprite(character);
         EntityVisibilityController.DowngradeVisibilityLayer();
+        Inventory.DropAllDroppable();
 
         PathAgent.FreeMySpace();
     }

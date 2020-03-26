@@ -18,14 +18,18 @@ public class ItemGenerator : MonoBehaviour
         for (int i = 0; i < numberOfItems.GetRandom(); i++) {
             //Pick a random room, generate encounter, then remove it from the list
             Room room = dungeon.rooms.RandomItem();
-            SpawnItem(room);
+            SpawnRandomItem(room);
         }
     }
 
-    private void SpawnItem(Room room) {
+    public void SpawnRandomItem(Room room) {
         Vector2Int position = room.RandomSpawnablePoint();
+        Item item = itemList.RandomItem();
+        SpawnItem(item, position);
+    }
 
-        GameObject newItem = Instantiate(itemBase, position.ToVector3Int(), Quaternion.identity);
-        newItem.GetComponent<WorldItem>().Initialise(itemList.RandomItem());
+    public void SpawnItem(Item item, Vector2Int position) {
+        GameObject newWorldItem = Instantiate(itemBase, position.ToVector3Int(), Quaternion.identity);
+        newWorldItem.GetComponent<WorldItem>().Initialise(item);
     }
 }

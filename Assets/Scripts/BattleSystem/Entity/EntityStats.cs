@@ -12,12 +12,14 @@ public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
 
-    public StatCollection stats;
+    public StatCollection Collection { get; private set; }
 
     public bool isDead = false;
 
     public Image healthBar;
     public TextMeshProUGUI healthText;
+    public Image manaBar;
+    public TextMeshProUGUI manaText;
 
     private Entity myEntity;
 
@@ -29,19 +31,25 @@ public class EntityStats : MonoBehaviour
     public void Initialise() {
         myEntity = GetComponent<Entity>();
         activeOvertimeEffects = new Dictionary<string, GameObject>();
-        stats = new StatCollection(myEntity.character);
-        //stats.onHealthUpdate += UpdateHealthBar;
-        stats.onStatUpdate[StatType.health] += UpdateHealthBar;
-        stats.onStatUpdate[StatType.health] += CheckForDeath;
-        stats.Initialise();
+
+        Collection = new StatCollection(myEntity.character);
+        Collection.onStatUpdate[StatType.health] += UpdateHealthBar;
+        Collection.onStatUpdate[StatType.health] += CheckForDeath;
+        Collection.onStatUpdate[StatType.mana] += UpdateManaBar;
+
+        Collection.Initialise();
     }
 
-    public void SetStat(StatType attr, int newValue) {
-        stats.Set(attr, newValue);
+    public void Set(StatType attr, int newValue) {
+        Collection.Set(attr, newValue);
     }
-    public void ModifyStatByValue(StatType attr, int value) {
-        int newValue = stats.Get(attr) + value;
-        SetStat(attr, newValue);
+    public void ModifyByValue(StatType attr, int value) {
+        int newValue = Collection.Get(attr) + value;
+        Set(attr, newValue);
+    }
+
+    public int Get(StatType attr) {
+        return Collection.Get(attr);
     }
     public void AddOvertimeEffect(GameObject overTimeEffectObject)
     {
@@ -53,7 +61,7 @@ public class EntityStats : MonoBehaviour
     }
 
     internal void DebugLogStats() {
-        stats.DebugLogStats(myEntity);
+        Collection.DebugLogStats(myEntity);
     }
     #endregion
 
@@ -68,6 +76,11 @@ public class EntityStats : MonoBehaviour
     private void UpdateHealthBar(Stat health) {
         healthBar.fillAmount = (float)health.ValueNow / health.Max;
         healthText.text = $"{health.ValueNow} / {health.Max}";
+    }
+
+    private void UpdateManaBar(Stat mana) {
+        manaBar.fillAmount = (float)mana.ValueNow / mana.Max;
+        manaText.text = $"{mana.ValueNow} / {mana.Max}";
     }
 
     

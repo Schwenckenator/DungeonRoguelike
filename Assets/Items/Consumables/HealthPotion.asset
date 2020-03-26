@@ -10,17 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03fa7fc614bd4444088ce39995440a84, type: 3}
-  m_Name: KnightlyPlate
+  m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  name: Knightly Plate
-  abilities: []
-  passives:
-  - id: Armour_Body_Vi
-    statType: 7
-    operation: 0
-    value: 5
-  - id: Armour_Body_Ar
-    statType: 3
-    operation: 0
-    value: 15
-  sprite: {fileID: 21300000, guid: 2a727ec92a475f74e93d4a472010e2e0, type: 3}
+  name: Health Potion
+  isConsumable: 1
+  charges: 1
+  isDroppable: 1
+  abilities:
+  - {fileID: 11400000, guid: 4802da56f8251f744ad983ebbe590423, type: 2}
+  passives: []
+  sprite: {fileID: 21300000, guid: 5bd1332fed88ce6479e36bdc06cf0c6d, type: 3}

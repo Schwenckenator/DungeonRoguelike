@@ -18,6 +18,8 @@ public class Dungeon : MonoBehaviour
 
     public FogOfWar fog;
 
+    public TilemapCollider2D tileCollider;
+
     private IDungeonGenerator generator;
     private bool showFilledArea = false;
 
@@ -76,8 +78,6 @@ public class Dungeon : MonoBehaviour
 
     public IEnumerator GenerateDungeon() {
         yield return StartCoroutine(generator.GenerateDungeon(this));
-        
-        
     }
 
     /// <summary>

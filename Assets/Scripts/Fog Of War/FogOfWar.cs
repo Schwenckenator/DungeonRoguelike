@@ -46,14 +46,7 @@ public class FogOfWar : MonoBehaviour
     }
 
     public void OnFogClearerLeaveRoom(Room room) {
-        bool roomOccupied = false;
-        foreach (var clearer in clearers) {
-            if (clearer.IsInRoom(room)) {
-                roomOccupied = true;
-                break;
-            }
-        }
-        if (!roomOccupied) {
+        if (!RoomOccupiedByClearer(room)) {
             SetFog(FogState.discovered, room.Bounds);
         }
     }
@@ -83,6 +76,15 @@ public class FogOfWar : MonoBehaviour
 
     public void AddHidee(FogHidee value) {
         hidees.Add(value);
+    }
+
+    public bool RoomOccupiedByClearer(Room room) {
+        foreach (var clearer in clearers) {
+            if (clearer.IsInRoom(room)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     #region Debug

@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EntityInventory : MonoBehaviour
 {
     private Entity myEntity;
 
-    private List<Item> items;
-
+    private Dictionary<Item, int> items;
+    
     private List<WorldItem> itemsStoodOn;
 
     public void Initialise() {
         myEntity = GetComponent<Entity>();
-        items = new List<Item>();
+        items = new Dictionary<Item, int>();
         itemsStoodOn = new List<WorldItem>();
 
         foreach(Item item in myEntity.character.startingItems) {
@@ -21,12 +22,23 @@ public class EntityInventory : MonoBehaviour
     }
 
     public void AddItem(Item item) {
-        items.Add(item);
+        int count = item.charges <= 0 ? 1 : item.charges; // Return either 1 or the number of charges
+
+        if (items.ContainsKey(item)) {
+            items[item] += count;
+        } else {
+            items.Add(item, count);
+        }
+
         foreach(Ability ability in item.abilities) {
-            myEntity.Interaction.AddAbility(ability);
+            ItemCallback callback = null;
+            if (item.isConsumable) {
+                callback = new ItemCallback(item, DecrementCharges);
+            }
+            myEntity.Interaction.AddAbility(ability, callback);
         }
         foreach(StatModifier mod in item.passives) {
-            myEntity.Stats.stats.AddModifier(mod);
+            myEntity.Stats.Collection.AddModifier(mod);
         }
     }
 
@@ -36,7 +48,7 @@ public class EntityInventory : MonoBehaviour
             myEntity.Interaction.RemoveAbility(ability);
         }
         foreach (StatModifier mod in item.passives) {
-            myEntity.Stats.stats.RemoveModifier(mod);
+            myEntity.Stats.Collection.RemoveModifier(mod);
         }
     }
 
@@ -59,8 +71,36 @@ public class EntityInventory : MonoBehaviour
         itemsStoodOn.Clear();
     }
 
+    public void DropItem(Item item) {
+        RemoveItem(item);
+        ItemGenerator.Instance.SpawnItem(item, transform.position.RoundToVector2Int());
+    }
+
+    public void DropAllDroppable() {
+        Debug.Log("Dropping droppables!");
+        var droppables = new List<Item>();
+        foreach(Item item in items.Keys) {
+            if (item.isDroppable) {
+                droppables.Add(item);
+            }
+        }
+        foreach(Item item in droppables) {
+            Debug.Log($"Dropping {item}");
+            DropItem(item);
+        }
+    }
+
     public bool IsCollidingWithWorldItem() {
         return itemsStoodOn.Count > 0;
+    }
+
+    private void DecrementCharges(Item item) {
+        Debug.Log("Charges decremented!");
+        items[item]--;
+        if (items[item] <= 0) {
+            Debug.Log("Charges are 0, item removed!");
+            RemoveItem(item);
+        }
     }
 
 }

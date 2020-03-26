@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEditor;
+using System;
 
 public class EntityInteraction : MonoBehaviour {
 
-    public List<Ability> abilities; //Set this in inspector
+    public List<Ability> abilities;
+    public Dictionary<Ability, ItemCallback> abilityCallbacks;
 
     public Collider2D selector;
     //public int raycount = 16;
@@ -20,14 +22,12 @@ public class EntityInteraction : MonoBehaviour {
         PlayerInput.Instance.onMouseHover += HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed += SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed += CancelTargeting;
-        //targetingRing.SetActive(true);
         selector.gameObject.SetActive(true);
     }
     private void OnDisable() {
         PlayerInput.Instance.onMouseHover -= HoverOverTarget;
         PlayerInput.Instance.onLeftMouseButtonPressed -= SelectTarget;
         PlayerInput.Instance.onRightMouseButtonPressed -= CancelTargeting;
-        //targetingRing.SetActive(false);
         selector.gameObject.SetActive(false);
     }
 
@@ -35,8 +35,10 @@ public class EntityInteraction : MonoBehaviour {
         myEntity = GetComponent<Entity>();
         abilities = new List<Ability>(myEntity.character.baseAbilities);
 
-        //Select first ability for safety.... Do I actually need this??
-        //SetCurrentAbility(0);
+        abilityCallbacks = new Dictionary<Ability, ItemCallback>();
+        foreach (var ability in abilities) {
+            abilityCallbacks.Add(ability, null);
+        }
 
         contactFilter = new ContactFilter2D();
         contactFilter.NoFilter();
@@ -53,7 +55,10 @@ public class EntityInteraction : MonoBehaviour {
 
     //Make this available to the AI hopefully keep it dry if possible
     public void HoverOverTarget(Vector2 worldPoint) {
-        if (currentAbility != null && currentAbility.PositionLocked) {
+        // No ability? No hovering.
+        if (currentAbility == null) return;
+
+        if (currentAbility.PositionLocked) {
             RotateSelector(worldPoint);
             MoveSelector(this.transform.position);
         } else {
@@ -112,11 +117,13 @@ public class EntityInteraction : MonoBehaviour {
             }
 
             //Do the ability
-            currentAbility.TriggerAbility(target);
+            currentAbility.TriggerAbility(myEntity, target);
             validTargets++;
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
-            currentAbility.DisplayVisual(myEntity);
+            currentAbility.DisplayVisual(worldPoint);
+            myEntity.Stats.ModifyByValue(StatType.mana, -1 * currentAbility.manaCost);
+            abilityCallbacks[currentAbility]?.Invoke(); // How do I get the item the ability came from?
             SpendActions();
         }
     }
@@ -136,16 +143,22 @@ public class EntityInteraction : MonoBehaviour {
         myEntity.State = EntityState.idle;
     }
     private bool IsValidInteraction(Vector3 worldPoint) {
-        //First check action count
+        
         if (currentAbility == null)
         {
             Debug.Log("Current Ability not set");
             return false;
         }
 
-
+        //First check action count
         if (myEntity.TurnScheduler.actionsRemaining < currentAbility.actionCost) {
             Debug.Log("Not enough Actions remaining!");
+            return false;
+        }
+
+        //Check mana
+        if(myEntity.Stats.Get(StatType.mana) < currentAbility.manaCost) {
+            Debug.Log("Not enough mana remaining!");
             return false;
         }
 
@@ -154,6 +167,12 @@ public class EntityInteraction : MonoBehaviour {
             Debug.Log("Out of range!");
             return false;
         }
+
+        if(currentAbility.isBlockedByTerrain && !IsLineOfSight(transform.position.RoundToVector2Int(), worldPoint.RoundToVector2Int())) {
+            Debug.Log("No line of sight!");
+            return false;
+        }
+
         Debug.Log("No obvious impediment.");
         return true;
     }
@@ -178,9 +197,11 @@ public class EntityInteraction : MonoBehaviour {
         }
     }
 
-    public void AddAbility(Ability ability) {
-        //abilities.Add(ability);
-        if(abilities.Count == 0) {
+    public void AddAbility(Ability ability, ItemCallback callback) {
+
+        abilityCallbacks.Add(ability, callback);
+
+        if (abilities.Count == 0) {
             abilities.Add(ability);
             return;
         }
@@ -203,6 +224,33 @@ public class EntityInteraction : MonoBehaviour {
         if (abilities.Contains(ability)) {
             abilities.Remove(ability);
         }
+        if (abilityCallbacks.ContainsKey(ability)) {
+            abilityCallbacks.Remove(ability);
+        }
+    }
+
+    private static bool IsLineOfSight(Vector2 origin, Vector2 target) {
+        // Cast 4 lines, from centre of origin to 4 corners of the target square
+        float offset = 0.49f;
+        Vector2[] targetPoints = {
+            new Vector2(target.x + offset, target.y + offset),
+            new Vector2(target.x + offset, target.y - offset),
+            new Vector2(target.x - offset, target.y - offset),
+            new Vector2(target.x - offset, target.y + offset)
+        };
+        bool lineOfSight = false;
+        foreach(Vector2 point in targetPoints) {
+            var hits = Physics2D.LinecastAll(origin, point, LayerMask.GetMask("Obstacle"));
+
+            if (hits.Length > 0) {
+                Debug.DrawLine(origin, point, Color.red, 5f);
+                continue;
+            }
+            Debug.DrawLine(origin, point, Color.green, 5f);
+            lineOfSight = true;
+        }
+
+        return lineOfSight;
     }
 }
 
