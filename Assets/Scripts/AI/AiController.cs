@@ -46,6 +46,8 @@ public class AiController : MonoBehaviour
         Debug.Log("Do my turn!");
 
         Entity nearestEntity = GetNearestEntity(FindTargets());
+        //TODO need to check inside nearest target
+        //TODO move this hidden check to a better spot
         if(nearestEntity == null) {
             //Do Nothing
             MyEntity.TurnScheduler.actionsRemaining = 0; // Naughty Matt!
@@ -164,7 +166,7 @@ public class AiController : MonoBehaviour
         foreach (var entity in targets) {
             Vector2 entity2dPos = new Vector2(entity.transform.position.x, entity.transform.position.y);
             Vector2 distanceVector = (entity2dPos - myPos);
-            if (distanceVector.sqrMagnitude < currentSmallestSqrMagnitude && !entity.Stats.isDead) {
+            if (distanceVector.sqrMagnitude < currentSmallestSqrMagnitude && !entity.Stats.isDead && !entity.Stats.isHidden) {
                 currentSmallestSqrMagnitude = distanceVector.sqrMagnitude;
                 nearestEntity = entity;
             }
