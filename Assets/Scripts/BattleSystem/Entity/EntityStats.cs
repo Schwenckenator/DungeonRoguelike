@@ -15,6 +15,7 @@ public class EntityStats : MonoBehaviour
     public StatCollection Collection { get; private set; }
 
     public bool isDead = false;
+    public bool isHidden = false;
 
     public Image healthBar;
     public TextMeshProUGUI healthText;
@@ -22,6 +23,10 @@ public class EntityStats : MonoBehaviour
     public TextMeshProUGUI manaText;
 
     private Entity myEntity;
+
+    //TODO Temp idea to test , make private
+    private Dictionary<string,GameObject> activeOvertimeEffects;
+    //private Dictionary<Item, int> effectOvertime;
 
     #region public methods
     public void Initialise() {
@@ -32,6 +37,12 @@ public class EntityStats : MonoBehaviour
         Collection.onStatUpdate[StatType.mana] += UpdateManaBar;
 
         Collection.Initialise();
+        activeOvertimeEffects = new Dictionary<string, GameObject>();
+        stats = new StatCollection(myEntity.character);
+        //stats.onHealthUpdate += UpdateHealthBar;
+        stats.onStatUpdate[StatType.health] += UpdateHealthBar;
+        stats.onStatUpdate[StatType.health] += CheckForDeath;
+        stats.Initialise();
     }
 
     public void Set(StatType attr, int newValue) {
@@ -44,6 +55,14 @@ public class EntityStats : MonoBehaviour
 
     public int Get(StatType attr) {
         return Collection.Get(attr);
+    }
+    public void AddOvertimeEffect(GameObject overTimeEffectObject)
+    {
+        activeOvertimeEffects[overTimeEffectObject.name] = overTimeEffectObject;
+    }
+    public bool CheckForOverTimeEffect(string overTimeEffectObjectName)
+    {
+        return true;
     }
 
     internal void DebugLogStats() {

@@ -5,7 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New SingleTargetAbility", menuName = "Ability/Single Target Ability", order = 51)]
 public class SingleTargetAbility : Ability {
 
-    public override void DisplayVisual(Vector2 position) {
+    //private readonly Vector2[] points = {
+    //    new Vector2(0.25f, 0f),
+    //    new Vector2(0f, 0.25f),
+    //    new Vector2(-0.25f, 0f),
+    //    new Vector2(0f, -0.25f)
+    //};
+
+    public override void DisplayVisual(Entity me)
+    {
+        Vector2 position = me.transform.position;
         Instantiate(visual, position, Quaternion.identity);
     }
 

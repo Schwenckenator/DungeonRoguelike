@@ -46,5 +46,12 @@ public class EntityVisibilityController : MonoBehaviour
 
     }
 
+    public void SetEntityAlpha(float targetAlpha)
+    {
+        Color oldC = spriteRenderer.color;
+        Color newC = new Color(oldC.r, oldC.g, oldC.b, targetAlpha);
+        spriteRenderer.color = newC;
+    }
+
 
 }

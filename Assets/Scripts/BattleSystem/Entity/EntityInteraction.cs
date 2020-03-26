@@ -121,9 +121,7 @@ public class EntityInteraction : MonoBehaviour {
             validTargets++;
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
-            currentAbility.DisplayVisual(worldPoint);
-            myEntity.Stats.ModifyByValue(StatType.mana, -1 * currentAbility.manaCost);
-            abilityCallbacks[currentAbility]?.Invoke(); // How do I get the item the ability came from?
+            currentAbility.DisplayVisual(myEntity);
             SpendActions();
         }
     }
