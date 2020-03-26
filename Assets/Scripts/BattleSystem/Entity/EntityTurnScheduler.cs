@@ -105,7 +105,7 @@ public class EntityTurnScheduler : MonoBehaviour
         }
     }
 
-    public void ActionStarted() {
+    public void ActionStarted() { 
         currentlyPerformingAction = true;
     }
     public void ActionFinished() {
