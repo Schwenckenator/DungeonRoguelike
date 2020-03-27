@@ -62,9 +62,13 @@ namespace GridPathfinding {
             if (originSet)
             {
                 foreach (var node in visited) {
-                    Gizmos.color = new Color(1, 0, 0, 0.5f);
+                    Gizmos.color = Color.red;
                     Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
 
+                }
+                foreach(var node in oneActionReachableNodes) {
+                    Gizmos.color = Color.magenta;
+                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
                 }
                 foreach (var node in frontier) {
 
@@ -125,6 +129,7 @@ namespace GridPathfinding {
             scoreMap = new int[size, size];
             frontier.Clear();
             visited.Clear();
+            oneActionReachableNodes.Clear();
             frontier.Add(new PathNode(null, origin));
 
             int maxDistance = (maxSteps * stepCost) + diagBasePenalty; // Pathfinder is allowed to overflow by 1 diagonal penalty
@@ -173,7 +178,7 @@ namespace GridPathfinding {
                         //if (debug) Debug.Log($"Node {neighbour} is over max score");
                     } else {
                         frontier.Add(neighbour);
-                        if(neighbour.distance < oneActionDistance) {
+                        if(neighbour.distance <= oneActionDistance) {
                             oneActionReachableNodes.Add(neighbour);
                         }
                     }
@@ -183,6 +188,8 @@ namespace GridPathfinding {
         
             if (debug) Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
+
+            PathBoundaryManager.SetupBoundaries(oneActionReachableNodes.ToArray(), visited.ToArray());
         }
 
         public Vector2Int[] GetPath(Vector2Int goal, out int length) {
