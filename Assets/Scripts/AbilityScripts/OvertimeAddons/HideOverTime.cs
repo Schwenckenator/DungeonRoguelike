@@ -39,8 +39,9 @@ public class HideOverTime : MonoBehaviour
      }
     public void ExitHide()
     {
-        parentEntity.EntityVisibilityController.SetEntityAlpha(1);
         GameEvents.current.onStartPlayerTurn -= DecrementEffectLifetime;
+        parentEntity.EntityVisibilityController.SetEntityAlpha(1);
+        parentEntity.Stats.isHidden = false;
 
     }
 
