@@ -23,7 +23,7 @@ public class EntityStats : MonoBehaviour
     public TextMeshProUGUI manaText;
 
     private Entity myEntity;
-
+    private StatCollection stats;
     //TODO Temp idea to test , make private
     private Dictionary<string,GameObject> activeOvertimeEffects;
     //private Dictionary<Item, int> effectOvertime;
