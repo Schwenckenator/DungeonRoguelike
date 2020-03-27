@@ -31,18 +31,13 @@ public class EntityStats : MonoBehaviour
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
+        activeOvertimeEffects = new Dictionary<string, GameObject>();
         Collection = new StatCollection(myEntity.character);
         Collection.onStatUpdate[StatType.health] += UpdateHealthBar;
         Collection.onStatUpdate[StatType.health] += CheckForDeath;
         Collection.onStatUpdate[StatType.mana] += UpdateManaBar;
 
         Collection.Initialise();
-        activeOvertimeEffects = new Dictionary<string, GameObject>();
-        stats = new StatCollection(myEntity.character);
-        //stats.onHealthUpdate += UpdateHealthBar;
-        stats.onStatUpdate[StatType.health] += UpdateHealthBar;
-        stats.onStatUpdate[StatType.health] += CheckForDeath;
-        stats.Initialise();
     }
 
     public void Set(StatType attr, int newValue) {
@@ -104,14 +99,5 @@ public class EntityStatsEditor : Editor {
         if(GUILayout.Button("Print Stats")) {
             myScript.DebugLogStats();
         }
-        //if (GUILayout.Button("Set Health")) {
-        //    myScript.SetHealth(myScript.health);
-        //}
-        ////if (GUILayout.Button("Damage Me!")) {
-        ////    myScript.Damage(myScript.TestDamage);
-        ////}
-        ////if (GUILayout.Button("Heal Me!")) {
-        ////    myScript.Heal(myScript.TestHealing);
-        ////}
     }
 }
