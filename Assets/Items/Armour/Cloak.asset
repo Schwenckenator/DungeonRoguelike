@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Cloak
   m_EditorClassIdentifier: 
   name: 
-  abilities:
-  - {fileID: 11400000, guid: fdf4ffa3932684de6921f5a400504446, type: 2}
+  isConsumable: 0
+  charges: 0
+  isDroppable: 0
+  abilities: []
   passives: []
   sprite: {fileID: 0}
