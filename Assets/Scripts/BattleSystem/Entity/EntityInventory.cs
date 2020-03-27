@@ -31,6 +31,10 @@ public class EntityInventory : MonoBehaviour
         }
 
         foreach(Ability ability in item.abilities) {
+            if(ability is null) {
+                Debug.LogError($"Ability in {item.name} is null!");
+            }
+
             ItemCallback callback = null;
             if (item.isConsumable) {
                 callback = new ItemCallback(item, DecrementCharges);
