@@ -28,6 +28,13 @@ namespace GridPathfinding {
         }
 
         #region Unity Callbacks
+        private void Update() {
+            if (Input.GetKeyDown(KeyCode.L)) {
+                //PathBoundaryManager.SetLines(stepsFor1Action, stepsFor1Action * myEntity.TurnScheduler.actionsRemaining);
+            }
+        }
+
+
         private void FixedUpdate() {
             if (isMoving) {
                 Walk();
@@ -54,9 +61,6 @@ namespace GridPathfinding {
                 PathFind();
             }
         }
-
-
-
 
         public int PathCheckIntDistance(Vector2 goalToCheck)
         {
@@ -111,25 +115,15 @@ namespace GridPathfinding {
         }
 
         public void FreeMySpace() {
-            NodeMap.SetOccupied(transform.position.RoundToInt().ToVector2Int(), false);
+            NodeMap.SetOccupied(transform.position.RoundToVector2Int(), false);
         }
 
         #region Private Methods
-
-
-
-
         void SetOrigin(Vector2 point) {
-            //TODO working on this at the moment
-            //Open the old origin position up
-            //if(origin!=null)NodeMap.instance.SetPathable(origin.Value, true);
-            ////Close the new origin position
-            //NodeMap.instance.SetPathable(point.RoundToVector2Int(), false);
-
             origin = point.RoundToInt();
             goal = Vector2Int.zero;
             int maxSteps = stepsFor1Action * myEntity.TurnScheduler.actionsRemaining;
-            BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxSteps);
+            BreadthFirstPathfinder.Instance.SetOrigin(origin.Value, maxSteps, stepsFor1Action);
         }
 
         bool PathFind() {
