@@ -189,7 +189,10 @@ namespace GridPathfinding {
             if (debug) Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
 
-            PathBoundaryManager.SetupBoundaries(oneActionReachableNodes.ToArray(), visited.ToArray());
+            PathBoundaryManager.SetupBoundaries(
+                PathBoundaryManager.SortNodes(oneActionReachableNodes.ToArray()),
+                PathBoundaryManager.SortNodes(visited.ToArray())
+            );
         }
 
         public Vector2Int[] GetPath(Vector2Int goal, out int length) {
