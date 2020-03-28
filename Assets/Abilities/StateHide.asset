@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41c55438f36139b41ae05a1ff85d7e4d, type: 3}
-  m_Name: New SingleTargetAbility
+  m_Name: StateHide
   m_EditorClassIdentifier: 
-  name: 
+  name: Hide
   sortingIndex: 0
-  targetType: 0
+  targetType: 1
   canTargetDead: 0
   canTargetAlive: 1
-  visual: {fileID: 0}
-  effects: []
+  visual: {fileID: 1134481946190490, guid: b4ee8b8c6b9f64be6aa7abe34ecc5b9f, type: 3}
+  effects:
+  - {fileID: 11400000, guid: f3aa1f033574d443ea61aca68ed4a592, type: 2}
   actionCost: 1
   endsTurn: 0
   requireValidTarget: 1
