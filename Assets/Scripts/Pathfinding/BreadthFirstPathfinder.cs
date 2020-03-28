@@ -130,7 +130,10 @@ namespace GridPathfinding {
             frontier.Clear();
             visited.Clear();
             oneActionReachableNodes.Clear();
-            frontier.Add(new PathNode(null, origin));
+
+            PathNode firstNode = new PathNode(null, origin);
+            frontier.Add(firstNode);
+            oneActionReachableNodes.Add(firstNode);
 
             int maxDistance = (maxSteps * stepCost) + diagBasePenalty; // Pathfinder is allowed to overflow by 1 diagonal penalty
             int oneActionDistance = oneActionSteps * stepCost + diagBasePenalty;

@@ -55,6 +55,9 @@ public static class MathsExtension {
     public static Vector3Int ToVector3Int(this Vector2Int input) {
         return new Vector3Int(input.x, input.y, 0);
     }
+    public static Vector3 ToVector3(this Vector2Int input) {
+        return new Vector3(input.x, input.y, 0);
+    }
     public static Vector2Int DivideByScalar(this Vector2Int input, int scalar) {
         return new Vector2Int(input.x / scalar, input.y / scalar);
     }
