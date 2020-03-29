@@ -181,12 +181,18 @@ namespace GridPathfinding {
                         //if (debug) Debug.Log($"Node {neighbour} is over max score");
                     } else {
                         frontier.Add(neighbour);
-                        if(neighbour.distance <= oneActionDistance) {
+                        if(neighbour.distance <= oneActionDistance && !oneActionReachableNodes.Contains(neighbour)) {
                             oneActionReachableNodes.Add(neighbour);
                         }
                     }
                 
                 }
+            }
+
+            //TODO: fix horrible hack
+            if(maxDistance <= oneActionDistance) {
+                //If one move is the max, only display orange move, so clear this list
+                oneActionReachableNodes.Clear();
             }
         
             if (debug) Debug.Log("Flood fill pathing complete.");

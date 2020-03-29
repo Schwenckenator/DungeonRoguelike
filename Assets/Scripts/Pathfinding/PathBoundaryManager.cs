@@ -64,12 +64,22 @@ public class PathBoundaryManager : MonoBehaviour
 
     public static void SetupBoundaries(PathNode[] oneMove, PathNode[] maxMove) {
 
-        Instance.meshes[0] = SetupBoundary(oneMove, Instance.meshes[0]);
-        Instance.meshFilters[0].sharedMesh = Instance.meshes[0];
+        Debug.Log($"One move has {oneMove.Length} nodes.");
+        Debug.Log($"Max move has {maxMove.Length} nodes.");
 
-        //Instance.meshes[1] = SetupBoundary(maxMove, Instance.meshes[1]);
-        //Instance.meshFilters[1].sharedMesh = Instance.meshes[1];
+        SetMesh(maxMove, 1);
+        SetMesh(oneMove, 0);
+    }
 
+    private static void SetMesh(PathNode[] nodes, int index) {
+        if (nodes.Length > 1) {
+            Instance.meshFilters[index].gameObject.SetActive(true);
+
+            Instance.meshes[index] = SetupBoundary(nodes, Instance.meshes[index]);
+            Instance.meshFilters[index].sharedMesh = Instance.meshes[index];
+        } else {
+            Instance.meshFilters[index].gameObject.SetActive(false);
+        }
     }
 
     private static Mesh SetupBoundary(PathNode[] nodes, Mesh mesh) {
@@ -81,16 +91,27 @@ public class PathBoundaryManager : MonoBehaviour
 
         // Pull only positions from nodes
         //nodePositions = nodes.Select(x => x.position).ToList();
+        float offset = 0.25f;
         foreach(var node in nodes) {
-            nodePositions.Add(new Vector2(node.position.x - 0.45f, node.position.y - 0.45f));
-            nodePositions.Add(new Vector2(node.position.x + 0.45f, node.position.y - 0.45f));
-            nodePositions.Add(new Vector2(node.position.x - 0.45f, node.position.y + 0.45f));
-            nodePositions.Add(new Vector2(node.position.x + 0.45f, node.position.y + 0.45f));
+            nodePositions.Add(new Vector2(node.position.x - offset, node.position.y - offset));
+            nodePositions.Add(new Vector2(node.position.x + offset, node.position.y - offset));
+            nodePositions.Add(new Vector2(node.position.x - offset, node.position.y + offset));
+            nodePositions.Add(new Vector2(node.position.x + offset, node.position.y + offset));
         }
-
+        
         // Populate Dictionary with Vectors and their indices for easy checking
         for (int i = 0; i < nodePositions.Count; i++) {
-            nodeIndexDict.Add(nodePositions[i], i);
+
+            //Debug.Log($"Checking dict for {nodePositions[i]}.");
+
+            if (!nodeIndexDict.ContainsKey(nodePositions[i])) {
+                //Debug.Log($"Adding {nodePositions[i]} to nodeDictionary.");
+                nodeIndexDict.Add(nodePositions[i], i);
+            } else {
+                Debug.Log($"WOW! Dict already contains {nodePositions[i]}!");
+                nodeIndexDict.Remove(nodePositions[i]);
+                nodeIndexDict.Add(nodePositions[i], i);
+            }
         }
 
         //Setup triangles
@@ -99,47 +120,49 @@ public class PathBoundaryManager : MonoBehaviour
             float y = nodePositions[i].y;
 
             // Is there not a vertex behind us?
-            if (!Contains(x-1, y)) {
-                // There isn't
-                
-                if(Contains(x-1, y+1) && Contains(x, y+1)) {
-                    // Make triange behind us
-                    tris.Add(GetPos(x, y));
-                    tris.Add(GetPos(x - 1, y + 1));
-                    tris.Add(GetPos(x, y + 1));
-                }
-            }
+            //if (!Contains(x-1, y)) {
+            //    // There isn't
+
+            //    if(Contains(x-1, y+1) && Contains(x, y+1)) {
+            //        // Make triange behind us
+            //        tris.Add(GetPos(x, y));
+            //        tris.Add(GetPos(x - 1, y + 1));
+            //        tris.Add(GetPos(x, y + 1));
+            //    }
+            //}
 
             //Do we have a complete quad?
-            if(Contains(x, y+1) && Contains(x+1, y+1) && Contains(x+1, y)) {
+            float step = 0.5f;
+
+            if(Contains(x, y+ step) && Contains(x+ step, y+ step) && Contains(x+ step, y)) {
                 //Yes!
                 tris.Add(GetPos(x, y));
-                tris.Add(GetPos(x, y + 1));
-                tris.Add(GetPos(x + 1, y + 1));
+                tris.Add(GetPos(x, y + step));
+                tris.Add(GetPos(x + step, y + step));
 
                 tris.Add(GetPos(x, y));
-                tris.Add(GetPos(x + 1, y + 1));
-                tris.Add(GetPos(x + 1, y));
-            } else {
-                // Missing next x
-                if (Contains(x, y + 1) && Contains(x + 1, y + 1)) {
-                    tris.Add(GetPos(x, y));
-                    tris.Add(GetPos(x, y + 1));
-                    tris.Add(GetPos(x + 1, y + 1));
-                }
-                // Missing next y
-                if (Contains(x + 1, y + 1) && Contains(x + 1, y)) {
-                    tris.Add(GetPos(x, y));
-                    tris.Add(GetPos(x + 1, y + 1));
-                    tris.Add(GetPos(x + 1, y));
-                }
-                //Missing y diagonal
-                if (Contains(x, y + 1) && Contains(x + 1, y)) {
-                    tris.Add(GetPos(x, y));
-                    tris.Add(GetPos(x, y + 1));
-                    tris.Add(GetPos(x + 1, y));
-                }
-            }
+                tris.Add(GetPos(x + step, y + step));
+                tris.Add(GetPos(x + step, y));
+            } //else {
+            //    // Missing next x
+            //    if (Contains(x, y + 1) && Contains(x + 1, y + 1)) {
+            //        tris.Add(GetPos(x, y));
+            //        tris.Add(GetPos(x, y + 1));
+            //        tris.Add(GetPos(x + 1, y + 1));
+            //    }
+            //    // Missing next y
+            //    if (Contains(x + 1, y + 1) && Contains(x + 1, y)) {
+            //        tris.Add(GetPos(x, y));
+            //        tris.Add(GetPos(x + 1, y + 1));
+            //        tris.Add(GetPos(x + 1, y));
+            //    }
+            //    //Missing y diagonal
+            //    if (Contains(x, y + 1) && Contains(x + 1, y)) {
+            //        tris.Add(GetPos(x, y));
+            //        tris.Add(GetPos(x, y + 1));
+            //        tris.Add(GetPos(x + 1, y));
+            //    }
+            //}
         }
 
         //vertices = nodePositions.Select(x => x.position).ToList()
@@ -149,7 +172,7 @@ public class PathBoundaryManager : MonoBehaviour
         for (int i = 1; i < uvs.Length; i++) {
             uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
         }
-
+        mesh.Clear();
         mesh.SetVertices(vertices);
         mesh.triangles = tris.ToArray();
         mesh.uv = uvs;
