@@ -1,4 +1,5 @@
 ﻿using GridPathfinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,9 +9,14 @@ public class PathBoundaryManager : MonoBehaviour
     private static PathBoundaryManager Instance { get; set; }
     public MeshFilter[] meshFilters;
 
+    public LineRenderer[] lines;
+
     private Mesh[] meshes;
 
+    static bool ready = false;
+
     static Dictionary<Vector2, int> nodeIndexDict;
+    static List<PositionNode> edges;
 
     private void Awake() {
         if(Instance != null) {
@@ -21,6 +27,7 @@ public class PathBoundaryManager : MonoBehaviour
         Instance = this;
 
         nodeIndexDict = new Dictionary<Vector2, int>();
+        edges = new List<PositionNode>();
         meshes = new Mesh[meshFilters.Length];
         for(int i=0; i< meshFilters.Length; i++) {
             meshes[i] = new Mesh {
@@ -62,20 +69,28 @@ public class PathBoundaryManager : MonoBehaviour
         return sortedNodes.ToArray();
     }
 
-    public static void SetupBoundaries(PathNode[] oneMove, PathNode[] maxMove) {
+    public static void SetupBoundaries(Vector2Int origin, PathNode[] oneMove, PathNode[] maxMove) {
 
         Debug.Log($"One move has {oneMove.Length} nodes.");
         Debug.Log($"Max move has {maxMove.Length} nodes.");
 
         SetMesh(maxMove, 1);
         SetMesh(oneMove, 0);
+        ready = true;
+    }
+
+
+
+    private static void SetupLine(List<PositionNode> list, LineRenderer lineRenderer) {
+        lineRenderer.positionCount = list.Count;
+        lineRenderer.SetPositions(list.Select(x => x.position.ToVector3()).ToArray());
     }
 
     private static void SetMesh(PathNode[] nodes, int index) {
         if (nodes.Length > 1) {
             Instance.meshFilters[index].gameObject.SetActive(true);
 
-            Instance.meshes[index] = SetupBoundary(EdgeDetector.FindEdges(new List<PathNode>(nodes)).ToArray(), Instance.meshes[index]);
+            Instance.meshes[index] = SetupBoundary(nodes, Instance.meshes[index]);
             Instance.meshFilters[index].sharedMesh = Instance.meshes[index];
         } else {
             Instance.meshFilters[index].gameObject.SetActive(false);
@@ -226,4 +241,16 @@ public class PathBoundaryManager : MonoBehaviour
         return nodeIndexDict[new Vector2(x, y)];
     }
 
+
+    private void OnDrawGizmos() {
+        if (ready) {
+
+            foreach (var node in edges) {
+
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
+            }
+
+        }
+    }
 }

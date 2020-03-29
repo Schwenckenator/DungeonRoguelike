@@ -199,6 +199,7 @@ namespace GridPathfinding {
             readyToGetPath = true;
 
             PathBoundaryManager.SetupBoundaries(
+                origin,
                 PathBoundaryManager.SortNodes(oneActionReachableNodes.ToArray()),
                 PathBoundaryManager.SortNodes(visited.ToArray())
             );
