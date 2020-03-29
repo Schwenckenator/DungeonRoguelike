@@ -372,11 +372,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 873628acd52105e41a770c4958b5ffe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshFilters:
-  - {fileID: 1616552972}
-  - {fileID: 1621925610}
-  lines:
-  - {fileID: 738331364}
+  pathBoundaries:
+  - {fileID: 1616552973}
+  - {fileID: 1621925611}
 --- !u!1 &1616552969
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +386,7 @@ GameObject:
   - component: {fileID: 1616552970}
   - component: {fileID: 1616552972}
   - component: {fileID: 1616552971}
+  - component: {fileID: 1616552973}
   m_Layer: 0
   m_Name: OneMoveMesh
   m_TagString: Untagged
@@ -455,6 +454,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1616552969}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1616552973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616552969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b447608fb0459b24fad4608974c57b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 1616552972}
+  size: 100
 --- !u!1 &1621925607
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +479,7 @@ GameObject:
   - component: {fileID: 1621925608}
   - component: {fileID: 1621925610}
   - component: {fileID: 1621925609}
+  - component: {fileID: 1621925611}
   m_Layer: 0
   m_Name: MaxMoveMesh
   m_TagString: Untagged
@@ -533,6 +547,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1621925607}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1621925611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621925607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b447608fb0459b24fad4608974c57b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 1621925610}
+  size: 100
 --- !u!1001 &1115927483046538932
 PrefabInstance:
   m_ObjectHideFlags: 0

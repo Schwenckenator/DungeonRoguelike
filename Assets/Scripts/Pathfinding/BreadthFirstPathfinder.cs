@@ -181,7 +181,7 @@ namespace GridPathfinding {
                         //if (debug) Debug.Log($"Node {neighbour} is over max score");
                     } else {
                         frontier.Add(neighbour);
-                        if(neighbour.distance <= oneActionDistance && !oneActionReachableNodes.Contains(neighbour)) {
+                        if(neighbour.distance <= oneActionDistance) {
                             oneActionReachableNodes.Add(neighbour);
                         }
                     }
@@ -199,9 +199,8 @@ namespace GridPathfinding {
             readyToGetPath = true;
 
             PathBoundaryManager.SetupBoundaries(
-                origin,
-                PathBoundaryManager.SortNodes(oneActionReachableNodes.ToArray()),
-                PathBoundaryManager.SortNodes(visited.ToArray())
+                oneActionReachableNodes.ToArray(),
+                visited.ToArray()
             );
         }
 
