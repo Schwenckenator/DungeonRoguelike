@@ -75,44 +75,44 @@ public class PathBoundaryManager : MonoBehaviour
         if (nodes.Length > 1) {
             Instance.meshFilters[index].gameObject.SetActive(true);
 
-            Instance.meshes[index] = SetupMesh(nodes, Instance.meshes[index]);
+            Instance.meshes[index] = SetupBoundary(EdgeDetector.FindEdges(new List<PathNode>(nodes)).ToArray(), Instance.meshes[index]);
             Instance.meshFilters[index].sharedMesh = Instance.meshes[index];
         } else {
             Instance.meshFilters[index].gameObject.SetActive(false);
         }
     }
 
-    private static Mesh SetupMesh(PathNode[] nodes, Mesh mesh) {
-        var nodePositions = new List<Vector2>();
+    //private static Mesh SetupMesh(PathNode[] nodes, Mesh mesh) {
+    //    var nodePositions = new List<Vector2>();
 
-        float offset = 0.25f;
-        foreach (var node in nodes) {
-            nodePositions.Add(new Vector2(node.position.x - offset, node.position.y - offset));
-            nodePositions.Add(new Vector2(node.position.x + offset, node.position.y - offset));
-            nodePositions.Add(new Vector2(node.position.x - offset, node.position.y + offset));
-            nodePositions.Add(new Vector2(node.position.x + offset, node.position.y + offset));
-        }
+    //    float offset = 0.25f;
+    //    foreach (var node in nodes) {
+    //        nodePositions.Add(new Vector2(node.position.x - offset, node.position.y - offset));
+    //        nodePositions.Add(new Vector2(node.position.x + offset, node.position.y - offset));
+    //        nodePositions.Add(new Vector2(node.position.x - offset, node.position.y + offset));
+    //        nodePositions.Add(new Vector2(node.position.x + offset, node.position.y + offset));
+    //    }
 
-        Triangulator triangulator = new Triangulator(nodePositions.ToArray());
-        int[] tris = triangulator.Triangulate();
-        var vertices = new List<Vector3>();
+    //    Triangulator triangulator = new Triangulator(nodePositions.ToArray());
+    //    int[] tris = triangulator.Triangulate();
+    //    var vertices = new List<Vector3>();
 
-        vertices.AddRange(nodePositions.Select(x => x.ToVector3()));
+    //    vertices.AddRange(nodePositions.Select(x => x.ToVector3()));
 
-        Vector2[] uvs = new Vector2[vertices.Count];
+    //    Vector2[] uvs = new Vector2[vertices.Count];
 
-        for (int i = 1; i < uvs.Length; i++) {
-            uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
-        }
-        mesh.Clear();
-        mesh.SetVertices(vertices);
-        mesh.triangles = tris;
-        mesh.uv = uvs;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+    //    for (int i = 1; i < uvs.Length; i++) {
+    //        uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
+    //    }
+    //    mesh.Clear();
+    //    mesh.SetVertices(vertices);
+    //    mesh.triangles = tris;
+    //    mesh.uv = uvs;
+    //    mesh.RecalculateNormals();
+    //    mesh.RecalculateBounds();
 
-        return mesh;
-    }
+    //    return mesh;
+    //}
 
     private static Mesh SetupBoundary(PathNode[] nodes, Mesh mesh) {
         var nodePositions = new List<Vector2>();
