@@ -54,11 +54,27 @@ public class PathBoundary : MonoBehaviour
         triangles.Clear();
         mesh.Clear();
 
-        TriangulateCellRows();
+        //TriangulateCellRows();
+        TriangulateAllCells();
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         
+    }
+
+    private void TriangulateAllCells() {
+        int cells = size - 1;
+        for (int i = 0, y = 0; y < cells; y++, i++) {
+            for (int x = 0; x < cells; x++, i++) {
+                TriangulateSingleCell(voxels[i]);
+            }
+        }
+    }
+
+    private void TriangulateSingleCell(Voxel2D voxel) {
+        if (voxel.state) {
+            AddQuad(voxel.topLeftPos, voxel.topRightPos, voxel.botRightPos, voxel.botLeftPos);
+        }
     }
 
     private void TriangulateCellRows() {
