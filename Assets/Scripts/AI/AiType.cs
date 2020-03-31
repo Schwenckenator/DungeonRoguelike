@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New A.I. Type", menuName = "AI/New AIType", order = 53)]
+[CreateAssetMenu(fileName = "New Ai Type", menuName = "AI/New AiType", order = 53)]
 public class AiType : ScriptableObject
 {
     public string aiTypeName;
@@ -49,7 +49,7 @@ public class AiType : ScriptableObject
 
     public void ShouldChase(Entity me, Entity nearestEntity)
     {
-        //TODO call AI Controller
+        me.AiController.MoveToNearestPlayer(nearestEntity);
     }
 
     public void ShouldAttack(Entity me, Entity nearestEntity)

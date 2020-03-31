@@ -13,6 +13,8 @@ public class AiController : MonoBehaviour
 
     public float minDistance = 1;
     public bool debug = true;
+
+    public AiType aiType;
     //Basic AI
 
     //Checks all enemies
@@ -27,6 +29,7 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
+        aiType = GetComponent<AiType>();
         debugCircle = Instantiate(debugCircle);
     }
 
@@ -54,34 +57,10 @@ public class AiController : MonoBehaviour
             MyEntity.TurnScheduler.ActionFinished();
             return;
         }
-        float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
-        if (distanceToEntity < 1.5f) {
-            //You're in range! Punch the sucker!
-            if (debug) Debug.Log("Enemy close! Attacking!");
-            MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
-            //Immitate the player using mouse by letting ai show hover.
-            MyEntity.Interaction.HoverOverTarget(nearestEntity.transform.position);
-            MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
-           
-        } 
-        else {
-            //Try to move closer to nearest entity.
+        //Move decision making to aiType
+        aiType.makeDecision(MyEntity, nearestEntity);
 
-
-
-            if (!MoveToNearestPlayer(nearestEntity))
-            {
-                if (debug) Debug.Log("Failed to move to target. Finish Turn.");
-                MyEntity.TurnScheduler.actionsRemaining = 0;
-                MyEntity.TurnScheduler.ActionFinished();
-
-            }
-
-
-
-            //MyEntity.TurnScheduler.actionsRemaining -= 1;
-        }
 
         //TODO turnAttemptCount - maybe this could be based on MyEntity.TurnScheduler.actionsRemaining
         if (turnAttemptCount > 2)
@@ -102,7 +81,8 @@ public class AiController : MonoBehaviour
         }
     }
 
-    private bool MoveToNearestPlayer(Entity nearestEntity) {
+
+    public bool MoveToNearestPlayer(Entity nearestEntity) {
         if (debug) Debug.Log("MoveToNearestPlayer Called");
 
         //Move towards target
@@ -119,6 +99,11 @@ public class AiController : MonoBehaviour
         if (reachableGoal == origin)
         {
             //No path found
+
+
+            if (debug) Debug.Log("Failed to move to target. Finish Turn.");
+            MyEntity.TurnScheduler.actionsRemaining = 0;
+            MyEntity.TurnScheduler.ActionFinished();
             return false;
         }
 
@@ -134,6 +119,19 @@ public class AiController : MonoBehaviour
 
         //MyEntity.ClickToMove.MoveOrder(targetPosition);
         
+    }
+
+
+    public void Attack(Entity targetEntity)
+    {
+
+            //You're in range! Punch the sucker!
+            if (debug) Debug.Log("Enemy close! Attacking!");
+            MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
+            //Immitate the player using mouse by letting ai show hover.
+            MyEntity.Interaction.HoverOverTarget(targetEntity.transform.position);
+            MyEntity.Interaction.SelectTarget(targetEntity.transform.position);
+
     }
 
     //Find the a distance point between two Vectors
