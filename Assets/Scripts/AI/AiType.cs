@@ -8,7 +8,7 @@ public class AiType : ScriptableObject
     public string aiTypeName;
     //Eg front line would like to be at 1 distance when choosing attacks
     public float preferredFightRange;
-    public float patrolRadius;
+    public int patrolMaxTiles;
     public float chaseRange;
     public float endChaseRange;
     public bool debug = true;

@@ -102,7 +102,12 @@ public class AiController : MonoBehaviour
         Vector2Int origin = new Vector2Int(transform.position.x.RoundToInt(), transform.position.y.RoundToInt());
         Vector2Int goal = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
 
-        Vector2Int reachableGoal = MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
+        return MoveToPosition(origin, goal);
+    }
+
+    public bool MoveToPosition(Vector2Int origin, Vector2Int goal) { 
+
+    Vector2Int reachableGoal = MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
         if (reachableGoal == origin)
         {
             //No path found
@@ -123,8 +128,6 @@ public class AiController : MonoBehaviour
 
         if (debug) Debug.Log("Finished set goal and find path.");
         return true;
-
-        //MyEntity.ClickToMove.MoveOrder(targetPosition);
         
     }
 
@@ -146,32 +149,43 @@ public class AiController : MonoBehaviour
         //Pick a random direction within the maxTiles
         //This is going to get ugly, best not to look
         int direction = Random.Range(0, 3);
-        Vector2 target;
+        Vector2Int origin = MyEntity.transform.position.RoundToVector2Int();
+
+        Vector2Int target;
+
+        
+        int x, y;
         //North
         if (direction == 0)
         {
-            target = new Vector2(startingPosition.x+maxTiles,startingPosition.y);
+            x = startingPosition.x.RoundToInt() + maxTiles;
+            y = startingPosition.y.RoundToInt();
+            target = new Vector2Int(x,y);
         }
         //East
         else if (direction == 1)
         {
-            target = new Vector2(startingPosition.x, startingPosition.y+ maxTiles);
+            x = startingPosition.x.RoundToInt() ;
+            y = startingPosition.y.RoundToInt() + maxTiles;
+            target = new Vector2Int(x, y);
         }
         //South
         else if (direction == 2)
         {
-            target = new Vector2(startingPosition.x - maxTiles, startingPosition.y);
+            x = startingPosition.x.RoundToInt() - maxTiles;
+            y = startingPosition.y.RoundToInt();
+            target = new Vector2Int(x, y);
         } 
         //West
-        else if (direction == 3)
+        else
         {
-            target = new Vector2(startingPosition.x, startingPosition.y-maxTiles);
+            x = startingPosition.x.RoundToInt();
+            y = startingPosition.y.RoundToInt() - maxTiles;
+            target = new Vector2Int(x, y);
         }
         if (debug) Debug.Log("Ai Patrolling");
 
-        //TODO
-        //MoveToNearestPlayer()
-
+        MoveToPosition(origin,target);
     }
 
     //Find the a distance point between two Vectors
