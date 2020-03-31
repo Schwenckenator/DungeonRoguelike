@@ -15,6 +15,8 @@ public class AiController : MonoBehaviour
     public bool debug = true;
 
     public AiType aiType;
+    //Use this to track patrol boundary
+    private Vector2 startingPosition;
     //Basic AI
 
     //Checks all enemies
@@ -35,6 +37,7 @@ public class AiController : MonoBehaviour
         aiType = MyEntity.character.aiType;
         
         debugCircle = Instantiate(debugCircle);
+        startingPosition = MyEntity.transform.position;
     }
 
     // Update is called once per frame
@@ -135,6 +138,39 @@ public class AiController : MonoBehaviour
             //Immitate the player using mouse by letting ai show hover.
             MyEntity.Interaction.HoverOverTarget(targetEntity.transform.position);
             MyEntity.Interaction.SelectTarget(targetEntity.transform.position);
+
+    }
+
+    public void Patrol(int maxTiles)
+    {
+        //Pick a random direction within the maxTiles
+        //This is going to get ugly, best not to look
+        int direction = Random.Range(0, 3);
+        Vector2 target;
+        //North
+        if (direction == 0)
+        {
+            target = new Vector2(startingPosition.x+maxTiles,startingPosition.y);
+        }
+        //East
+        else if (direction == 1)
+        {
+            target = new Vector2(startingPosition.x, startingPosition.y+ maxTiles);
+        }
+        //South
+        else if (direction == 2)
+        {
+            target = new Vector2(startingPosition.x - maxTiles, startingPosition.y);
+        } 
+        //West
+        else if (direction == 3)
+        {
+            target = new Vector2(startingPosition.x, startingPosition.y-maxTiles);
+        }
+        if (debug) Debug.Log("Ai Patrolling");
+
+        //TODO
+        //MoveToNearestPlayer()
 
     }
 
