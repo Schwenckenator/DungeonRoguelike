@@ -7,7 +7,10 @@ using UnityEngine;
 public class PathBoundary : MonoBehaviour
 {
     public MeshFilter meshFilter;
-    public LineRenderer lineRenderer;
+    public GameObject lineObject;
+
+    public List<LineRenderer> lineRenderers;
+    //public LineRenderer lineRenderer;
     public int size = 100; // Size of the entire map
 
     private Voxel2D[] voxels;
@@ -17,7 +20,7 @@ public class PathBoundary : MonoBehaviour
 
     private List<Edge2D> edges;
     private List<Edge2D> lonelyEdges;
-    private List<Edge2D> connectedEdges;
+    private List<List<Edge2D>> connectedEdges;
     
 
     public void Initialise() {
@@ -29,7 +32,7 @@ public class PathBoundary : MonoBehaviour
         triangles = new List<int>();
         edges = new List<Edge2D>();
         lonelyEdges = new List<Edge2D>();
-        connectedEdges = new List<Edge2D>();
+        connectedEdges = new List<List<Edge2D>>();
 
         for(int i=0, y=0; y < size ; y++) {
             for(int x=0; x < size; x++, i++) {
@@ -71,8 +74,10 @@ public class PathBoundary : MonoBehaviour
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         
-        FindNonSharedEdges();
-        ConnectEdges();
+        if(edges.Count > 0) {
+            FindNonSharedEdges();
+            ConnectEdges();
+        }
         SetLinePoints();
     }
 
@@ -246,7 +251,12 @@ public class PathBoundary : MonoBehaviour
 
     private void ConnectEdges() {
 
-        connectedEdges.Add(lonelyEdges[0]);
+        connectedEdges.Add(new List<Edge2D>());
+
+        int lineIndex = 0;
+        connectedEdges[lineIndex].Add(lonelyEdges[0]);
+        
+
         var currentEdge = lonelyEdges[0];
 
         while (lonelyEdges.Count > 0) {
@@ -256,7 +266,7 @@ public class PathBoundary : MonoBehaviour
             foreach(var edge in lonelyEdges) {
                 if(currentEdge.end == edge.start) {
                     //Found a connection!
-                    connectedEdges.Add(edge);
+                    connectedEdges[lineIndex].Add(edge);
                     currentEdge = edge;
                     foundEdge = true;
                     break;
@@ -264,22 +274,38 @@ public class PathBoundary : MonoBehaviour
             }
 
             if (!foundEdge && lonelyEdges.Count > 0) {
+                connectedEdges.Add(new List<Edge2D>());
+                lineIndex++;
                 currentEdge = lonelyEdges[0];
             }
         }
     }
 
     private void SetLinePoints() {
-
-        List<Vector3> points = new List<Vector3>();
-
-        foreach(var edge in connectedEdges) {
-            points.Add(edge.start);
+        int index = 0;
+        foreach(var line in lineRenderers) {
+            line.enabled = false;
         }
-        //Add end of last point
-        points.Add(connectedEdges[connectedEdges.Count - 1].end);
+        Debug.Log($"I have {lineRenderers.Count} renderers, and {connectedEdges.Count} lines to draw");
+        foreach(var line in connectedEdges) {
+            Debug.Log($"Making line with {line.Count} segments");
+            if(index >= lineRenderers.Count) {
+                Debug.Log("Index is higher than count, instantiating");
+                GameObject obj = Instantiate(lineObject, Vector3.zero, Quaternion.identity ,transform);
+                lineRenderers.Add(obj.GetComponent<LineRenderer>());
+            }
 
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
+            List<Vector3> points = new List<Vector3>();
+
+            foreach (var edge in line) {
+                points.Add(edge.start);
+                points.Add(edge.end);
+            }
+
+            lineRenderers[index].enabled = true;
+            lineRenderers[index].positionCount = points.Count;
+            lineRenderers[index].SetPositions(points.ToArray());
+            index++;
+        }
     }
 }
