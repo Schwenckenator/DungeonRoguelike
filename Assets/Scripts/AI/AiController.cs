@@ -29,7 +29,11 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
-        aiType = GetComponent<AiType>();
+
+
+
+        aiType = MyEntity.character.aiType;
+        
         debugCircle = Instantiate(debugCircle);
     }
 

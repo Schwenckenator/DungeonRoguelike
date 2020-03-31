@@ -27,7 +27,7 @@ public class AiType : ScriptableObject
         }
 
 
-        if (nearestEntityExists && distanceToEntity < preferredFightRange)
+        if (nearestEntityExists && distanceToEntity <= preferredFightRange)
         {
             ShouldAttack(me, nearestEntity);
         }
@@ -54,13 +54,13 @@ public class AiType : ScriptableObject
 
     public void ShouldAttack(Entity me, Entity nearestEntity)
     {
-        //TODO call AI Controller
+        me.AiController.Attack(nearestEntity);
     }
     public void ShouldPatrol(Entity me)
     {
         //TODO call AI Controller
     }
     public void ShouldDoNothing(Entity me) {
-        //TODO call AI Controller
+        //Added just for completeness, might need to know down the track
     }
 }

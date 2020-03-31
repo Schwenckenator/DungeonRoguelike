@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AiFrontLiner
   m_EditorClassIdentifier: 
   aiTypeName: Frontliner
-  preferredFightRange: 0
+  preferredFightRange: 2
   patrolRadius: 0
-  chaseRange: 0
-  endChaseRange: 0
+  chaseRange: 5
+  endChaseRange: 7
   debug: 1
