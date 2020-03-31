@@ -7,12 +7,17 @@ using UnityEngine;
 public class PathBoundary : MonoBehaviour
 {
     public MeshFilter meshFilter;
+    public LineRenderer lineRenderer;
     public int size = 100; // Size of the entire map
 
     private Voxel2D[] voxels;
     private Mesh mesh;
     private List<Vector3> vertices;
     private List<int> triangles;
+
+    private List<Edge2D> edges;
+    private List<Edge2D> lonelyEdges;
+    private List<Edge2D> connectedEdges;
     
 
     public void Initialise() {
@@ -22,6 +27,9 @@ public class PathBoundary : MonoBehaviour
         };
         vertices = new List<Vector3>();
         triangles = new List<int>();
+        edges = new List<Edge2D>();
+        lonelyEdges = new List<Edge2D>();
+        connectedEdges = new List<Edge2D>();
 
         for(int i=0, y=0; y < size ; y++) {
             for(int x=0; x < size; x++, i++) {
@@ -53,6 +61,9 @@ public class PathBoundary : MonoBehaviour
         vertices.Clear();
         triangles.Clear();
         mesh.Clear();
+        edges.Clear();
+        lonelyEdges.Clear();
+        connectedEdges.Clear();
 
         //TriangulateCellRows();
         TriangulateAllCells();
@@ -60,7 +71,12 @@ public class PathBoundary : MonoBehaviour
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         
+        FindNonSharedEdges();
+        ConnectEdges();
+        SetLinePoints();
     }
+
+
 
     private void TriangulateAllCells() {
         int cells = size - 1;
@@ -191,6 +207,11 @@ public class PathBoundary : MonoBehaviour
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 2);
         triangles.Add(vertexIndex + 3);
+
+        edges.Add(new Edge2D(a, b));
+        edges.Add(new Edge2D(b, c));
+        edges.Add(new Edge2D(c, d));
+        edges.Add(new Edge2D(d, a));
     }
 
     private void AddPentagon(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 e) {
@@ -209,5 +230,56 @@ public class PathBoundary : MonoBehaviour
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 3);
         triangles.Add(vertexIndex + 4);
+    }
+
+    private void FindNonSharedEdges() {
+        Debug.Log($"Edge Count: {edges.Count}");
+        foreach (var edge in edges) {
+            if (lonelyEdges.Contains(edge)) {
+                lonelyEdges.Remove(edge);
+            } else {
+                lonelyEdges.Add(edge);
+            }
+        }
+        Debug.Log($"Lonely Edges Found: {lonelyEdges.Count}");
+    }
+
+    private void ConnectEdges() {
+
+        connectedEdges.Add(lonelyEdges[0]);
+        var currentEdge = lonelyEdges[0];
+
+        while (lonelyEdges.Count > 0) {
+            bool foundEdge = false;
+            lonelyEdges.Remove(currentEdge);
+
+            foreach(var edge in lonelyEdges) {
+                if(currentEdge.end == edge.start) {
+                    //Found a connection!
+                    connectedEdges.Add(edge);
+                    currentEdge = edge;
+                    foundEdge = true;
+                    break;
+                }
+            }
+
+            if (!foundEdge && lonelyEdges.Count > 0) {
+                currentEdge = lonelyEdges[0];
+            }
+        }
+    }
+
+    private void SetLinePoints() {
+
+        List<Vector3> points = new List<Vector3>();
+
+        foreach(var edge in connectedEdges) {
+            points.Add(edge.start);
+        }
+        //Add end of last point
+        points.Add(connectedEdges[connectedEdges.Count - 1].end);
+
+        lineRenderer.positionCount = points.Count;
+        lineRenderer.SetPositions(points.ToArray());
     }
 }
