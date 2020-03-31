@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa3eec2d120de74bb3788e0f5111a80, type: 3}
+  m_Name: GoblinSentry
+  m_EditorClassIdentifier: 
+  charName: Goblin
+  sprite: {fileID: -5600741944267201218, guid: 314d2030f875eb043afbf70514421528, type: 3}
+  deadSprite: {fileID: -8229080096476049980, guid: 314d2030f875eb043afbf70514421528,
+    type: 3}
+  baseAbilities: []
+  startingItems:
+  - {fileID: 11400000, guid: 6a5426bf7efc64c47b949a9a19993ae9, type: 2}
+  - {fileID: 11400000, guid: 32895570f1c3d8d4ba9927d723b2eca4, type: 2}
+  aiType: {fileID: 11400000, guid: a8442464088694c1f83356ca8cae879b, type: 2}
+  grace: 5
+  intellect: 5
+  might: 5
+  vitality: 5
