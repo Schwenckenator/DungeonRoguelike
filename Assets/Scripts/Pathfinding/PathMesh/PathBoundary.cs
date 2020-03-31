@@ -48,6 +48,12 @@ public class PathBoundary : MonoBehaviour
         Trianglulate();
     }
 
+    public void HideLine() {
+        foreach(var renderer in lineRenderers) {
+            renderer.enabled = false;
+        }
+    }
+
     public void SetVoxels(PathNode[] nodes) {
         //Clear old voxels
         foreach(var voxel in voxels) {
@@ -69,10 +75,12 @@ public class PathBoundary : MonoBehaviour
         connectedEdges.Clear();
 
         //TriangulateCellRows();
-        TriangulateAllCells();
+        //TriangulateAllCells();
 
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
+        //mesh.vertices = vertices.ToArray();
+        //mesh.triangles = triangles.ToArray();
+
+        EdgifyAllCells();
         
         if(edges.Count > 0) {
             FindNonSharedEdges();
@@ -81,7 +89,23 @@ public class PathBoundary : MonoBehaviour
         SetLinePoints();
     }
 
+    private void EdgifyAllCells() {
+        int cells = size - 1;
+        for (int i = 0, y = 0; y < cells; y++, i++) {
+            for (int x = 0; x < cells; x++, i++) {
+                EdgifySingleCell(voxels[i]);
+            }
+        }
+    }
 
+    private void EdgifySingleCell(Voxel2D voxel) {
+        if (voxel.state) {
+            edges.Add(new Edge2D(voxel.topLeftPos, voxel.topRightPos));
+            edges.Add(new Edge2D(voxel.topRightPos, voxel.botRightPos));
+            edges.Add(new Edge2D(voxel.botRightPos, voxel.botLeftPos));
+            edges.Add(new Edge2D(voxel.botLeftPos, voxel.topLeftPos));
+        }
+    }
 
     private void TriangulateAllCells() {
         int cells = size - 1;
@@ -212,11 +236,6 @@ public class PathBoundary : MonoBehaviour
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 2);
         triangles.Add(vertexIndex + 3);
-
-        edges.Add(new Edge2D(a, b));
-        edges.Add(new Edge2D(b, c));
-        edges.Add(new Edge2D(c, d));
-        edges.Add(new Edge2D(d, a));
     }
 
     private void AddPentagon(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 e) {

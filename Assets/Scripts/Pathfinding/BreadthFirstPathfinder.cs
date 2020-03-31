@@ -86,7 +86,7 @@ namespace GridPathfinding {
 
         #region Public Methods
         public void SetOrigin(Vector2Int origin, int maxSteps, int oneActionSteps) {
-        
+            PathBoundaryManager.ClearBoundaries();
             StartCoroutine(SetOriginCoroutine(origin, maxSteps, oneActionSteps));
         }
 
@@ -198,10 +198,14 @@ namespace GridPathfinding {
             if (debug) Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
 
-            PathBoundaryManager.SetupBoundaries(
-                oneActionReachableNodes.ToArray(),
-                visited.ToArray()
-            );
+            //Only show when player turn
+            if (PlayerInput.Instance.playerHasControl) {
+                PathBoundaryManager.SetupBoundaries(
+                    oneActionReachableNodes.ToArray(),
+                    visited.ToArray()
+                );
+            }
+
         }
 
         public Vector2Int[] GetPath(Vector2Int goal, out int length) {

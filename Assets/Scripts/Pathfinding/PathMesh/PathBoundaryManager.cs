@@ -64,7 +64,13 @@ public class PathBoundaryManager : MonoBehaviour
         
         Instance.pathBoundaries[0].Apply(oneMove);
         Instance.pathBoundaries[1].Apply(maxMove);
-        ready = true;
+        //ready = true;
+    }
+
+    public static void ClearBoundaries() {
+        Instance.pathBoundaries[0].HideLine();
+        Instance.pathBoundaries[1].HideLine();
+        //ready = true;
     }
 
 }
