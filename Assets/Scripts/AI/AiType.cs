@@ -36,7 +36,7 @@ public class AiType : ScriptableObject
             ShouldChase(me, nearestEntity);
 
         }
-        else if (patrolRadius > 0)
+        else if (patrolMaxTiles > 0)
         {
             ShouldPatrol(me);
 
@@ -58,7 +58,8 @@ public class AiType : ScriptableObject
     }
     public void ShouldPatrol(Entity me)
     {
-        //TODO call AI Controller
+        me.AiController.Patrol(patrolMaxTiles);
+
     }
     public void ShouldDoNothing(Entity me) {
         //Added just for completeness, might need to know down the track

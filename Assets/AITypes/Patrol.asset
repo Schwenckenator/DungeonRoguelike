@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiTypeName: LocalPatrol
   preferredFightRange: 1
-  patrolRadius: 3
+  patrolMaxTiles: 3
   chaseRange: 10
   endChaseRange: 12
   debug: 1
