@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace GridPathfinding {
 
-    
-
     /// <summary>
     /// This is a pathfinder that floods the grid from a start point and finds the best paths
     /// </summary>
@@ -23,7 +21,14 @@ namespace GridPathfinding {
 
         public int size = 100;
         public static readonly int stepCost = 10;
-        public float diagonalPenalty = 1.5f;
+        public static float diagonalPenalty = 1.5f;
+        public static int diagBasePenalty
+        {
+            get
+            {
+                return Mathf.RoundToInt(stepCost * (diagonalPenalty - 1));
+            }
+        }
 
         readonly Vector2Int[] DIRECTIONS = {
                     Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left,
@@ -37,9 +42,9 @@ namespace GridPathfinding {
         List<PathNode> frontier;
         List<PathNode> visited;
 
-        PathNode currentNode;
+        List<PathNode> oneActionReachableNodes;
 
-        private Thread pathThread; // Not sure what to do with this...
+        PathNode currentNode;
 
         #endregion
 
@@ -49,9 +54,7 @@ namespace GridPathfinding {
             scoreMap = new int[size, size];
             frontier = new List<PathNode>();
             visited = new List<PathNode>();
-
-            //maxScore = maxDistance * 10 + 5;
-            //halfMax = maxScore / 2;
+            oneActionReachableNodes = new List<PathNode>();
         }
 
         private void OnDrawGizmos()
@@ -59,9 +62,13 @@ namespace GridPathfinding {
             if (originSet)
             {
                 foreach (var node in visited) {
-                    Gizmos.color = new Color(1, 0, 0, 0.5f);
+                    Gizmos.color = Color.red;
                     Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
 
+                }
+                foreach(var node in oneActionReachableNodes) {
+                    Gizmos.color = Color.magenta;
+                    Gizmos.DrawWireSphere(node.position.ToVector3Int(), 0.5f);
                 }
                 foreach (var node in frontier) {
 
@@ -78,9 +85,9 @@ namespace GridPathfinding {
         #endregion
 
         #region Public Methods
-        public void SetOrigin(Vector2Int origin, int maxSteps) {
-        
-            StartCoroutine(SetOriginCoroutine(origin, maxSteps));
+        public void SetOrigin(Vector2Int origin, int maxSteps, int oneActionSteps) {
+            PathBoundaryManager.ClearBoundaries();
+            StartCoroutine(SetOriginCoroutine(origin, maxSteps, oneActionSteps));
         }
 
         public Vector2 NearestNeighbour(Vector2 closest)
@@ -90,8 +97,8 @@ namespace GridPathfinding {
             List<PathNode> neighbours = Neighbours(map);
 
             PathNode closestNode = neighbours[0];
-            bool found = false;
-            float closestDistance = float.PositiveInfinity;
+            //bool found = false;
+            //float closestDistance = float.PositiveInfinity;
 
             foreach (var neighbour in neighbours)
             {
@@ -113,7 +120,7 @@ namespace GridPathfinding {
 
         }
 
-        public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxSteps) {
+        public IEnumerator SetOriginCoroutine(Vector2Int origin, int maxSteps, int oneActionSteps) {
             //if (debug) Debug.Log("Flood fill pathing started.");
             readyToGetPath = false;
             originSet = true;
@@ -122,9 +129,14 @@ namespace GridPathfinding {
             scoreMap = new int[size, size];
             frontier.Clear();
             visited.Clear();
-            frontier.Add(new PathNode(null, origin));
+            oneActionReachableNodes.Clear();
 
-            int maxDistance = (maxSteps * stepCost) + Mathf.RoundToInt(stepCost * (diagonalPenalty - 1)); // Pathfinder is allowed to overflow by 1 diagonal penalty
+            PathNode firstNode = new PathNode(null, origin);
+            frontier.Add(firstNode);
+            oneActionReachableNodes.Add(firstNode);
+
+            int maxDistance = (maxSteps * stepCost) + diagBasePenalty; // Pathfinder is allowed to overflow by 1 diagonal penalty
+            int oneActionDistance = oneActionSteps * stepCost + diagBasePenalty;
         
 
             while(frontier.Count > 0) {
@@ -169,13 +181,31 @@ namespace GridPathfinding {
                         //if (debug) Debug.Log($"Node {neighbour} is over max score");
                     } else {
                         frontier.Add(neighbour);
+                        if(neighbour.distance <= oneActionDistance) {
+                            oneActionReachableNodes.Add(neighbour);
+                        }
                     }
                 
                 }
             }
+
+            //TODO: fix horrible hack
+            if(maxDistance <= oneActionDistance) {
+                //If one move is the max, only display orange move, so clear this list
+                oneActionReachableNodes.Clear();
+            }
         
             if (debug) Debug.Log("Flood fill pathing complete.");
             readyToGetPath = true;
+
+            //Only show when player turn
+            if (PlayerInput.Instance.playerHasControl) {
+                PathBoundaryManager.SetupBoundaries(
+                    oneActionReachableNodes.ToArray(),
+                    visited.ToArray()
+                );
+            }
+
         }
 
         public Vector2Int[] GetPath(Vector2Int goal, out int length) {
@@ -209,6 +239,9 @@ namespace GridPathfinding {
         public static int StepsToDistance(int stepCount) {
             return stepCount * stepCost;
         }
+
+
+        
         #endregion
 
         #region Private Methods

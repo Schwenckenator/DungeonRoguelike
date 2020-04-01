@@ -11,7 +11,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
     public bool hasControl = false;
 
-    public GameObject selectionRingObj;
+    //public GameObject selectionRingObj;
 
     public int actionsPerTurn = 2;
     public int actionsRemaining;
@@ -49,7 +49,7 @@ public class EntityTurnScheduler : MonoBehaviour
         //Say its my turn
         hasControl = true;
         
-        selectionRingObj.SetActive(true);
+        //selectionRingObj.SetActive(true);
         myEntity.State = EntityState.idle;
 
         // Show actions in UI
@@ -70,7 +70,7 @@ public class EntityTurnScheduler : MonoBehaviour
 
         //Disable self
         hasControl = false;
-        selectionRingObj.SetActive(false);
+        //selectionRingObj.SetActive(false);
         myEntity.State = EntityState.inactive;
 
         GameEvents.current.FinishPlayerTurn(gameObject.GetInstanceID());

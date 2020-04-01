@@ -755,9 +755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  myTurn: 0
-  myTickDelay: 10
-  selectionRingObj: {fileID: 4367331689997767131}
+  hasControl: 0
   actionsPerTurn: 2
   actionsRemaining: 0
   actionArrows:
