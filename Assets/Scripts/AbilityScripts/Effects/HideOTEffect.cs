@@ -11,7 +11,7 @@ public class HideOTEffect : Effect {
         // Overtime Effect
     
 
-    public override void TriggerEffect(Entity target, int minValue, int maxValue) {
+    public override void TriggerEffect(Entity origin, Entity target, int minValue, int maxValue) {
 
         GameObject hideOverTimeObject =  Instantiate(hideOverTime, target.transform);
         target.Stats.AddOvertimeEffect(hideOverTimeObject);

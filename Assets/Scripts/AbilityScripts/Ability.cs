@@ -18,13 +18,13 @@ public abstract class Ability : ScriptableObject, IComparable {
     public GameObject visual;
 
 
-    public Effect[] effects;
+    public EffectValueBundle[] effects;
     public int actionCost = 1;
     public bool endsTurn = false;
     public bool requireValidTarget = true;
     public float range = 1f;
-    public int minValue;
-    public int maxValue;
+    //public int minValue;
+    //public int maxValue;
     public bool alwaysHit = false;
     public StatType attackStat;
     public StatType defenceStat = StatType.defence;
@@ -44,7 +44,7 @@ public abstract class Ability : ScriptableObject, IComparable {
             Debug.Log("Hit!");
         }
         foreach (var effect in effects) {
-            effect.TriggerEffect(target, minValue, maxValue);
+            effect.TriggerEffect(me, target);
         }
     }
     public abstract void DisplayVisual(Entity me);

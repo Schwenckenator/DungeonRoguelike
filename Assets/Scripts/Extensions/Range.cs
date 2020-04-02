@@ -2,30 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An serialisable max-included range
+/// </summary>
 [System.Serializable]
-public class RangeInt{
-    public int Min;
-    public int Max;
+public struct RangeInt{
+    public int min;
+    public int max;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="min"></param>
+    /// <param name="max">Max inclusive</param>
     public RangeInt(int min, int max) {
         if(min > max) {
             Debug.LogError("Minimum is greater than Maximum! Wrong way around!");
             throw new System.Exception();
         }
 
-        Min = min;
-        Max = max;
+        this.min = min;
+        this.max = max;
     }
 
     public int GetRandom() {
-        return Random.Range(Min, Max);
+        return Random.Range(min, max+1);
     }
     
 }
 [System.Serializable]
-public class RangeFloat {
-    public float Min;
-    public float Max;
+public struct RangeFloat {
+    public float min;
+    public float max;
 
     public RangeFloat(float min, float max) {
 
@@ -34,11 +42,11 @@ public class RangeFloat {
             throw new System.Exception();
         }
 
-        Min = min;
-        Max = max;
+        this.min = min;
+        this.max = max;
     }
 
     public float GetRandom() {
-        return Random.Range(Min, Max);
+        return Random.Range(min, max);
     }
 }
