@@ -1022,5 +1022,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: numOfEncounters.min
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: numOfEncounters.max
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: monstersPerEncounter.min
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: monstersPerEncounter.max
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39fe941210b89ee42ae0871df4e1b78d, type: 3}

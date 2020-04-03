@@ -6,7 +6,7 @@ using UnityEditor;
 using System;
 using TMPro;
 
-
+public enum ConditionType { hidden }
 
 public class EntityStats : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class EntityStats : MonoBehaviour
     public StatCollection Collection { get; private set; }
 
     public bool isDead = false;
-    public bool isHidden = false;
+    //public bool isHidden = false;
 
     public Image healthBar;
     public TextMeshProUGUI healthText;
@@ -24,14 +24,19 @@ public class EntityStats : MonoBehaviour
 
     private Entity myEntity;
     private StatCollection stats;
-    //TODO Temp idea to test , make private
+
     private Dictionary<string,GameObject> activeOvertimeEffects;
-    //private Dictionary<Item, int> effectOvertime;
+
+
+    //private Dictionary<Condition, bool> conditions;
+    private List<ConditionType> conditions;
+    
 
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
         activeOvertimeEffects = new Dictionary<string, GameObject>();
+        conditions = new List<ConditionType>();
         Collection = new StatCollection(myEntity.character);
         Collection.onStatUpdate[StatType.health] += UpdateHealthBar;
         Collection.onStatUpdate[StatType.health] += CheckForDeath;
@@ -58,6 +63,16 @@ public class EntityStats : MonoBehaviour
     public bool CheckForOverTimeEffect(string overTimeEffectObjectName)
     {
         return true;
+    }
+
+    public bool HasCondition(ConditionType type) {
+        return conditions.Contains(type);
+    }
+    public void AddCondition(ConditionType type) {
+        conditions.Add(type);
+    }
+    public void RemoveCondition(ConditionType type) {
+        conditions.Remove(type);
     }
 
     internal void DebugLogStats() {

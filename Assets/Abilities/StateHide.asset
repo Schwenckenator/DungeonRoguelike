@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: StateHide
   m_EditorClassIdentifier: 
   name: Hide
-  sortingIndex: 0
+  sortingIndex: 30
   targetType: 1
   canTargetDead: 0
   canTargetAlive: 1
   visual: {fileID: 1134481946190490, guid: b4ee8b8c6b9f64be6aa7abe34ecc5b9f, type: 3}
   effects:
-  - effect: {fileID: 11400000, guid: f3aa1f033574d443ea61aca68ed4a592, type: 2}
+  - effect: {fileID: 11400000, guid: ba42799a718f2cb47ab072832874631c, type: 2}
     minValue: 0
     maxValue: 0
   actionCost: 1

@@ -53,7 +53,7 @@ public abstract class Ability : ScriptableObject, IComparable {
     
     //TODO add something here to check for hidden
     public bool IsLegalTarget(Entity me, Entity target) {
-        if (target.Stats.isHidden) return false;
+        //if (target.Stats.isHidden) return false;
         if (!canTargetDead && target.Stats.isDead) return false;
         if (!canTargetAlive && !target.Stats.isDead) return false;
 
