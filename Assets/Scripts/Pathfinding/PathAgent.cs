@@ -10,6 +10,8 @@ namespace GridPathfinding {
         public float walkSpeed;
         public int stepsFor1Action;
 
+        private float forceMoveSpeedMultiplier = 2f;
+
         Vector2Int[] lastPath;
 
         Vector2Int? origin;
@@ -116,6 +118,30 @@ namespace GridPathfinding {
 
         public void FreeMySpace() {
             NodeMap.SetOccupied(transform.position.RoundToVector2Int(), false);
+        }
+
+        public void ForceMove(Vector2Int pos) {
+            StartCoroutine(ForceMoveCo(transform.position.RoundToVector2Int(), pos));
+        }
+        private IEnumerator ForceMoveCo(Vector2Int start, Vector2Int end) {
+            bool moving = true;
+            int debugLoopBreaker = 100;
+            while(moving && debugLoopBreaker-- > 0){
+                if ((transform.position - end.ToVector3Int()).sqrMagnitude < 0.01f) {
+                    //Reached the goal!
+                    transform.position = end.ToVector3Int();
+
+                    //Free original space, restrict new space
+                    NodeMap.SetOccupied(start, false);
+                    NodeMap.SetOccupied(end, true);
+                    moving = true;
+                    
+                } else {
+                    transform.position = Vector3.MoveTowards(transform.position, end.ToVector3(), walkSpeed * Time.deltaTime * forceMoveSpeedMultiplier);
+                }
+                yield return null;
+            }
+            yield return null;
         }
 
         #region Private Methods

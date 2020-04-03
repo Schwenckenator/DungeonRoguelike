@@ -19,13 +19,13 @@ MonoBehaviour:
   canTargetAlive: 1
   visual: {fileID: 7977837134407638966, guid: cbcde11c61b3b5849afc4c2c6ddfb380, type: 3}
   effects:
-  - {fileID: 11400000, guid: 3c200776382ff7b4ca34d70e37bf0fbe, type: 2}
+  - effect: {fileID: 11400000, guid: 3c200776382ff7b4ca34d70e37bf0fbe, type: 2}
+    minValue: 25
+    maxValue: 50
   actionCost: 1
   endsTurn: 0
   requireValidTarget: 1
   range: 1
-  minValue: 25
-  maxValue: 35
   alwaysHit: 1
   attackStat: 0
   defenceStat: 2
