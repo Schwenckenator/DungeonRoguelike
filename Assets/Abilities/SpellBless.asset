@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a94f24897887534caefdb493bb2ef45, type: 3}
+  m_Name: SpellBless
+  m_EditorClassIdentifier: 
+  name: Bless
+  sortingIndex: 30
+  targetType: 4
+  canTargetDead: 0
+  canTargetAlive: 1
+  visual: {fileID: 1134481946190490, guid: b4ee8b8c6b9f64be6aa7abe34ecc5b9f, type: 3}
+  effects:
+  - effect: {fileID: 11400000, guid: b2ddb7df7864c9a41bba596cec13ee35, type: 2}
+    minValue: 10
+    maxValue: 30
+  actionCost: 1
+  endsTurn: 0
+  requireValidTarget: 1
+  range: 6
+  alwaysHit: 1
+  attackStat: 0
+  defenceStat: 2
+  attackBonus: 0
+  manaCost: 15
+  snapToGrid: 1
+  isBlockedByTerrain: 1

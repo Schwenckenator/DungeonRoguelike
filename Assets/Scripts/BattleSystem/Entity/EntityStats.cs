@@ -6,8 +6,6 @@ using UnityEditor;
 using System;
 using TMPro;
 
-public enum ConditionType { hidden }
-
 public class EntityStats : MonoBehaviour
 {
     private static readonly float vitalityToHealthMultiplier = 10;
@@ -29,14 +27,14 @@ public class EntityStats : MonoBehaviour
 
 
     //private Dictionary<Condition, bool> conditions;
-    private List<ConditionType> conditions;
+    private List<string> conditions;
     
 
     #region public methods
     public void Initialise() {
         myEntity = GetComponent<Entity>();
         activeOvertimeEffects = new Dictionary<string, GameObject>();
-        conditions = new List<ConditionType>();
+        conditions = new List<string>();
         Collection = new StatCollection(myEntity.character);
         Collection.onStatUpdate[StatType.health] += UpdateHealthBar;
         Collection.onStatUpdate[StatType.health] += CheckForDeath;
@@ -65,13 +63,13 @@ public class EntityStats : MonoBehaviour
         return true;
     }
 
-    public bool HasCondition(ConditionType type) {
+    public bool HasCondition(string type) {
         return conditions.Contains(type);
     }
-    public void AddCondition(ConditionType type) {
+    public void AddCondition(string type) {
         conditions.Add(type);
     }
-    public void RemoveCondition(ConditionType type) {
+    public void RemoveCondition(string type) {
         conditions.Remove(type);
     }
 

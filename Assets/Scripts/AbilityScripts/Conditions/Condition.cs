@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Condition : MonoBehaviour
 {
+    public new string name;
     public bool hasLifetime = true;
     public int lifetime;
     protected int remainingLifetime;
@@ -20,8 +21,13 @@ public abstract class Condition : MonoBehaviour
         StartCondition(minValue, maxValue);
     }
 
-    protected abstract void StartCondition(int minValue, int maxValue);
-    protected abstract void EndCondition();
+    protected virtual void StartCondition(int minValue, int maxValue) {
+        target.Stats.AddCondition(name);
+    }
+    protected virtual void EndCondition() {
+        target.Stats.RemoveCondition(name);
+    }
+
 
     protected virtual void DecrementLifetime(int entityID) {
         // Check only get responding to relevant entity

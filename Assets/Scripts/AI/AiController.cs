@@ -166,7 +166,7 @@ public class AiController : MonoBehaviour
         foreach (var entity in targets) {
             Vector2 entity2dPos = new Vector2(entity.transform.position.x, entity.transform.position.y);
             Vector2 distanceVector = (entity2dPos - myPos);
-            if (distanceVector.sqrMagnitude < currentSmallestSqrMagnitude && !entity.Stats.isDead && !entity.Stats.HasCondition(ConditionType.hidden)) {
+            if (distanceVector.sqrMagnitude < currentSmallestSqrMagnitude && !entity.Stats.isDead && !entity.Stats.HasCondition("hidden")) {
                 currentSmallestSqrMagnitude = distanceVector.sqrMagnitude;
                 nearestEntity = entity;
             }
