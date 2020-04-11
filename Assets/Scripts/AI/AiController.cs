@@ -56,8 +56,6 @@ public class AiController : MonoBehaviour
         Debug.Log("Do my turn!");
 
         Entity nearestEntity = GetNearestEntity(FindTargets());
-        //TODO need to check inside nearest target
-        //TODO move this hidden check to a better spot
         if(nearestEntity == null) {
             //Do Nothing
             MyEntity.TurnScheduler.actionsRemaining = 0; // Naughty Matt!
@@ -65,7 +63,6 @@ public class AiController : MonoBehaviour
             return;
         }
 
-        //Move decision making to aiType
         aiType.makeDecision(MyEntity, nearestEntity);
 
 
