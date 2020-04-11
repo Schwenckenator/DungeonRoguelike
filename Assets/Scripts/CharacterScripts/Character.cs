@@ -10,8 +10,9 @@ public class Character : ScriptableObject
     public Sprite deadSprite;
     public List<Ability> baseAbilities;
     public List<Item> startingItems;
+    public AiType aiType;
 
-//    public CharacterAttributes attributes;
+    //    public CharacterAttributes attributes;
     public int grace;
     public int intellect;
     public int might;

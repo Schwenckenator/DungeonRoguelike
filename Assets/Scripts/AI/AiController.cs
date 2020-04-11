@@ -13,6 +13,10 @@ public class AiController : MonoBehaviour
 
     public float minDistance = 1;
     public bool debug = true;
+
+    public AiType aiType;
+    //Use this to track patrol boundary
+    private Vector2 startingPosition;
     //Basic AI
 
     //Checks all enemies
@@ -27,7 +31,13 @@ public class AiController : MonoBehaviour
     void Start()
     {
         MyEntity = GetComponent<Entity>();
+
+
+
+        aiType = MyEntity.character.aiType;
+        
         debugCircle = Instantiate(debugCircle);
+        startingPosition = MyEntity.transform.position;
     }
 
     // Update is called once per frame
@@ -54,34 +64,10 @@ public class AiController : MonoBehaviour
             MyEntity.TurnScheduler.ActionFinished();
             return;
         }
-        float distanceToEntity = (nearestEntity.transform.position - transform.position).magnitude;
 
-        if (distanceToEntity < 1.5f) {
-            //You're in range! Punch the sucker!
-            if (debug) Debug.Log("Enemy close! Attacking!");
-            MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
-            //Immitate the player using mouse by letting ai show hover.
-            MyEntity.Interaction.HoverOverTarget(nearestEntity.transform.position);
-            MyEntity.Interaction.SelectTarget(nearestEntity.transform.position);
-           
-        } 
-        else {
-            //Try to move closer to nearest entity.
+        //Move decision making to aiType
+        aiType.makeDecision(MyEntity, nearestEntity);
 
-
-
-            if (!MoveToNearestPlayer(nearestEntity))
-            {
-                if (debug) Debug.Log("Failed to move to target. Finish Turn.");
-                MyEntity.TurnScheduler.actionsRemaining = 0;
-                MyEntity.TurnScheduler.ActionFinished();
-
-            }
-
-
-
-            //MyEntity.TurnScheduler.actionsRemaining -= 1;
-        }
 
         //TODO turnAttemptCount - maybe this could be based on MyEntity.TurnScheduler.actionsRemaining
         if (turnAttemptCount > 2)
@@ -102,7 +88,8 @@ public class AiController : MonoBehaviour
         }
     }
 
-    private bool MoveToNearestPlayer(Entity nearestEntity) {
+
+    public bool MoveToNearestPlayer(Entity nearestEntity) {
         if (debug) Debug.Log("MoveToNearestPlayer Called");
 
         //Move towards target
@@ -115,10 +102,20 @@ public class AiController : MonoBehaviour
         Vector2Int origin = new Vector2Int(transform.position.x.RoundToInt(), transform.position.y.RoundToInt());
         Vector2Int goal = new Vector2Int(nearestEntity.transform.position.x.RoundToInt(), nearestEntity.transform.position.y.RoundToInt());
 
-        Vector2Int reachableGoal = MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
+        return MoveToPosition(origin, goal);
+    }
+
+    public bool MoveToPosition(Vector2Int origin, Vector2Int goal) { 
+
+    Vector2Int reachableGoal = MyEntity.PathAgent.GoalToReachableCoord(origin, goal);
         if (reachableGoal == origin)
         {
             //No path found
+
+
+            if (debug) Debug.Log("Failed to move to target. Finish Turn.");
+            MyEntity.TurnScheduler.actionsRemaining = 0;
+            MyEntity.TurnScheduler.ActionFinished();
             return false;
         }
 
@@ -131,9 +128,64 @@ public class AiController : MonoBehaviour
 
         if (debug) Debug.Log("Finished set goal and find path.");
         return true;
-
-        //MyEntity.ClickToMove.MoveOrder(targetPosition);
         
+    }
+
+
+    public void Attack(Entity targetEntity)
+    {
+
+            //You're in range! Punch the sucker!
+            if (debug) Debug.Log("Enemy close! Attacking!");
+            MyEntity.Interaction.SetCurrentAbility(0); //TODO: Fix Naughty Magic number!
+            //Immitate the player using mouse by letting ai show hover.
+            MyEntity.Interaction.HoverOverTarget(targetEntity.transform.position);
+            MyEntity.Interaction.SelectTarget(targetEntity.transform.position);
+
+    }
+
+    public void Patrol(int maxTiles)
+    {
+        //Pick a random direction within the maxTiles
+        //This is going to get ugly, best not to look
+        int direction = Random.Range(0, 3);
+        Vector2Int origin = MyEntity.transform.position.RoundToVector2Int();
+
+        Vector2Int target;
+
+        
+        int x, y;
+        //North
+        if (direction == 0)
+        {
+            x = startingPosition.x.RoundToInt() + maxTiles;
+            y = startingPosition.y.RoundToInt();
+            target = new Vector2Int(x,y);
+        }
+        //East
+        else if (direction == 1)
+        {
+            x = startingPosition.x.RoundToInt() ;
+            y = startingPosition.y.RoundToInt() + maxTiles;
+            target = new Vector2Int(x, y);
+        }
+        //South
+        else if (direction == 2)
+        {
+            x = startingPosition.x.RoundToInt() - maxTiles;
+            y = startingPosition.y.RoundToInt();
+            target = new Vector2Int(x, y);
+        } 
+        //West
+        else
+        {
+            x = startingPosition.x.RoundToInt();
+            y = startingPosition.y.RoundToInt() - maxTiles;
+            target = new Vector2Int(x, y);
+        }
+        if (debug) Debug.Log("Ai Patrolling");
+
+        MoveToPosition(origin,target);
     }
 
     //Find the a distance point between two Vectors
