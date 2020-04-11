@@ -118,10 +118,11 @@ public class EntityInteraction : MonoBehaviour {
 
             //Do the ability
             currentAbility.TriggerAbility(myEntity, target);
+            currentAbility.DisplayVisual(target);
+
             validTargets++;
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
-            currentAbility.DisplayVisual(myEntity);
             SpendActions();
         }
     }
