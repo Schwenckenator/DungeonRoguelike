@@ -1024,6 +1024,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
+      propertyPath: monsters.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
       propertyPath: numOfEncounters.min
       value: 10
       objectReference: {fileID: 0}
@@ -1041,6 +1046,28 @@ PrefabInstance:
         type: 3}
       propertyPath: monstersPerEncounter.max
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: monsters.Array.data[0].character
+      value: 
+      objectReference: {fileID: 11400000, guid: fc38a7c2d6ef02b4d80c0e07b8867d67,
+        type: 2}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: monsters.Array.data[1].character
+      value: 
+      objectReference: {fileID: 11400000, guid: 2db8a603e624342078e04e9d9353f884,
+        type: 2}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: monsters.Array.data[1].ratio
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: monsters.Array.data[0].ratio
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39fe941210b89ee42ae0871df4e1b78d, type: 3}

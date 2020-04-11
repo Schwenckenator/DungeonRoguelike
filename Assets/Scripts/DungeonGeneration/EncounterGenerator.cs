@@ -44,7 +44,6 @@ public class EncounterGenerator : MonoBehaviour
     //public int monstersPerEncounter;
     public RangeInt numOfEncounters;
     public RangeInt monstersPerEncounter;
-    //public Character monster;
     public List<Monster> monsters;
 
     private void Start() {
