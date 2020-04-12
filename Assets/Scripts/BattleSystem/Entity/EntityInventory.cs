@@ -73,6 +73,7 @@ public class EntityInventory : MonoBehaviour
             PickUpItem(itemsStoodOn[i]);
         }
         itemsStoodOn.Clear();
+        myEntity.TurnScheduler.ActionFinished();
     }
 
     public void DropItem(Item item) {
