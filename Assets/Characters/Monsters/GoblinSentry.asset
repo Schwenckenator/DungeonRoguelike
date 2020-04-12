@@ -20,7 +20,7 @@ MonoBehaviour:
   startingItems:
   - {fileID: 11400000, guid: 6a5426bf7efc64c47b949a9a19993ae9, type: 2}
   - {fileID: 11400000, guid: 32895570f1c3d8d4ba9927d723b2eca4, type: 2}
-  aiType: {fileID: 11400000, guid: a8442464088694c1f83356ca8cae879b, type: 2}
+  aiType: {fileID: 11400000, guid: e4d0294bba6ab4538a2985d4e54933a7, type: 2}
   grace: 5
   intellect: 5
   might: 5
