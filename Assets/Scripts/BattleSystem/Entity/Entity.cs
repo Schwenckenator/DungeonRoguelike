@@ -19,6 +19,7 @@ public class Entity : MonoBehaviour
     public FogClearer FogClearer { get; private set; }
     public FogInteractor FogInteractor { get; private set; }
     public EntityVisibilityController EntityVisibilityController { get; private set; }
+    public AiController AiController { get; private set; }
 
     public EntityAllegiance allegiance;
 
@@ -76,6 +77,12 @@ public class Entity : MonoBehaviour
         PathAgent = GetComponent<PathAgent>();
         FogInteractor = GetComponent<FogInteractor>();
         EntityVisibilityController = GetComponent<EntityVisibilityController>();
+
+        if (GetComponent<AiController>())
+        {
+            AiController = GetComponent<AiController>();
+        }
+
 
         State = EntityState.inactive;
 

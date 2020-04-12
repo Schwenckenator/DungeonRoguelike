@@ -1061,13 +1061,18 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
-      propertyPath: monsters.Array.data[1].ratio
-      value: 0.8
+      propertyPath: monsters.Array.data[0].ratio
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4998510161240802364, guid: 39fe941210b89ee42ae0871df4e1b78d,
         type: 3}
-      propertyPath: monsters.Array.data[0].ratio
-      value: 0.2
+      propertyPath: monsters.Array.data[1].ratio
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1100326877037558286, guid: 39fe941210b89ee42ae0871df4e1b78d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39fe941210b89ee42ae0871df4e1b78d, type: 3}
