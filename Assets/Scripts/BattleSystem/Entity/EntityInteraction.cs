@@ -123,6 +123,7 @@ public class EntityInteraction : MonoBehaviour {
             validTargets++;
         }
         if (!currentAbility.requireValidTarget || validTargets > 0) {
+            abilityCallbacks[currentAbility]?.Invoke();
             SpendActions();
         }
     }
@@ -198,8 +199,12 @@ public class EntityInteraction : MonoBehaviour {
 
     public void AddAbility(Ability ability, ItemCallback callback) {
 
-        abilityCallbacks.Add(ability, callback);
-
+        if (abilityCallbacks.ContainsKey(ability)) {
+            abilityCallbacks[ability] = callback;
+        } else {
+            abilityCallbacks.Add(ability, callback);
+        }
+        
         if (abilities.Count == 0) {
             abilities.Add(ability);
             return;
@@ -220,13 +225,12 @@ public class EntityInteraction : MonoBehaviour {
     }
 
     public void RemoveAbility(Ability ability) {
-        if (abilities.Contains(ability)) {
-            abilities.Remove(ability);
-        }
-        if (abilityCallbacks.ContainsKey(ability)) {
-            abilityCallbacks.Remove(ability);
-        }
+        // Don't need to check for Contains
+        abilities.Remove(ability);
+        abilityCallbacks.Remove(ability); 
     }
+
+
 
     private static bool IsLineOfSight(Vector2 origin, Vector2 target) {
         // Cast 4 lines, from centre of origin to 4 corners of the target square

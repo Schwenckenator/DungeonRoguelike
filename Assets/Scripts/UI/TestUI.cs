@@ -48,4 +48,5 @@ public class TestUI : MonoBehaviour
         newEntity.GetComponent<Entity>().character = character;
         newEntity.GetComponent<Entity>().Initialise();
     }
+
 }

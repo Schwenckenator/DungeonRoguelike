@@ -34,6 +34,9 @@ public class MainUI : MonoBehaviour
             if (i < abilities.Length) {
                 abilityButtons[i].SetActive(true);
                 Text newButtonText = abilityButtons[i].GetComponentInChildren<Text>();
+                string buttonText = abilities[i].name;
+                //if(abilities[i].)
+
                 newButtonText.text = abilities[i].name;
             } else {
                 abilityButtons[i].SetActive(false);
