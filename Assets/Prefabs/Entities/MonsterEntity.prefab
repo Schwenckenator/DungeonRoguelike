@@ -31,7 +31,7 @@ MonoBehaviour:
   debugCircle: {fileID: 4944248538278691224, guid: 74769874fe5c747bfa54b2e90a781d2d,
     type: 3}
   minDistance: 1
-  debug: 1
+  debug: 0
 --- !u!1001 &7163113410882170835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -124,10 +124,21 @@ PrefabInstance:
       propertyPath: myTickDelay
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 1042253517969308516, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300696, guid: c51d6277d6e5e86499e6eca007e73e8d,
+        type: 3}
     - target: {fileID: 7339988922619381412, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863527771864588891, guid: 5a71753eb18b6b04db2df0e5430107c4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4688124379612218704, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
@@ -189,12 +200,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1042253517969308516, guid: 5a71753eb18b6b04db2df0e5430107c4,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300696, guid: c51d6277d6e5e86499e6eca007e73e8d,
-        type: 3}
     - target: {fileID: 5688986332951585188, guid: 5a71753eb18b6b04db2df0e5430107c4,
         type: 3}
       propertyPath: m_Enabled
